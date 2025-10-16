@@ -1,8 +1,9 @@
 <?php
 session_start();
 $basePath = '/RetroBio';
-
 require_once __DIR__.'/router.php';
+require_once __DIR__.'/helpers.php';
+
 get("$basePath", function() {
     require_once __DIR__ . "/controllers/HomeController.php";
     $controller = new HomeController();

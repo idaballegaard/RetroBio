@@ -226,7 +226,7 @@ window.addEventListener('resize', ()=>{
                 <?php $previous = null; ?>
                 <?php foreach($viewModel->getShowings() as $showing): ?>
                   <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
-                    <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo $showing->getDate()->format("d/M/Y") ?></button>
+                    <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
                   <?php endif; ?>
                   <?php $previous = $showing; ?>
                 <?php endforeach; ?>

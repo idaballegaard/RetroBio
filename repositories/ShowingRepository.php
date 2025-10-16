@@ -15,7 +15,7 @@ class ShowingRepository extends BaseRepository {
                             LEFT JOIN Movie m ON s.movieID = m.movieID
                             LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                             LEFT JOIN Hall h ON s.hallID = h.hallID
-                            WHERE s.date >= NOW() AND s.date < DATE_ADD(NOW(), INTERVAL 7 DAY)
+                            WHERE s.date >= CURDATE() AND s.date < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
                             ORDER BY s.date, s.startTime ASC
         ");
         $stmt->execute();

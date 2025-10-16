@@ -48,7 +48,7 @@ $menuLinks = [
       <div class="hidden md:flex items-center space-x-4">
         <?php if(isset($_SESSION['username'])): ?>
             <span class="text-[#FE04FF] font-semibold">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-            <a href="logout.php" class="text-[#FFDF00] border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Logout</a>
+            <a href="logout" class="text-[#FFDF00] border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Logout</a>
         <?php else: ?>
             <a href="login" class="text-[#FFDF00] border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Login</a>
             <a href="register.php" class="text-[#FE04FF] border border-[#FE04FF] px-3 py-1 rounded-lg hover:bg-[#FE04FF] hover:text-black transition-all">Sign Up</a>
@@ -77,7 +77,7 @@ $menuLinks = [
 
     <?php if(isset($_SESSION['username'])): ?>
         <span class="text-[#FE04FF] block mt-2">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-        <a href="logout.php" class="text-[#FFDF00] block mt-1 border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Logout</a>
+        <a href="logout" class="text-[#FFDF00] block mt-1 border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Logout</a>
     <?php else: ?>
         <a href="login" class="text-[#FFDF00] block mt-2 border border-[#FFDF00] px-3 py-1 rounded-lg hover:bg-[#FFDF00] hover:text-black transition-all">Login</a>
         <a href="register.php" class="text-[#FE04FF] block mt-1 border border-[#FE04FF] px-3 py-1 rounded-lg hover:bg-[#FE04FF] hover:text-black transition-all">Sign Up</a>

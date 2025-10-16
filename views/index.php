@@ -223,18 +223,23 @@ window.addEventListener('resize', ()=>{
             <!-- Week Calendar -->
             <div class="flex overflow-x-auto pb-4 mb-8 scrollbar-hide">
             <div class="flex space-x-2">
-                <button class="bg-[#00e7ec] text-black px-4 py-2 rounded-md font-medium min-w-[100px]">Today</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Tomorrow</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Wed, Jun 14</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Thu, Jun 15</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Fri, Jun 16</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Sat, Jun 17</button>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]">Sun, Jun 18</button>
+                <?php $previous = null; ?>
+                <?php foreach($viewModel->getShowings() as $showing): ?>
+                  <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
+                    <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo $showing->getDate()->format("d/M/Y") ?></button>
+                  <?php endif; ?>
+                  <?php $previous = $showing; ?>
+                <?php endforeach; ?>
+                <!-- <button class="bg-[#00e7ec] text-black px-4 py-2 rounded-md font-medium min-w-[100px]">Today</button>
+                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black px-4 py-2 rounded-md min-w-[100px]">Tomorrow</button> -->
             </div>
             </div>
 
 
-            <!-- Movie Card -->
+            <!-- Showing Card -->
+           <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
+
+
            <div class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
                         transition-transform duration-300 hover:-translate-y-2 
                         hover:shadow-2xl">
@@ -246,56 +251,36 @@ window.addEventListener('resize', ()=>{
                     </div>
                     <div class="md:w-3/4 p-6">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                            <h3 class="text-2xl text-[#00e7ec] font-bold">The Goonies</h3>
+                            <h3 class="text-2xl text-[#00e7ec] font-bold"><?php echo htmlspecialchars($showing->getMovie()->getTitle()) ?></h3>
                             <div class="flex items-center ">
                                 <i data-feather="star" class="mr-1"></i>
-                                <span>4.8/5</span>
+                                <span><?php echo floatval($showing->getMovie()->getRanking()) ?>/5</span>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded">Adventure</span>
-                            <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded">Comedy</span>
-                            <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded">Family</span>
+                            <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded"><?php echo htmlspecialchars($showing->getMovie()->getGenre()) ?></span>
                         </div>
-                        <p class="text-gray-300 mb-6">
-                            A group of adventurous kids discover an old treasure map and embark on a dangerous race to find hidden treasure. In their small coastal town, their homes are threatened with demolition, and they hope that the pirate One-Eyed Willy’s treasure can save them. <br><br>
-                            They follow the map through dark tunnels and hidden caves filled with traps and puzzles, all while trying to escape the criminal Fratelli family who are after them. Along the way, the kids learn that unity and courage are their greatest weapons. <br><br>
-                        </p>
+                        <p class="text-gray-300 mb-6"><?php echo htmlspecialchars($showing->getMovie()->getDescription()) ?></p>
 
                         <div>
                             <h4 class="font-medium text-[#00e7ec] mb-3">Reel times</h4>
                             <div class="flex flex-wrap gap-3">
-                                <a href="booking_page" 
-                                class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
-                                    border border-[#00e7ec] hover:border-[#00e7ec]        
-                                    hover:bg-[#00e7ec] hover:!text-[#000000]">
-                                10:00 AM
-                                </a>
-                                <a href="booking_page" 
-                                class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
-                                    border border-[#00e7ec] hover:border-[#00e7ec]        
-                                    hover:bg-[#00e7ec] hover:!text-[#000000]">
-                                10:00 AM
-                                </a>
-                                <a href="booking_page" 
-                                class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
-                                    border border-[#00e7ec] hover:border-[#00e7ec]        
-                                    hover:bg-[#00e7ec] hover:!text-[#000000]">
-                                10:00 AM
-                                </a>
-                                <a href="booking_page" 
-                                class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
-                                    border border-[#00e7ec] hover:border-[#00e7ec]        
-                                    hover:bg-[#00e7ec] hover:!text-[#000000]">
-                                10:00 AM
-                                </a>
+                                <?php foreach($showing->getReelTimes() as $reelTime): ?>
+                                  <a href="booking_page" 
+                                  class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
+                                      border border-[#00e7ec] hover:border-[#00e7ec]        
+                                      hover:bg-[#00e7ec] hover:!text-[#000000]">
+                                  <?php echo htmlspecialchars($reelTime) ?>
+                                  </a>
+                                <?php endforeach; ?>
                                 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <?php endforeach; ?>
+          </div>
     </section>
 
 <script>

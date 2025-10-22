@@ -2,34 +2,66 @@ DROP DATABASE IF EXISTS RetroBioDB;
 CREATE DATABASE RetroBioDB;
 USE RetroBioDB;
 
+CREATE TABLE Company (
+    companyID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name varchar (255) NOT NULL
+);
+
+CREATE TABLE Genre (
+    genreID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name varchar (255) NOT NULL
+);
+
+CREATE TABLE CastMembers (
+    castMemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    firstName varchar (255) NOT NULL,
+    lastName varchar (255) NOT NULL,
+);
+
 CREATE TABLE Movie (
     movieID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     titel varchar (255) NOT NULL,
     `description` varchar (1000) NOT NULL,
+    releaseYear int NOT NULL,
     `length` int NOT NULL,
     `language` varchar (100) NOT NULL,
-    director varchar (255) NULL,
-    genre varchar (100) NOT NULL,
-    actors varchar (1000) NULL,
     ageLimit int NOT NULL,
-    ranking float NULL
+    ranking float NULL,
+    directorID int NOT NULL,
+    companyID int NOT NULL,
+);
+
+CREATE TABLE MovieGenre (
+    movieID int NOT NULL,
+    genreID int NOT NULL,
+    CONSTRAINT PK_MovieGenre PRIMARY KEY (movieID, genreID),
+    FOREIGN KEY (movieID) REFERENCES Movie(movieID),
+    FOREIGN KEY (genreID) REFERENCES Genre(genreID)
+);
+
+CREATE TABLE MovieActor (
+    movieID int NOT NULL,
+    castMemberID int NOT NULL,
+    CONSTRAINT PK_MovieActors PRIMARY KEY (movieID, castMemberID),
+    FOREIGN KEY (movieID) REFERENCES Movie(movieID),
+    FOREIGN KEY (castMemberID) REFERENCES CastMembers(castMemberID)
 );
 
 CREATE TABLE Showing (
     showingID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `type` varchar (100) NULL,
-    startTime time NOT NULL,
     `date` date NOT NULL,
-    showingPrice float NOT NULL,
-    hallID int NOT NULL,
+    startTime time NOT NULL,
+    `type` varchar (100) NULL,
+    price float NOT NULL,
     movieID int NOT NULL,
+    hallID int NOT NULL,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID)
 );
 
 CREATE TABLE Hall (  
     hallID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    hallName varchar (255) NOT NULL,
-    hallNumber int NOT NULL
+    `name` varchar (255) NOT NULL,
+    `number` int NOT NULL
 );
 
 ALTER TABLE Showing
@@ -37,23 +69,21 @@ ADD FOREIGN KEY (hallID) REFERENCES Hall(hallID);
 
 CREATE TABLE Seat (
     seatID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `number` int NOT NULL,
     rowNumber int NOT NULL,
-    seatNumber int NOT NULL,
     hallID int NOT NULL,
     FOREIGN KEY (hallID) REFERENCES Hall(hallID)
 );
 
-CREATE TABLE Ticket (
-    ticketID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    purchasePrice float NOT NULL,
-    dateOfPurchase date NOT NULL,
-    purchaseStatus varchar (100) NOT NULL,
+CREATE TABLE `Order` (
+    orderID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    price float NOT NULL,
+    `date` date NOT NULL,
+    `status` varchar (100) NOT NULL,
     numberOfTickets int NOT NULL,
     userID int NOT NULL,
     showingID int NOT NULL,
-    seatID int NOT NULL,
-    FOREIGN KEY (showingID) REFERENCES Showing(showingID),
-    FOREIGN KEY (seatID) REFERENCES Seat(seatID)
+    FOREIGN KEY (showingID) REFERENCES Showing(showingID)
 );
 
 CREATE TABLE PostalCode (
@@ -66,6 +96,7 @@ CREATE TABLE User (
     userID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName varchar (255) NOT NULL,
     lastName varchar (255) NOT NULL,
+    userName varchar (100) NOT NULL,
     email varchar (255) NOT NULL,
     phone varchar (20) NOT NULL,
     country varchar (100) NOT NULL,
@@ -75,16 +106,23 @@ CREATE TABLE User (
     FOREIGN KEY (postalCodeID) REFERENCES PostalCode(postalCodeID)
 );
 
-ALTER TABLE Ticket
+ALTER TABLE `Order`
 ADD FOREIGN KEY (userID) REFERENCES User(userID);
 
-CREATE TABLE Contains (
-    ticketID int NOT NULL,
+CREATE TABLE OrderSeat (
+    orderID int NOT NULL,
     seatID int NOT NULL,
-    CONSTRAINT PK_Contains PRIMARY KEY (ticketID, seatID),
-    FOREIGN KEY (ticketID) REFERENCES Ticket(ticketID),
+    CONSTRAINT PK_OrderSeat PRIMARY KEY (orderID, seatID),
+    FOREIGN KEY (orderID) REFERENCES `Order`(orderID),
     FOREIGN KEY (seatID) REFERENCES Seat(seatID)
 );
+
+CREATE TABLE NEWS (
+    NEWSID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title varchar (100) NOT NULL,
+    `description` varchar (1000) NOT NULL,
+    releaseDate DATE NOT NULL
+)
 
 
 

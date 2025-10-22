@@ -1,15 +1,16 @@
 <?php
 require_once __DIR__ . "/CastMember.php";
+
 class Movie {
     private int $movieID;
     private string $title;
     private string $description;
-    private int $lenght;
+    private int $length;
     private string $language;
     private string $genre;
-    private string $ageLimit;
-    private string $ranking;
-    private string $releaseYear;
+    private int $ageLimit;
+    private float $ranking;
+    private int $releaseYear;
     private CastMember $director;
     // @var CastMember[]
     private array $actors = [];
@@ -42,12 +43,12 @@ class Movie {
         $this->description = $description;
     }
 
-    public function getLenght(): int {
-        return $this->lenght;
+    public function getLength(): int {
+        return $this->length;
     }
 
-    public function setLenght(int $lenght): void {
-        $this->lenght = $lenght;
+    public function setLength(int $length): void {
+        $this->length = $length;
     }
 
     public function getLanguage(): string {
@@ -66,11 +67,11 @@ class Movie {
         $this->genre = $genre;
     }
 
-    public function getAgeLimit(): string {
+    public function getAgeLimit(): int {
         return $this->ageLimit;
     }
 
-    public function setAgeLimit(string $ageLimit): void {
+    public function setAgeLimit(int $ageLimit): void {
         $this->ageLimit = $ageLimit;
     }
 
@@ -82,11 +83,11 @@ class Movie {
         $this->ranking = $ranking;
     }
 
-    public function getReleaseYear(): string {
+    public function getReleaseYear(): int {
         return $this->releaseYear;
     }
 
-    public function setReleaseYear(string $releaseYear): void {
+    public function setReleaseYear(int $releaseYear): void {
         $this->releaseYear = $releaseYear;
     }
 

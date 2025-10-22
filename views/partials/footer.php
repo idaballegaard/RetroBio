@@ -1,6 +1,5 @@
-        <!-- footer.php -->
         <footer class="bg-black border-t border-[#FFDF00]/50 py-12">
-            <!-- CSS for logo, glow og pseudo-bokse -->
+            <!-- CSS for logo -->
             <style>
                 .film-logo {
                     position: relative;

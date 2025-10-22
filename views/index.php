@@ -4,21 +4,16 @@
    <section id="hero" class="relative h-[650px] flex flex-col items-center justify-center text-center overflow-hidden px-4"
          style="background-image: url('/img/hero-img.webp'); background-size: cover; background-position: center;">
 
-        <!-- Mørk overlay -->
         <div class="absolute inset-0 bg-black/60"></div>
 
-        <!-- Blur/haze overlay -->
         <div class="absolute inset-0 pointer-events-none">
             <div class="absolute inset-0 bg-gradient-to-r from-[#FFDF00]/30 via-[#FE04FF]/20 to-[#00e7ec]/30 blur-3xl"></div>
         </div>
 
-        <!-- Linjer -->
         <div id="lines-container" class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"></div>
 
-        <!-- Partikler -->
         <div id="particles-container" class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"></div>
 
-        <!-- Hero indhold -->
         <div class="relative z-10 max-w-3xl">
             <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 text-[#FFDF00] animate-neon-flicker whitespace-nowrap">
                 Step into RetroBio
@@ -30,14 +25,13 @@
     </section>
 
 <style>
-/* Mild neon tekst flicker med lidt ekstra glød */
 @keyframes neonFlicker {
   0%,19%,21%,23%,25%,54%,56%,100% { 
       text-shadow: 
           0 0 2px currentColor, 
           0 0 6px currentColor, 
           0 0 12px currentColor, 
-          0 0 20px currentColor; /* ekstra glød */
+          0 0 20px currentColor;
       opacity:1;
   }
   20%,22%,24%,55% { 
@@ -52,13 +46,11 @@
     animation-delay:0.2s; 
 }
 
-/* Diagonal line base */
 .diagonal-line {
   position:absolute; width:3px; height:200%; opacity:0.3;
   box-shadow:0 0 10px currentColor,0 0 20px currentColor,0 0 40px currentColor;
 }
 
-/* Partikler base */
 .particle {
   position:absolute;
   width:6px; height:6px;
@@ -67,7 +59,6 @@
   box-shadow:0 0 8px currentColor,0 0 16px currentColor,0 0 32px currentColor;
 }
 
-/* Sparkle */
 .sparkle {
   position:absolute;
   width:2px; height:2px;
@@ -77,7 +68,6 @@
   pointer-events:none;
 }
 
-/* Blur/haze overlay */
 .blur-3xl { filter: blur(64px); }
 </style>
 
@@ -95,7 +85,6 @@ let heroWidth = hero.offsetWidth;
 let heroHeight = hero.offsetHeight;
 const rand = (min,max) => Math.random()*(max-min)+min;
 
-// --- Linjer ---
 for(let i=0;i<NUM_LINES;i++){
     const line = document.createElement('div');
     line.classList.add('diagonal-line');
@@ -123,7 +112,6 @@ for(let i=0;i<NUM_LINES;i++){
     linesContainer.appendChild(line);
 }
 
-// --- Partikler ---
 for(let i=0;i<NUM_PARTICLES;i++){
     const particle = document.createElement('div');
     particle.classList.add('particle');
@@ -152,7 +140,6 @@ for(let i=0;i<NUM_PARTICLES;i++){
     particlesContainer.appendChild(particle);
 }
 
-// --- Sparkles ---
 for(let i=0;i<NUM_SPARKLES;i++){
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
@@ -171,7 +158,6 @@ for(let i=0;i<NUM_SPARKLES;i++){
     particlesContainer.appendChild(sparkle);
 }
 
-// --- Responsiv ---
 window.addEventListener('resize', ()=>{
     heroWidth = hero.offsetWidth;
     heroHeight = hero.offsetHeight;

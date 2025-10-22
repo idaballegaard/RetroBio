@@ -16,3 +16,13 @@ function relativeDate($date) {
         return $date->format("d/M/Y");
     }
 }
+
+function generateUrl(string $path) {
+    $prefix = "/RetroBio";
+    if($path === "" || $path === "/") {
+        $url = $prefix;
+    } else {
+        $url = $prefix . "/" . ltrim($path, '/');
+    }
+    return $url;
+}

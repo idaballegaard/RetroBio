@@ -45,7 +45,7 @@ class ShowingRepository extends BaseRepository {
             $showing->getMovie()->setMovieID($row['movieID']);
             $showing->getMovie()->setTitle($row['title']);
             $showing->getMovie()->setDescription($row['description']);
-            $showing->getMovie()->setLenght($row['length']);
+            $showing->getMovie()->setLength($row['length']);
             $showing->getMovie()->setLanguage($row['language']);
 
             $showing->getMovie()->getDirector()->setCastMemberID($row['directorID']);

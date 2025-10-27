@@ -11,6 +11,12 @@ class HomeController extends BaseController {
         $viewModel = new FrontpageViewModel(__DIR__ . "/../views/index.php");
         $viewModel->setShowings($showingRepository->getShowingsThisWeek());
         return $viewModel;
+
+        // News integration
+        $newsRepository = new NewsRepository();
+        $latestNews = $newsRepository->getLatestNews(5);
+        $viewModel->setLatestNews($latestNews);
+        return $viewModel;
     }
 
 }

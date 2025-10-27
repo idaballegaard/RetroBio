@@ -366,72 +366,20 @@ document.addEventListener('click', (e) => {
       <!-- Karrusel-container -->
       <div id="newsCarousel" class="flex overflow-x-auto space-x-6 scroll-smooth">
 
-         <!-- News Card 4 -->
-        <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
-          <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
-            <img src="img/poster-wall.webp" alt="Nyhed 4" class="w-full h-52 object-cover">
-          </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker">New Posters on the walls</h3>
-          <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p>We’ve filled the cinema with vintage posters from films like Blade Runner, A Clockwork Orange, and other cult classics. Come take a look—and get inspired by iconic designs.</p>
-            <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
-          </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold">Nov 12, 2025</span>
-        </div>
+        <!-- News Card -->
+         <?php /** @var News $news */ foreach($viewModel->getNews() as $news): ?>
 
-        <!-- News Card 5 -->
-        <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
-          <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
-            <img src="img/quiz-night.webp" alt="Nyhed 5" class="w-full h-52 object-cover">
-          </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker">Film Quiz in the Cinema</h3>
-          <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p>Test your knowledge of cult classics and win awesome prizes in our cozy cinema environment. Can you match our film enthusiasts and remember all the details from the wildest retro movies?</p>
-            <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
-          </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold">Nov 18, 2025</span>
-        </div>
-
-        <!-- News Card 3 -->
-        <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
-          <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
-            <img src="img/movie-marathon.webp" alt="Nyhed 3" class="w-full h-52 object-cover">
-          </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker">Cult Movie Marathon</h3>
-          <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p>24 hours of non-stop cult classics – a retro fan’s dream come true. Bring snacks, blankets, and your love for vintage cinema!</p>
-            <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
-          </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold">Nov 21, 2025</span>
-        </div>
-
-        <!-- News Card 1 -->
         <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
           <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
             <img src="/img/news1.jpg" alt="Nyhed 1" class="w-full h-52 object-cover">
           </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker">Classic Horror Night</h3>
+          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker"><?php echo htmlspecialchars($news->getNews()->getTitle()) ?></h3>
           <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p>Join us this Friday for a night of classic horror films with popcorn and neon vibes. Don’t miss the retro trailers and surprise giveaways!</p>
+            <p><?php echo htmlspecialchars($news->getNews()->getDescription()) ?></p>
             <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
           </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold">Dec 1, 2025</span>
+          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold"><?php echo htmlspecialchars($news->getNews()->getReleaseDate()) ?></span>
         </div>
-
-        <!-- News Card 2 -->
-        <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
-          <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
-            <img src="/img/news2.jpg" alt="Nyhed 2" class="w-full h-52 object-cover">
-          </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker">Retro Sci-Fi Week</h3>
-          <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p>Experience timeless sci-fi classics from the '70s and '80s, all on the big screen. Special Q&A sessions with retro film enthusiasts!</p>
-            <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
-          </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold">Dec 3, 2025</span>
-        </div>
-
-      </div>
 
       <!-- Pile navigation -->
       <button id="prevNews" class="absolute top-1/2 -left-4 transform -translate-y-1/2 bg-black text-[#FE04FF] border border-[#FE04FF] rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#FE04FF] hover:text-black transition z-10">

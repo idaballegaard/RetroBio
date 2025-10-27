@@ -373,13 +373,15 @@ document.addEventListener('click', (e) => {
           <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
             <img src="/img/news1.jpg" alt="Nyhed 1" class="w-full h-52 object-cover">
           </div>
-          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker"><?php echo htmlspecialchars($news->getNews()->getTitle()) ?></h3>
+          <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker"><?php echo safeString($news->getTitle()) ?></h3>
           <div class="text-container text-gray-300 text-sm relative overflow-hidden">
-            <p><?php echo htmlspecialchars($news->getNews()->getDescription()) ?></p>
+            <p><?php echo safeString($news->getDescription()) ?></p>
             <div class="fade-overlay absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black"></div>
           </div>
-          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold"><?php echo htmlspecialchars($news->getNews()->getReleaseDate()) ?></span>
+          <span class="mt-2 inline-block text-xs text-[#FFDF00] font-semibold"><?php echo safeString($news->getReleaseDate()->format('Y-m-d')) ?></span>
         </div>
+
+        <?php endforeach; ?>
 
       <!-- Pile navigation -->
       <button id="prevNews" class="absolute top-1/2 -left-4 transform -translate-y-1/2 bg-black text-[#FE04FF] border border-[#FE04FF] rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#FE04FF] hover:text-black transition z-10">

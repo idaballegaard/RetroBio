@@ -10,7 +10,7 @@ class NewsRepository extends BaseRepository {
         if (!$db) return $newsList;
 
         try {
-            $stmt = $db->prepare("SELECT * FROM News ORDER BY publishedAt DESC LIMIT :limit");
+            $stmt = $db->prepare("SELECT * FROM News ORDER BY releaseDate DESC LIMIT :limit");
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

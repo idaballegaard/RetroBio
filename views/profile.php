@@ -1,20 +1,10 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 
 <?php
-$firstName = $viewModel->getFirstName();
-$lastName = $viewModel->getLastName();
-$username = $viewModel->getUsername();
-$email = $viewModel->getEmail();
-$phone = $viewModel->getPhone();
-$country = $viewModel->getCountry();
-$city = $viewModel->getCity();
-$postalCode = $viewModel->getPostalCode();
-$street = $viewModel->getStreet();
-$streetNumber = $viewModel->getStreetNumber();
+$user = $viewModel->getUser();
 ?>
 
 <?php
-session_start();
 if(!isset($_SESSION['username'])) {
     $_SESSION['username'] = "RetroFan"; // Dummy session for layout-test
     // header("Location: login.php");

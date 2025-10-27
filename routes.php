@@ -74,7 +74,7 @@ post(generateUrl("register"), function() {
 get(generateUrl("profile"), function() {
     require_once __DIR__ . "/controllers/UserController.php";
     $controller = new UserController();
-    $controller->showProfile($_GET['userID'])->presentView();
+    $controller->showProfile($_SESSION["user_id"])->presentView();
 });
 
 // 404

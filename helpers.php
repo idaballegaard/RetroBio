@@ -26,3 +26,7 @@ function generateUrl(string $path) {
     }
     return $url;
 }
+
+function safeString(string $input): string {
+    return trim(htmlspecialchars($input));
+}

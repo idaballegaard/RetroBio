@@ -88,4 +88,18 @@ class UserController extends BaseController {
             return $viewModel;
         }
     }
+
+    public function showProfile(int $userID) : BasicViewModel {
+        $userRepository = new UserRepository();
+        $user = $userRepository->getUserByID($userID);
+
+        if ($user) {
+            $viewModel = new BasicViewModel(__DIR__ . "/../views/profile.php");
+            $viewModel->setData(['user' => $user]);
+            return $viewModel;
+        } else {
+            $viewModel = new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
+            return $viewModel;
+        }
+    }
 }

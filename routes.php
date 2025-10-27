@@ -71,5 +71,11 @@ post(generateUrl("register"), function() {
     )->presentView();
 });
 
+get(generateUrl("profile"), function() {
+    require_once __DIR__ . "/controllers/UserController.php";
+    $controller = new UserController();
+    $controller->showProfile($_GET['userID'])->presentView();
+});
+
 // 404
 any(generateUrl('404'),'views/404.php');

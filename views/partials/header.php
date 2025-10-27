@@ -7,6 +7,11 @@ $menuLinks = [
     generateUrl('news.php') => 'News',
     generateUrl('contact.php') => 'Contact'
 ];
+
+// Tilføj "Profile" kun hvis brugeren er logget ind
+if (isset($_SESSION['username'])) {
+    $menuLinks[generateUrl('profile.php')] = 'Profile';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

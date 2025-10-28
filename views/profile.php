@@ -20,22 +20,22 @@ if(!isset($_SESSION['username'])) {
         <!-- Venstre: Brugerinfor -->
         <div class="flex flex-col text-left space-y-3">
             <h1 class="text-4xl font-bold text-[#00e7ec] animate-neon-flicker mb-2">
-                <?php echo htmlspecialchars($user->getUsername()); ?>
+                <?php echo safeString($user->getUsername()); ?>
             </h1>
             <p class="text-[#FFDF00] text-sm">
-                <?php echo htmlspecialchars($user->getFirstName() . ' ' . $user->getLastName()); ?>
+                <?php echo safeString($user->getFirstName() . ' ' . $user->getLastName()); ?>
             </p>
             <p class="text-[#FFDF00] text-sm">
-                <?php echo htmlspecialchars($user->getEmail()); ?>
+                <?php echo safeString($user->getEmail()); ?>
             </p>
             <p class="text-[#FFDF00] text-sm">
-                <?php echo htmlspecialchars($user->getPhone()); ?>
+                <?php echo safeString($user->getPhone()); ?>
             </p>
             <p class="text-[#FFDF00] text-sm">
-                <?php echo htmlspecialchars($user->getStreet() . ' ' . $user->getStreetNumber()); ?>
+                <?php echo safeString($user->getStreet() . ' ' . $user->getStreetNumber()); ?>
             </p>
             <p class="text-[#FFDF00] text-sm">
-                <?php echo htmlspecialchars($user->getPostalCode() . ' ' . $user->getCity()); ?>
+                <?php echo safeString($user->getPostalCode() . ' ' . $user->getCity()); ?>
             </p>
         </div>
 

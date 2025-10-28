@@ -1,0 +1,212 @@
+/* ------------------------------
+   Navbar Glow og Film-logo
+--------------------------------*/
+.custom-navbar .glow {
+  text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+.custom-navbar .film-logo {
+  position: relative;
+  display: inline-block;
+  padding: 4px 10px;
+  border: 2px solid #FFDF00;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #FFDF00, 0 0 20px #FFDF0033;
+  background-color: #000;
+  letter-spacing: 1px;
+}
+
+.custom-navbar .film-logo::before,
+.custom-navbar .film-logo::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  width: 6px;
+  background-color: #000;
+  border: 2px solid #FFDF00;
+}
+
+.custom-navbar .film-logo::before { left: -12px; }
+.custom-navbar .film-logo::after { right: -12px; }
+
+/* ------------------------------
+   Aktiv menu-understregning
+--------------------------------*/
+.custom-navbar .nav-link-active {
+  position: relative;
+  color: #FFDF00;
+  text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+.custom-navbar .nav-link-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background-color: #FFDF00;
+  border-radius: 1px;
+  box-shadow: 0 0 6px #FFDF00, 0 0 12px #FFDF0033;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+/* Animationer */
+@keyframes slideIn {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.custom-navbar .slide-down {
+  animation: slideDown 0.25s ease-out;
+}
+
+/* ------------------------------
+   Navbar specifikke input og knap
+--------------------------------*/
+.custom-navbar .navbar-search {
+  background-color: #000;
+  border: 1px solid #FFDF00;
+  color: #FFDF00;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+}
+
+.custom-navbar .navbar-search::placeholder {
+  color: #FFDF00;
+}
+
+.custom-navbar .navbar-search:focus {
+  outline: none;
+  box-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+.custom-navbar .navbar-btn {
+  border: 1px solid #FFDF00;
+  color: #FFDF00;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.custom-navbar .navbar-btn:hover {
+  background-color: #FFDF00;
+  color: #000;
+  box-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+.film-logo {
+    position: relative;
+    display: inline-block;
+    padding: 4px 10px;
+    border: 2px solid #FFDF00;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #FFDF00, 0 0 20px #FFDF0033;
+    background-color: #000;
+    letter-spacing: 1px;
+}
+
+.film-logo::before,
+.film-logo::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    width: 6px;
+    background-color: #000;
+    border: 2px solid #FFDF00;
+}
+
+.film-logo::before { left: -12px; }
+.film-logo::after { right: -12px; }
+
+.glow {
+    text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% { 
+      text-shadow: 
+          0 0 2px currentColor, 
+          0 0 6px currentColor, 
+          0 0 12px currentColor, 
+          0 0 20px currentColor;
+      opacity:1;
+  }
+  20%,22%,24%,55% { 
+      text-shadow:none; 
+      opacity:0.9;
+  }
+}
+.animate-neon-flicker { 
+    animation: neonFlicker 2s infinite; 
+}
+.animate-neon-flicker.delay-200 { 
+    animation-delay:0.2s; 
+}
+
+.diagonal-line {
+  position:absolute; width:3px; height:200%; opacity:0.3;
+  box-shadow:0 0 10px currentColor,0 0 20px currentColor,0 0 40px currentColor;
+}
+
+.particle {
+  position:absolute;
+  width:6px; height:6px;
+  border-radius:50%;
+  opacity:0.7;
+  box-shadow:0 0 8px currentColor,0 0 16px currentColor,0 0 32px currentColor;
+}
+
+.sparkle {
+  position:absolute;
+  width:2px; height:2px;
+  border-radius:50%;
+  opacity:0;
+  box-shadow:0 0 6px currentColor,0 0 12px currentColor;
+  pointer-events:none;
+}
+
+.blur-3xl { filter: blur(64px); }
+
+/* Scrollbar skjult */
+#newsCarousel::-webkit-scrollbar { display: none; }
+#newsCarousel { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Ens højde på kort */
+.news-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 420px;
+  min-height: 420px;
+}
+.news-card img {
+  width: 100%;
+  height: 208px;
+  object-fit: cover;
+}
+
+/* Fade overlay for lang tekst */
+.text-container { flex: 1; position: relative; }
+.fade-overlay { pointer-events: none; }
+
+/* Neon animation */
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% { text-shadow: 0 0 2px currentColor, 0 0 6px currentColor, 0 0 12px currentColor, 0 0 20px currentColor; opacity:1; }
+  20%,22%,24%,55% { text-shadow:none; opacity:0.9; }
+}
+.animate-neon-flicker { animation: neonFlicker 2s infinite; }
+
+/* Hover neon-effekt */
+.news-card:hover h3 { text-shadow: 0 0 12px #FE04FF, 0 0 25px #FE04FF; }
+.news-card:hover { box-shadow: 0 0 25px #FE04FF, 0 0 40px #FE04FF inset; }

@@ -25,7 +25,7 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=VT323&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="style.css" rel="stylesheet">
+    <link href="assets/style.css" rel="stylesheet">
 </head>
 <body class="bg-black text-white">
 <nav class="custom-navbar bg-black border-b border-[#FFDF00]/50 fixed w-full z-20 top-0 left-0 shadow-lg">
@@ -86,12 +86,3 @@ if (isset($_SESSION['username'])) {
     <?php endif; ?>
   </div>
 </nav>
-
-<script>
-  // Mobilmenu toggle
-  const menuBtn = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  menuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
-</script>

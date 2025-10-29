@@ -15,7 +15,7 @@ CREATE TABLE Genre (
 CREATE TABLE CastMembers (
     castMemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName varchar (255) NOT NULL,
-    lastName varchar (255) NOT NULL,
+    lastName varchar (255) NOT NULL
 );
 
 CREATE TABLE Movie (
@@ -28,7 +28,7 @@ CREATE TABLE Movie (
     ageLimit int NOT NULL,
     ranking float NULL,
     directorID int NOT NULL,
-    companyID int NOT NULL,
+    companyID int NOT NULL
 );
 
 CREATE TABLE MovieGenre (
@@ -92,7 +92,7 @@ CREATE TABLE PostalCode (
     city varchar (100) NOT NULL
 );
 
-CREATE TABLE User (
+CREATE TABLE `User` (
     userID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName varchar (255) NOT NULL,
     lastName varchar (255) NOT NULL,

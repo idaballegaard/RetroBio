@@ -1,13 +1,5 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 
-<?php
-$movie = $viewModel->getMovie();
-$company = $viewModel->getCompany();
-$genres = $viewModel->getGenres();
-$cast = $viewModel->getCast();
-$showings = $viewModel->getShowings();
-?>
-
 <style>
 @keyframes pulseGlow {
   0%,100% { box-shadow:0 0 10px #fbbf24,0 0 20px #fbbf24,0 0 40px #fbbf24; }

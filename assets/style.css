@@ -129,6 +129,10 @@
 .film-logo::before { left: -12px; }
 .film-logo::after { right: -12px; }
 
+
+/* ------------------------------
+   Hero-sektion på forsiden
+--------------------------------*/
 .glow {
     text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
 }
@@ -178,6 +182,10 @@
 
 .blur-3xl { filter: blur(64px); }
 
+
+/* ------------------------------
+   News-sektion på forsiden
+--------------------------------*/
 /* Scrollbar skjult */
 #newsCarousel::-webkit-scrollbar { display: none; }
 #newsCarousel { -ms-overflow-style: none; scrollbar-width: none; }

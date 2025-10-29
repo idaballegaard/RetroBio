@@ -14,6 +14,8 @@ class Movie {
     private CastMember $director;
     // @var CastMember[]
     private array $actors = [];
+    // @var string[]
+    private array $genres = [];
     
     public function __construct() {
         $this->director = new CastMember();
@@ -57,14 +59,6 @@ class Movie {
 
     public function setLanguage(string $language): void {
         $this->language = $language;
-    }
-
-    public function getGenre(): string {
-        return $this->genre;
-    }
-
-    public function setGenre(string $genre): void {
-        $this->genre = $genre;
     }
 
     public function getAgeLimit(): int {
@@ -111,5 +105,18 @@ class Movie {
 
     public function addActor(CastMember $actor): void {
         $this->actors[] = $actor;
+    }
+
+    // @return string[]
+    public function getGenres(): array {
+        return $this->genres;
+    }
+
+    public function setGenres(array $genres): void {
+        $this->genres = $genres;
+    }
+
+    public function addGenre(string $genre): void {
+        $this->genres[] = $genre;
     }
 }

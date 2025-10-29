@@ -12,7 +12,7 @@ CREATE TABLE Genre (
     name varchar (255) NOT NULL
 );
 
-CREATE TABLE CastMembers (
+CREATE TABLE CastMember (
     castMemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName varchar (255) NOT NULL,
     lastName varchar (255) NOT NULL
@@ -20,7 +20,7 @@ CREATE TABLE CastMembers (
 
 CREATE TABLE Movie (
     movieID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    titel varchar (255) NOT NULL,
+    title varchar (255) NOT NULL,
     `description` varchar (1000) NOT NULL,
     releaseYear int NOT NULL,
     `length` int NOT NULL,
@@ -97,6 +97,7 @@ CREATE TABLE `User` (
     firstName varchar (255) NOT NULL,
     lastName varchar (255) NOT NULL,
     userName varchar (100) NOT NULL,
+    hashedPassword varchar (60) NOT NULL,
     email varchar (255) NOT NULL,
     phone varchar (20) NOT NULL,
     country varchar (100) NOT NULL,

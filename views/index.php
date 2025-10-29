@@ -72,7 +72,7 @@
             <?php $previous = null; ?>
             <?php foreach($viewModel->getShowings() as $showing): ?>
               <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
-                <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
+                <button onclick="filterMovies(this)" class="filter-button bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
               <?php endif; ?>
               <?php $previous = $showing; ?>
             <?php endforeach; ?>
@@ -86,7 +86,7 @@
         <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
 
 
-        <div class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
+        <div data-showing-date="<?php echo relativeDate($showing->getDate()) ?>" class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
                     transition-transform duration-300 hover:-translate-y-2 
                     hover:shadow-2xl">
             <div class="flex flex-col md:flex-row">
@@ -104,7 +104,9 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded"><?php echo safeString($showing->getMovie()->getGenre()) ?></span>
+                        <?php /** @var string $genre */ foreach($showing->getMovie()->getGenres() as $genre): ?>
+                          <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded"><?php echo safeString($genre) ?></span>
+                        <?php endforeach; ?>
                     </div>
                     <p class="text-gray-300 mb-6"><?php echo safeString($showing->getMovie()->getDescription()) ?></p>
 

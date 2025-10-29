@@ -1,16 +1,19 @@
 <?php
 require_once __DIR__ . "/BaseRepository.php";
+require_once __DIR__ . "/GenreRepository.php";
 require_once __DIR__ . "/../models/Showing.php";
 
 class ShowingRepository extends BaseRepository {
 
     // @return Showing[]
     public function getShowingsThisWeek() : array {
+        $genreReository = new GenreRepository();
+
         $pdo = $this->connectDatabase();
         $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
                                     h.name, h.number,
                                     cm.firstName, cm.lastName,
-                                    m.title, m.description, m.length, m.language, m.directorID, m.genre, m.ageLimit, m.ranking, m.releaseYear 
+                                    m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
                             FROM Showing s
                             LEFT JOIN Movie m ON s.movieID = m.movieID
                             LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
@@ -19,7 +22,6 @@ class ShowingRepository extends BaseRepository {
                             ORDER BY s.date, s.startTime ASC
         ");
         $stmt->execute();
-        echo $stmt->rowCount() . " showings found.\n";
 
         $showings = [];
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +54,7 @@ class ShowingRepository extends BaseRepository {
             $showing->getMovie()->getDirector()->setFirstName($row['firstName']);
             $showing->getMovie()->getDirector()->setLastName($row['lastName']);
 
-            $showing->getMovie()->setGenre($row['genre']);
+            $showing->getMovie()->setGenres($genreReository->getGenresByMovieId($row['movieID']));
             $showing->getMovie()->setAgeLimit($row['ageLimit']);
             $showing->getMovie()->setRanking($row['ranking']);
             $showing->getMovie()->setReleaseYear($row['releaseYear']);

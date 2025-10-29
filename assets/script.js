@@ -208,3 +208,21 @@ newsCards.forEach(card => {
   const randomDelay = (Math.random() * 1.5).toFixed(2); // mellem 0 og 1.5 sek
   card.style.animationDelay = `${randomDelay}s`;
 });
+
+function filterMovies(button) {
+    const selectedDate = button.textContent;
+    const showings = document.querySelectorAll('[data-showing-date]');
+    document.querySelectorAll('.filter-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    button.classList.add('active');
+    showings.forEach(showing => {
+        if (showing.getAttribute('data-showing-date') === selectedDate) {
+            showing.style.setProperty('display', 'block', 'important');
+        } else {
+          console.log("Hiding showing for date: " + showing.getAttribute('data-showing-date'));
+            showing.style.setProperty('display', 'none', 'important');
+        }
+    });
+}
+document.querySelectorAll('.filter-button')[0].click();

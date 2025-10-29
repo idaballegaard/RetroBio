@@ -5,7 +5,6 @@ require_once __DIR__.'/helpers.php';
 
 // Frontpage
 get(generateUrl("/"), function() {
-    echo "HMM";
     require_once __DIR__ . "/controllers/HomeController.php";
     $controller = new HomeController();
     $controller->frontpage()->presentView();

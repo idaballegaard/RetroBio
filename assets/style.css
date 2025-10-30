@@ -225,3 +225,51 @@
     color: #000;
     border-color: #00e7ec;
 }
+
+
+/* ------------------------------
+   About-sektion på forsiden
+--------------------------------*/
+.glow {
+    text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+}
+
+.glow-pink {
+    text-shadow: 0 0 8px #FE04FF, 0 0 12px #FE04FF33;
+}
+
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% { 
+      text-shadow: 
+          0 0 2px currentColor, 
+          0 0 6px currentColor, 
+          0 0 12px currentColor, 
+          0 0 20px currentColor;
+      opacity:1;
+  }
+  20%,22%,24%,55% { 
+      text-shadow:none; 
+      opacity:0.9;
+  }
+}
+
+.animate-neon-flicker { 
+    animation: neonFlicker 2s infinite; 
+}
+.animate-neon-flicker.delay-200 { 
+    animation-delay:0.2s; 
+}
+
+/* Optional film-style image grain */
+.film-grain {
+    position: relative;
+}
+.film-grain::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: url('https://grainy-gradients.vercel.app/noise.png');
+    opacity: 0.22;
+    mix-blend-mode: soft-light;
+}

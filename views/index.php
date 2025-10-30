@@ -33,6 +33,7 @@
                 View All <i data-feather="chevron-right" class="ml-1"></i>
             </a>
         </div>
+      
 
         <!-- Date picker -->
         <div class="mb-8">
@@ -65,26 +66,23 @@
             </div>
         </div>
 
-
         <!-- Week Calendar -->
         <div class="flex overflow-x-auto pb-4 mb-8 scrollbar-hide">
-        <div class="flex space-x-2">
-            <?php $previous = null; ?>
-            <?php foreach($viewModel->getShowings() as $showing): ?>
-              <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
-                <button onclick="filterMovies(this)" class="filter-button bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
-              <?php endif; ?>
-              <?php $previous = $showing; ?>
-            <?php endforeach; ?>
-            <!-- <button class="bg-[#00e7ec] text-black px-4 py-2 rounded-md font-medium min-w-[100px]">Today</button>
-            <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black px-4 py-2 rounded-md min-w-[100px]">Tomorrow</button> -->
+          <div class="flex space-x-2">
+              <?php $previous = null; ?>
+              <?php foreach($viewModel->getShowings() as $showing): ?>
+                <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
+                  <button onclick="filterMovies(this)" class="filter-button bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
+                <?php endif; ?>
+                <?php $previous = $showing; ?>
+              <?php endforeach; ?>
+              <!-- <button class="bg-[#00e7ec] text-black px-4 py-2 rounded-md font-medium min-w-[100px]">Today</button>
+              <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black px-4 py-2 rounded-md min-w-[100px]">Tomorrow</button> -->
+          </div>
         </div>
-        </div>
-
 
         <!-- Showing Card -->
         <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
-
 
         <div data-showing-date="<?php echo relativeDate($showing->getDate()) ?>" class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
                     transition-transform duration-300 hover:-translate-y-2 
@@ -131,6 +129,7 @@
       </div>
 </section>
 
+
 <!-- News Section -->
 <section class="py-16 px-6 bg-black relative">
   <div class="container mx-auto">
@@ -170,6 +169,91 @@
           <i data-feather="chevron-right"></i>
         </button>
     </div>
+  </div>
+</section>
+
+
+<!-- About Section -->
+<section id="about" class="py-20 px-6 bg-black relative overflow-hidden">
+  <!-- Neon Glow Background -->
+  <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute inset-0 bg-gradient-to-r from-[#FE04FF]/25 via-[#00e7ec]/10 to-[#FFDF00]/25 blur-3xl opacity-30"></div>
+  </div>
+
+  <div class="container mx-auto relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+
+          <!-- Image -->
+          <div class="flex">
+              <div class="w-full overflow-hidden rounded-xl border border-[#00e7ec] shadow-[0_0_25px_#00e7ec] film-grain">
+                  <img src="/img/cinema-interior.webp" 
+                        alt="Retro Cinema Interior" 
+                        class="w-full h-full object-cover">
+              </div>
+          </div>
+
+          <!-- Text Content -->
+          <div class="flex flex-col justify-between">
+
+              <div class="text-center mb-10">
+                  <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#FFDF00] glow animate-neon-flicker">
+                      RetroBio
+                  </h2>
+                  <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FE04FF] glow-pink animate-neon-flicker delay-200 mt-2">
+                      Where Classics Shine Again
+                  </h3>
+              </div>
+
+              <div class="space-y-6 text-gray-300 leading-relaxed text-lg">
+                  <p>
+                      At RetroBio, we invite you to step into a world where film history is celebrated, cherished, 
+                      and brought back to life. Our cinema blends vintage charm with modern comfort, creating a space 
+                      where every screening feels like a special event. We’re passionate about honoring the art of cinema 
+                      and sharing unforgettable moments with fellow movie lovers.
+                  </p>
+
+                  <p>
+                      Our mission is to rekindle the magic of classic theaters—where the glow of the projector, 
+                      the anticipation before the opening scene, and the shared silence of the audience create something 
+                      truly timeless. We curate a unique selection of films, from iconic masterpieces to hidden gems 
+                      that deserve to be experienced on the big screen once more.
+                  </p>
+
+                  <p>
+                      RetroBio exists for one reason: love of film. Every detail in our theater is thoughtfully designed 
+                      to evoke nostalgia and wonder. We hope that, when you take your seat, you’ll feel transported to 
+                      an era when going to the movies wasn’t just entertainment—it was an experience.
+                  </p>
+              </div>
+
+              <!-- Contact / Hours -->
+              <div class="mt-10 bg-black border border-[#FFDF00] rounded-xl p-6 shadow-[0_0_25px_#FFDF00] film-grain">
+                  <!-- Overskrift Visit RetroBio -->
+                  <h3 class="text-xl text-[#FFDF00] font-bold mb-4 glow animate-neon-flicker delay-200">
+                      Visit RetroBio
+                  </h3>
+
+                  <div class="space-y-2 text-gray-200 text-sm">
+                      <p><span class="font-semibold text-[#FE04FF]">Address:</span> RetroBio Cinema, Retro Street 42, 8000 Aarhus</p>
+                      <p><span class="font-semibold text-[#FE04FF]">Email:</span> contact@retrobio.dk</p>
+                      <p><span class="font-semibold text-[#FE04FF]">Phone:</span> +45 12 34 56 78</p>
+                  </div>
+
+                  <div class="mt-4">
+                      <!-- Overskrift Opening Hours -->
+                      <h4 class="text-lg text-[#FFDF00] font-bold mb-2 glow animate-neon-flicker delay-200">
+                          Opening Hours
+                      </h4>
+                      <ul class="space-y-1 text-gray-200 text-sm">
+                          <li><span class="text-[#FE04FF] font-semibold">Mon–Thu:</span> 16:00 – 22:30</li>
+                          <li><span class="text-[#FE04FF] font-semibold">Fri:</span> 16:00 – 00:00</li>
+                          <li><span class="text-[#FE04FF] font-semibold">Sat:</span> 12:00 – 00:00</li>
+                          <li><span class="text-[#FE04FF] font-semibold">Sun:</span> 12:00 – 22:00</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
 </section>
 

@@ -123,6 +123,24 @@ CREATE TABLE News (
     title varchar (100) NOT NULL,
     `description` varchar (1000) NOT NULL,
     releaseDate DATE NOT NULL
+);
+
+CREATE TABLE About (
+    aboutID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title varchar (100) NOT NULL,
+    `description` varchar (1500) NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE OpeningHours (
+    openingHoursID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    day_of_week ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
+    open_time TIME NOT NULL,
+    close_time TIME NOT NULL,
+    aboutID int NOT NULL,
+    FOREIGN KEY (aboutID) REFERENCES About(aboutID)
 )
 
 

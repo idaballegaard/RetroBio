@@ -128,6 +128,7 @@ CREATE TABLE News (
 CREATE TABLE About (
     aboutID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title varchar (100) NOT NULL,
+    subtitle varchar (100) NOT NULL,
     `description` varchar (1500) NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,

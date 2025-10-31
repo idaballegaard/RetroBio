@@ -228,43 +228,27 @@
 
 
 /* ------------------------------
-   About-sektion på forsiden
+   About Section Scoped Styles
 --------------------------------*/
-.glow {
-    text-shadow: 0 0 8px #FFDF00, 0 0 12px #FFDF0033;
+#about .animate-neon-flicker {
+    animation: neonFlicker 2s infinite;
 }
 
-.glow-pink {
-    text-shadow: 0 0 8px #FE04FF, 0 0 12px #FE04FF33;
+#about .animate-neon-flicker.delay-200 {
+    animation-delay: 0.2s;
 }
 
-@keyframes neonFlicker {
-  0%,19%,21%,23%,25%,54%,56%,100% { 
-      text-shadow: 
-          0 0 2px currentColor, 
-          0 0 6px currentColor, 
-          0 0 12px currentColor, 
-          0 0 20px currentColor;
-      opacity:1;
-  }
-  20%,22%,24%,55% { 
-      text-shadow:none; 
-      opacity:0.9;
-  }
-}
-
-.animate-neon-flicker { 
-    animation: neonFlicker 2s infinite; 
-}
-.animate-neon-flicker.delay-200 { 
-    animation-delay:0.2s; 
-}
-
-/* Optional film-style image grain */
-.film-grain {
+#about .contact-box {
+    box-shadow: 0 0 25px #FFDF00;
     position: relative;
 }
-.film-grain::after {
+
+#about .image-box {
+    box-shadow: 0 0 25px #00e7ec;
+    position: relative;
+}
+
+#about .film-grain::after {
     content: "";
     pointer-events: none;
     position: absolute;
@@ -273,3 +257,10 @@
     opacity: 0.22;
     mix-blend-mode: soft-light;
 }
+
+/* Glow colors */
+#about h2 { color: #FFDF00; }
+#about h3 { color: #FE04FF; }
+#about .contact-box { border-color: #FFDF00; }
+#about .contact-box h3, #about .contact-box h4 { color: #FFDF00; }
+#about .contact-box span { color: #FE04FF; }

@@ -185,10 +185,8 @@
 
           <!-- Image -->
           <div class="flex">
-              <div class="w-full overflow-hidden rounded-xl border border-[#00e7ec] shadow-[0_0_25px_#00e7ec] film-grain">
-                  <img src="/img/cinema-interior.webp" 
-                        alt="Retro Cinema Interior" 
-                        class="w-full h-full object-cover">
+              <div class="image-box w-full overflow-hidden rounded-xl border border-[#00e7ec] film-grain">
+                  <img src="/img/cinema-interior.webp" alt="Retro Cinema Interior" class="w-full h-full object-cover">
               </div>
           </div>
 
@@ -196,55 +194,38 @@
           <div class="flex flex-col justify-between">
 
               <div class="text-center mb-10">
-                  <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#FFDF00] glow animate-neon-flicker">
-                      RetroBio
+                  <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#FFDF00] animate-neon-flicker">
+                    <?php echo safeString($about->getTitle()) ?>
                   </h2>
-                  <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FE04FF] glow-pink animate-neon-flicker delay-200 mt-2">
-                      Where Classics Shine Again
+                  <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FE04FF] animate-neon-flicker delay-200 mt-2">
+                    <?php echo safeString($about->getSubtitle()) ?>
                   </h3>
               </div>
 
               <div class="space-y-6 text-gray-300 leading-relaxed text-lg">
                   <p>
-                      At RetroBio, we invite you to step into a world where film history is celebrated, cherished, 
-                      and brought back to life. Our cinema blends vintage charm with modern comfort, creating a space 
-                      where every screening feels like a special event. We’re passionate about honoring the art of cinema 
-                      and sharing unforgettable moments with fellow movie lovers.
-                  </p>
-
-                  <p>
-                      Our mission is to rekindle the magic of classic theaters—where the glow of the projector, 
-                      the anticipation before the opening scene, and the shared silence of the audience create something 
-                      truly timeless. We curate a unique selection of films, from iconic masterpieces to hidden gems 
-                      that deserve to be experienced on the big screen once more.
-                  </p>
-
-                  <p>
-                      RetroBio exists for one reason: love of film. Every detail in our theater is thoughtfully designed 
-                      to evoke nostalgia and wonder. We hope that, when you take your seat, you’ll feel transported to 
-                      an era when going to the movies wasn’t just entertainment—it was an experience.
+                    <?php echo safeString($about->getDescription()) ?>
                   </p>
               </div>
 
               <!-- Contact / Hours -->
-              <div class="mt-10 bg-black border border-[#FFDF00] rounded-xl p-6 shadow-[0_0_25px_#FFDF00] film-grain">
-                  <!-- Overskrift Visit RetroBio -->
-                  <h3 class="text-xl text-[#FFDF00] font-bold mb-4 glow animate-neon-flicker delay-200">
+              <div class="mt-10 contact-box border rounded-xl p-6 film-grain">
+                  <!-- Visit RetroBio -->
+                  <h3 class="text-xl text-[#FFDF00] font-bold animate-neon-flicker delay-200 mb-4">
                       Visit RetroBio
                   </h3>
 
-                  <div class="space-y-2 text-gray-200 text-sm">
-                      <p><span class="font-semibold text-[#FE04FF]">Address:</span> RetroBio Cinema, Retro Street 42, 8000 Aarhus</p>
-                      <p><span class="font-semibold text-[#FE04FF]">Email:</span> contact@retrobio.dk</p>
-                      <p><span class="font-semibold text-[#FE04FF]">Phone:</span> +45 12 34 56 78</p>
+                  <div class="space-y-2 text-sm text-gray-200">
+                      <p><span class="font-semibold text-[#FE04FF]">Address:</span> <?php echo safeString($about->getAddress()) ?></p>
+                      <p><span class="font-semibold text-[#FE04FF]">Email:</span> <?php echo safeString($about->getEmail()) ?></p>
+                      <p><span class="font-semibold text-[#FE04FF]">Phone:</span> <?php echo safeString($about->getPhone()) ?></p>
                   </div>
 
                   <div class="mt-4">
-                      <!-- Overskrift Opening Hours -->
-                      <h4 class="text-lg text-[#FFDF00] font-bold mb-2 glow animate-neon-flicker delay-200">
+                      <h4 class="text-lg text-[#FFDF00] font-bold animate-neon-flicker delay-200 mb-2">
                           Opening Hours
                       </h4>
-                      <ul class="space-y-1 text-gray-200 text-sm">
+                      <ul class="space-y-1 text-sm text-gray-200">
                           <li><span class="text-[#FE04FF] font-semibold">Mon–Thu:</span> 16:00 – 22:30</li>
                           <li><span class="text-[#FE04FF] font-semibold">Fri:</span> 16:00 – 00:00</li>
                           <li><span class="text-[#FE04FF] font-semibold">Sat:</span> 12:00 – 00:00</li>

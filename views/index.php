@@ -190,10 +190,11 @@
               </div>
           </div>
 
+          <?php $about = $viewModel->getAbout() ?>
           <!-- Text Content -->
           <div class="flex flex-col justify-between">
 
-              <div class="text-center mb-10">
+              <div class="text-center mb-3">
                   <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#FFDF00] animate-neon-flicker">
                     <?php echo safeString($about->getTitle()) ?>
                   </h2>
@@ -202,10 +203,10 @@
                   </h3>
               </div>
 
-              <div class="space-y-6 text-gray-300 leading-relaxed text-lg">
-                  <p>
-                    <?php echo safeString($about->getDescription()) ?>
-                  </p>
+              <div class="space-y-6 text-gray-300 leading-relaxed text-lg" style="white-space: pre-line;">
+                <p>
+                    <?php echo safeString($about->getDescription()); ?>
+                </p>
               </div>
 
               <!-- Contact / Hours -->

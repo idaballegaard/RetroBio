@@ -45,22 +45,22 @@ class UserController extends BaseController {
         $userRepository = new UserRepository();
         $viewModel = new BasicViewModel(__DIR__ . "/../views/register.php");
 
-        // 1️⃣ Valider adgangskoder
+        // Valider adgangskoder
         if ($password !== $confirmPassword) {
             $viewModel->setErrorMessage("Passwords do not match.");
             return $viewModel;
         }
 
-        // 2️⃣ Tjek om brugernavn eller email allerede findes
+        // Tjek om brugernavn eller email allerede findes
         if ($userRepository->getUserByEmailOrUsername($email) || $userRepository->getUserByEmailOrUsername($username)) {
             $viewModel->setErrorMessage("Username or email already exists.");
             return $viewModel;
         }
 
-        // 3️⃣ Hash adgangskoden
+        // Hash adgangskoden
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        // 4️⃣ Opret brugeren (forventer et User-objekt retur)
+        // Opret brugeren (forventer et User-objekt retur)
         $user = $userRepository->createUser(
             $firstName,
             $lastName,
@@ -75,7 +75,7 @@ class UserController extends BaseController {
             $hashedPassword
         );
 
-        // 5️⃣ Hvis oprettelse lykkes, log brugeren ind
+        // Hvis oprettelse lykkes, log brugeren ind
         if ($user) {
             $_SESSION['user_id'] = $user->getUserID();
             $_SESSION['username'] = $user->getUsername();

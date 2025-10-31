@@ -96,7 +96,7 @@ CREATE TABLE `User` (
     userID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName varchar (255) NOT NULL,
     lastName varchar (255) NOT NULL,
-    userName varchar (100) NOT NULL,
+    username varchar (100) NOT NULL,
     hashedPassword varchar (60) NOT NULL,
     email varchar (255) NOT NULL,
     phone varchar (20) NOT NULL,
@@ -136,13 +136,30 @@ CREATE TABLE About (
 );
 
 CREATE TABLE OpeningHours (
-    openingHoursID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    day_of_week ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
-    open_time TIME NOT NULL,
-    close_time TIME NOT NULL,
-    aboutID int NOT NULL,
+  openingHoursID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  dayOfWeek ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
+  openTime TIME NOT NULL,
+  closeTime TIME NOT NULL,
+  aboutID INT NOT NULL,
+  FOREIGN KEY (aboutID) REFERENCES About(aboutID)
+);
+
+CREATE TABLE TimeSlots (
+    timeSlotID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    openTime TIME NOT NULL,
+    closeTime TIME NOT NULL,
+    label VARCHAR(50) NULL
+);
+
+CREATE TABLE OpeningDays (
+    openingDayID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    timeSlotID INT NOT NULL,
+    dayOfWeek ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
+    aboutID INT NOT NULL,
+    FOREIGN KEY (timeSlotID) REFERENCES TimeSlots(timeSlotID),
     FOREIGN KEY (aboutID) REFERENCES About(aboutID)
 )
+
 
 
 
@@ -375,3 +392,34 @@ INSERT INTO Contains(ticketID,seatID) VALUES
 
 -- Fortsæt mønster for alle billetter
 -- Hvert ticketID skal have seatID for alle købte billetter
+
+
+-- OpeningHours
+INSERT INTO OpeningHours (dayOfWeek, openTime, closeTime, aboutID)
+VALUES
+  ('Mon', '16:00:00', '22:30:00', 1),
+  ('Tue', '16:00:00', '22:30:00', 1),
+  ('Wed', '16:00:00', '22:30:00', 1),
+  ('Thu', '16:00:00', '22:30:00', 1),
+  ('Fri', '16:00:00', '00:00:00', 1),
+  ('Sat', '12:00:00', '00:00:00', 1),
+  ('Sun', '12:00:00', '22:00:00', 1);
+
+  -- OpeningDays
+  INSERT INTO OpeningDays (timeSlotID, dayOfWeek, aboutID)
+VALUES
+  (1, 'Mon', 1),
+  (1, 'Tue', 1),
+  (1, 'Wed', 1),
+  (1, 'Thu', 1),
+  (2, 'Fri', 1),
+  (3, 'Sat', 1),
+  (4, 'Sun', 1);
+
+  -- timeSlots
+  INSERT INTO TimeSlots (openTime, closeTime, label)
+VALUES 
+  ('16:00:00','22:30:00','Mon–Thu'),
+  ('16:00:00','00:00:00','Fri'),
+  ('12:00:00','00:00:00','Sat'),
+  ('12:00:00','22:00:00','Sun');

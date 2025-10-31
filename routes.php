@@ -70,6 +70,7 @@ post(generateUrl("register"), function() {
     )->presentView();
 });
 
+// Profil
 get(generateUrl("profile"), function() {
     require_once __DIR__ . "/controllers/UserController.php";
     $controller = new UserController();

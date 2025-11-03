@@ -13,7 +13,7 @@ class MovieRepository extends BaseRepository {
         $movie->setDescription($row['description']);
         $movie->setLength((int)$row['length']);
         $movie->setLanguage($row['language']);
-        $movie->setGenre($row['genre']);
+        $movie->addGenre($row['genre']);
         $movie->setAgeLimit((int)$row['ageLimit']);
         $movie->setRanking($row['ranking']);
         $movie->setReleaseYear((int)$row['releaseYear']);
@@ -129,5 +129,11 @@ class MovieRepository extends BaseRepository {
         $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function createMovie() {
+        if($this->verifyLoggedInUserAsAdmin()) {
+            
+        }
     }
 }

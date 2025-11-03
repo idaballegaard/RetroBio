@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once __DIR__.'/router.php';
-require_once __DIR__.'/helpers.php';
+require_once __DIR__."/router.php";
+require_once __DIR__."/helpers.php";
+require_once __DIR__."/BaseRepository.php";
 
 // Frontpage
 get(generateUrl("/"), function() {
@@ -76,6 +77,9 @@ get(generateUrl("profile"), function() {
     $controller = new UserController();
     $controller->showProfile($_SESSION["user_id"])->presentView();
 });
+
+// Admin
+if(UserRepository)
 
 // 404
 any(generateUrl('404'),'views/404.php');

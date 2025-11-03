@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/UserRepository.php";
 abstract class BaseRepository {
     protected function connectDatabase() {
         $db_name = "mysql:dbname=RetroBioDBNEW";
@@ -13,5 +14,15 @@ abstract class BaseRepository {
         catch(PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    public static function dieIfNotAdmin() {
+        $userRepository = new UserRepository();
+        $user = $userRepository->getUserByID($_SESSION["user_id"]);
+        if(!$user->getIsAdmin()) {
+            die("You are not authorized to access this resource.");
+            return;
+        }
+        return $user->getIsAdmin();
     }
 }

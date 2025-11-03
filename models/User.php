@@ -12,6 +12,7 @@ class User {
     private string $streetNumber;
     private string $postalCode;
     private string $city;
+    private bool $isAdmin;
 
     public function getUserID() : int {
         return $this->userID;
@@ -89,5 +90,13 @@ class User {
     }
     public function setCity(string $city) : void {
         $this->city = $city;
+    }
+
+    public function getIsAdmin() : bool {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin) : void {
+        $this->isAdmin = $isAdmin;
     }
 }

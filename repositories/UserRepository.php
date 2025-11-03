@@ -25,6 +25,7 @@ class UserRepository extends BaseRepository {
                 $user->setStreetNumber($row['streetNumber']);
                 $user->setPostalCode($row['postalCode']);
                 $user->setCity($row['city']);
+                $user->setIsAdmin($row['isAdmin']);
                 return $user;
             } else {
                 return null;
@@ -107,6 +108,7 @@ class UserRepository extends BaseRepository {
                 $user->setStreetNumber($row['streetNumber']);
                 $user->setPostalCode($row['postalCode']);
                 $user->setCity($row['city']);
+                $user->setIsAdmin($row['isAdmin']);
                 return $user;
             } else {
                 return null;

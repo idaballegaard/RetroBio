@@ -104,6 +104,7 @@ CREATE TABLE `User` (
     street varchar (255) NOT NULL,
     streetNumber varchar (20) NOT NULL,
     postalCodeID int NOT NULL,
+    isAdmin BIT NOT NULL DEFAULT 0,
     FOREIGN KEY (postalCodeID) REFERENCES PostalCode(postalCodeID)
 );
 

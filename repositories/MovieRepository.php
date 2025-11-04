@@ -13,12 +13,14 @@ class MovieRepository extends BaseRepository {
         $movie->setDescription($row['description']);
         $movie->setLength((int)$row['length']);
         $movie->setLanguage($row['language']);
-        $movie->addGenre($row['genre']);
         $movie->setAgeLimit((int)$row['ageLimit']);
         $movie->setRanking($row['ranking']);
         $movie->setReleaseYear((int)$row['releaseYear']);
+        $movie->setCompany($row['name']);
         $movie->getDirector()->setFirstName($row['firstName']);
         $movie->getDirector()->setLastName($row['lastName']);
+
+        $this->loadGenre($movie->getMovieID(), $movie);
         return $movie;
     }
 
@@ -44,6 +46,24 @@ class MovieRepository extends BaseRepository {
         }
     }
 
+    // Hent genre til en film
+    private function loadGenre(int $movieID, Movie $movie): void {
+        $db = $this->connectDatabase();
+        $stmt = $db->prepare("
+            SELECT g.* 
+            FROM MovieGenre mg
+            JOIN Genre g ON g.genreId = mg.genreId
+            WHERE mg.movieID = :movieID
+        ");
+        $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($rows as $row){
+            $movie->addGenre($row["name"]);
+        }
+    }
+
     // Film på forsiden
     public function getAllMovies(): array {
         $movies = [];
@@ -51,7 +71,7 @@ class MovieRepository extends BaseRepository {
         if (!$db) return $movies;
 
         try {
-            $stmt = $db->query("SELECT * FROM Movie m JOIN CastMember cm ON m.directorID = cm.castMemberID");
+            $stmt = $db->query("SELECT * FROM Movie m JOIN Company c ON c.companyID = m.companyID JOIN CastMember cm ON m.directorID = cm.castMemberID");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($rows as $row) {
@@ -75,6 +95,7 @@ class MovieRepository extends BaseRepository {
             $stmt = $db->prepare("
                 SELECT * FROM Movie m 
                 LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
+                LEFT JOIN Company c ON c.companyID = m.companyID
                 WHERE m.movieID = :movieID
             ");
             $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
@@ -129,11 +150,5 @@ class MovieRepository extends BaseRepository {
         $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
-    }
-
-    public function createMovie() {
-        if($this->verifyLoggedInUserAsAdmin()) {
-            
-        }
     }
 }

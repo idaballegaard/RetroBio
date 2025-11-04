@@ -7,7 +7,6 @@ class Movie {
     private string $description;
     private int $length;
     private string $language;
-    private string $genre;
     private int $ageLimit;
     private float $ranking;
     private int $releaseYear;
@@ -16,6 +15,7 @@ class Movie {
     private array $actors = [];
     // @var string[]
     private array $genres = [];
+    private string $company;
     
     public function __construct() {
         $this->director = new CastMember();
@@ -118,5 +118,13 @@ class Movie {
 
     public function addGenre(string $genre): void {
         $this->genres[] = $genre;
+    }
+
+    public function getCompany(): string {
+        return $this->company;
+    }
+
+    public function setCompany(string $company) {
+        $this->company = $company;
     }
 }

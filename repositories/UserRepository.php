@@ -119,4 +119,20 @@ class UserRepository extends BaseRepository {
             return null;
         }
     }
+
+    public static function isAdmin() {
+        $userRepository = new UserRepository();
+        if(!isset($_SESSION["user_id"])) {
+            return false;
+        }
+        $user = $userRepository->getUserByID($_SESSION["user_id"]);
+        return $user->getIsAdmin();
+    }
+
+    public static function dieIfNotAdmin() {
+        if(!UserRepository::isAdmin()) {
+            die("You are not authorized to access this resource.");
+            return;
+        }
+    }
 }

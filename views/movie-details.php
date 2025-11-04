@@ -1,4 +1,6 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
+<?php $movie = $viewModel->getMovie(); ?>
+<?php $company = $viewModel->getCompany(); ?>
 
 <style>
 @keyframes pulseGlow {
@@ -77,13 +79,13 @@
     <p id="movieDesc" class="text-gray-300 mb-6 leading-relaxed"><?php echo safeString($movie->getDescription()); ?></p>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
       <div><span class="text-[#00e7ec]">Release Year:</span> <?php echo safeString($movie->getReleaseYear()); ?></div>
-      <div><span class="text-[#00e7ec]">Genre:</span> <?php echo implode(', ', $genres); ?></div>
+      <div><span class="text-[#00e7ec]">Genre:</span> <?php echo implode(', ', $movie->getGenres()); ?></div>
       <div><span class="text-[#00e7ec]">Length:</span> <?php echo safeString($movie->getLength()); ?> min</div>
       <div><span class="text-[#00e7ec]">Language:</span> <?php echo safeString($movie->getLanguage()); ?></div>
       <div><span class="text-[#00e7ec]">Age Limit:</span> <?php echo safeString($movie->getAgeLimit()); ?>+</div>
       <div><span class="text-[#00e7ec]">Director:</span> <?php echo safeString($movie->getDirector()->getFirstName()); ?></div>
       <div><span class="text-[#00e7ec]">Company:</span> <?php echo safeString($company); ?></div>
-      <div class="col-span-2 md:col-span-3"><span class="text-[#00e7ec]">Main Cast:</span> <?php echo implode(', ', $cast); ?></div>
+      <div class="col-span-2 md:col-span-3"><span class="text-[#00e7ec]">Main Cast:</span> <?php echo implode(', ', $movie->getActors()); ?></div>
     </div>
   </div>
 </div>

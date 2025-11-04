@@ -22,4 +22,8 @@ class CastMember {
     public function setLastName(string $lastName) : void {
         $this->lastName = $lastName;
     }
+
+    public function __toString() {
+        return $this->firstName . " " . $this->lastName;
+    }
 }

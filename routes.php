@@ -2,7 +2,8 @@
 session_start();
 require_once __DIR__."/router.php";
 require_once __DIR__."/helpers.php";
-require_once __DIR__."/BaseRepository.php";
+require_once __DIR__."/repositories/UserRepository.php";
+require_once __DIR__."/repositories/NewsRepository.php";
 
 // Frontpage
 get(generateUrl("/"), function() {
@@ -79,7 +80,13 @@ get(generateUrl("profile"), function() {
 });
 
 // Admin
-if(UserRepository)
+if(UserRepository::isAdmin()) {
+    get(generateUrl("admin/news"), function() {
+        require_once __DIR__ . "/controllers/admin/NewsAdminController.php";
+        $controller = new NewsAdminController();
+        $controller->newsList()->presentView();
+    });
+}
 
 // 404
 any(generateUrl('404'),'views/404.php');

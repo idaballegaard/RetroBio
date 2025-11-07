@@ -81,10 +81,10 @@ get(generateUrl("profile"), function() {
 
 // Admin
 if(UserRepository::isAdmin()) {
-    get(generateUrl("admin/news"), function() {
-        require_once __DIR__ . "/controllers/admin/NewsAdminController.php";
-        $controller = new NewsAdminController();
-        $controller->newsList()->presentView();
+    get(generateUrl("admin/"), function() {
+        require_once __DIR__ . "/controllers/admin/AdminController.php";
+        $controller = new AdminController();
+        $controller->adminFrontpage()->presentView();
     });
 }
 

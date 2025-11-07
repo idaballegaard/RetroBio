@@ -151,4 +151,26 @@ class MovieRepository extends BaseRepository {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function getMoviesForAdmin() {
+        UserRepository::dieIfNotAdmin();
+
+        $movies = [];
+        $db = $this->connectDatabase();
+        if (!$db) return $movies;
+
+        try {
+            $stmt = $db->query("SELECT * FROM Movie m JOIN Company c ON c.companyID = m.companyID JOIN CastMember cm ON m.directorID = cm.castMemberID");
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($rows as $row) {
+                $movie = $this->mapRowToMovie($row);
+                $this->loadCast($row['movieID'], $movie);
+                $movies[] = $movie;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        return $movies;
+    }
 }

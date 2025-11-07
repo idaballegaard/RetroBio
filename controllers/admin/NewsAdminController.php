@@ -6,7 +6,7 @@ require_once __DIR__ . "/../../repositories/NewsRepository.php";
 class NewsAdminController extends BaseAdminController {
 
     public function newsList() {
-        $viewModel = new NewsAdminViewModel(__DIR__ . "/../../views/admin/news.php");
+        $viewModel = new NewsAdminViewModel(__DIR__ . "/../../views/admin.php");
 
         $newsRepository = new NewsRepository();
         $news = $newsRepository->getAllNews();

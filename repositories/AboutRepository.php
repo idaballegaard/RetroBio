@@ -30,4 +30,34 @@ class AboutRepository extends BaseRepository {
 
         return null;
     }
+
+    public function getAboutInfoForAdmin() {
+        UserRepository::dieIfNotAdmin();
+
+        $about = $this->getAboutInfo();
+        $db = $this->connectDatabase();
+        if (!$db) return $about;
+
+        try {
+            $stmt = $db->prepare("SELECT * FROM About LIMIT 1");
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                $about = new About();
+                $about->setAboutID((int)$row['aboutID']);
+                $about->setTitle($row['title']);
+                $about->setSubtitle($row['subtitle']);
+                $about->setDescription($row['description']);
+                $about->setAddress($row['address']);
+                $about->setEmail($row['email']);
+                $about->setPhone($row['phone']);
+                return $about;
+            }
+        } catch (PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        }
+        return $about;
+    }
+
 }

@@ -11,6 +11,8 @@ class AdminViewModel extends BasicViewModel
     // @var Movie[]
     private array $movies = [];
     private ?About $about = null;
+    // @var Hall[]
+    private array $halls = [];
 
     public function setShowings(array $showings): void
     {
@@ -50,5 +52,15 @@ class AdminViewModel extends BasicViewModel
     public function getAbout(): ?About
     {
         return $this->about;
+    }
+    
+    public function setHalls(array $halls): void
+    {
+        $this->halls = $halls;
+    }
+
+    public function getHalls(): array
+    {
+        return $this->halls;
     }
 }

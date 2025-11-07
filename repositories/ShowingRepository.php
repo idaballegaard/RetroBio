@@ -119,4 +119,31 @@ class ShowingRepository extends BaseRepository {
         return $showings;
     }
 
+    public function saveShowing(Showing $showing): void {
+        UserRepository::dieIfNotAdmin();
+
+        $pdo = $this->connectDatabase();
+        if($showing->getShowingID() > 0) {
+            $stmt = $pdo->prepare("UPDATE Showing SET movieID = :movieID, date = :date, startTime = :startTime, type = :type, price = :price, hallID = :hallID WHERE showingID = :showingID");
+            $stmt->bindValue(":showingID", $showing->getShowingID(), PDO::PARAM_INT);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO Showing (movieID, date, startTime, type, price, hallID) VALUES (:movieID, :date, :startTime, :type, :price, :hallID)");
+        }
+        $stmt->bindValue(":movieID", $showing->getMovie()->getMovieID(), PDO::PARAM_INT);
+        $stmt->bindValue(":date", $showing->getDate()->format("Y-m-d"), PDO::PARAM_STR);
+        $stmt->bindValue(":startTime", "00:00", PDO::PARAM_STR);
+        $stmt->bindValue(":type", $showing->getType(), PDO::PARAM_STR);
+        $stmt->bindValue(":price", $showing->getPrice(), PDO::PARAM_STR);
+        $stmt->bindValue(":hallID", $showing->getHall()->getHallID(), PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function deleteShowing(int $showingID): void {
+        UserRepository::dieIfNotAdmin();
+
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("DELETE FROM Showing WHERE showingID = :showingID");
+        $stmt->bindValue(":showingID", $showingID, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

@@ -129,16 +129,16 @@
         <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
             <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
                 <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3"><?php echo safeString($showing->getShowingId()); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getMovie()->getTitle()); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getDate()->format("Y-m-d")); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getDate()->format("H:i")); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getType()); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getPrice()); ?> DKK</td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getHall()); ?></td>
+                    <td class="px-4 py-3" data-form-field="id"><?php echo safeString($showing->getShowingId()); ?></td>
+                    <td class="px-4 py-3"><?php echo safeString($showing->getMovie()->getTitle()); ?><span class="hidden" data-form-field="movie"><?php echo safeString($showing->getMovie()->getMovieID()); ?></span></td>
+                    <td class="px-4 py-3" data-form-field="date"><?php echo safeString($showing->getDate()->format("Y-m-d")); ?></td>
+                    <td class="px-4 py-3" data-form-field="startTime"><?php echo safeString($showing->getDate()->format("H:i")); ?></td>
+                    <td class="px-4 py-3" data-form-field="type"><?php echo safeString($showing->getType()); ?></td>
+                    <td class="px-4 py-3"><span data-form-field="price"><?php echo safeString($showing->getPrice()); ?></span> DKK</td>
+                    <td class="px-4 py-3"><?php echo safeString($showing->getHall()); ?><span class="hidden" data-form-field="hall"><?php echo safeString($showing->getHall()->getHallID()); ?></span></td>
                     <td class="px-4 py-3 flex gap-3">
-                        <button onclick="openModal('showingModal')" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-                        <button onclick="openModal('deleteModal')" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
+                        <button onclick="openModal('showingModal', this)" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
+                        <button onclick="confirmDelete('showing', <?php echo safeString($showing->getShowingId()); ?>)" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -242,7 +242,8 @@
     </div>
   </div> -->
 
-  <div id="showingModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+  <?php require __DIR__ . "/admin/showing-modal.php"; ?>
+  <!-- <div id="showingModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
     <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
       <button onclick="closeModal('showingModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
       <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit Showing</h3>
@@ -252,7 +253,7 @@
         <button class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90">Save</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div id="newsModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
     <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
@@ -317,6 +318,7 @@
         row.querySelectorAll('[data-form-field]').forEach(field => {
           const fieldName = field.getAttribute('data-form-field');
           const modalField = modal.querySelector(`[name="${fieldName}"]`);
+          console.log('Filling modal field:', fieldName, modalField);
           if(modalField) {
             modalField.value = field.textContent.trim();
           }
@@ -329,7 +331,7 @@
     }
 
     // Standardvisning
-    showSection('movies');
+    showSection('showings');
   </script>
 </body>
 </html>

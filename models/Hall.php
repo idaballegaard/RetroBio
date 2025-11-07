@@ -27,4 +27,8 @@ class Hall {
     public function setNumber(int $number): void {
         $this->number = $number;
     }
+
+    public function __toString(): string {
+        return $this->name;
+    }
 }

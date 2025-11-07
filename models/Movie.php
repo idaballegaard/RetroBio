@@ -13,9 +13,9 @@ class Movie {
     private CastMember $director;
     // @var CastMember[]
     private array $actors = [];
-    // @var string[]
+    // @var Genre[]
     private array $genres = [];
-    private string $company;
+    private Company $company;
     
     public function __construct() {
         $this->director = new CastMember();
@@ -107,24 +107,25 @@ class Movie {
         $this->actors[] = $actor;
     }
 
-    // @return string[]
+    // @return Genre[]
     public function getGenres(): array {
         return $this->genres;
     }
 
+    // @param Genre[] $genres
     public function setGenres(array $genres): void {
         $this->genres = $genres;
     }
 
-    public function addGenre(string $genre): void {
+    public function addGenre(Genre $genre): void {
         $this->genres[] = $genre;
     }
 
-    public function getCompany(): string {
+    public function getCompany(): Company {
         return $this->company;
     }
 
-    public function setCompany(string $company) {
+    public function setCompany(Company $company): void {
         $this->company = $company;
     }
 }

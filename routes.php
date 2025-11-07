@@ -81,10 +81,24 @@ get(generateUrl("profile"), function() {
 
 // Admin
 if(UserRepository::isAdmin()) {
-    get(generateUrl("admin/"), function() {
+    get(generateUrl("admin"), function() {
         require_once __DIR__ . "/controllers/admin/AdminController.php";
         $controller = new AdminController();
         $controller->adminFrontpage()->presentView();
+    });
+    post(generateUrl("admin-save-movie"), function() {
+        require_once __DIR__ . "/controllers/admin/AdminController.php";
+        $controller = new AdminController();
+        $controller->saveMovie();
+        header("Location: " . generateUrl("admin"));
+    });
+    get(generateUrl("admin-delete"), function() {
+        require_once __DIR__ . "/controllers/admin/AdminController.php";
+        $controller = new AdminController();
+        $type = $_GET['type'] ?? '';
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $controller->delete($type, $id);
+        header("Location: " . generateUrl("admin"));
     });
 }
 

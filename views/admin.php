@@ -1,3 +1,4 @@
+<?php /** @var AdminViewModel $viewModel */ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,24 +79,26 @@
           </tr>
         </thead>
         <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-          <tr class="hover:bg-white/5">
-            <td class="px-4 py-3">1</td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getTitle()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getDescription()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString(implode(", ", $movie->getGenres())); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getReleaseYear()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getLength()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getLanguage()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getAgeLimit()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getRanking()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getCompany()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getDirector()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($movie->getMainCast()); ?></td>
-            <td class="px-4 py-3 flex gap-3">
-              <button onclick="openModal('movieModal')" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-              <button onclick="openModal('deleteModal')" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
-            </td>
-          </tr>
+          <?php /** @var Movie $movie */ foreach($viewModel->getMovies() as $index => $movie): ?>
+            <tr class="hover:bg-white/5">
+              <td class="px-4 py-3" data-form-field="id"><?php echo safeString($movie->getMovieID()); ?></td>
+              <td class="px-4 py-3" data-form-field="title"><?php echo safeString($movie->getTitle()); ?></td>
+              <td class="px-4 py-3" data-form-field="description"><?php echo safeString($movie->getDescription()); ?></td>
+              <td class="px-4 py-3" data-form-field="genre"><?php echo safeString(implode(", ", $movie->getGenres())); ?></td>
+              <td class="px-4 py-3" data-form-field="releaseYear"><?php echo safeString($movie->getReleaseYear()); ?></td>
+              <td class="px-4 py-3" data-form-field="length"><?php echo safeString($movie->getLength()); ?></td>
+              <td class="px-4 py-3" data-form-field="language"><?php echo safeString($movie->getLanguage()); ?></td>
+              <td class="px-4 py-3" data-form-field="ageLimit"><?php echo safeString($movie->getAgeLimit()); ?></td>
+              <td class="px-4 py-3" data-form-field="ranking"><?php echo safeString($movie->getRanking()); ?></td>
+              <td class="px-4 py-3" data-form-field="company"><?php echo safeString($movie->getCompany()); ?></td>
+              <td class="px-4 py-3" data-form-field="director"><?php echo safeString($movie->getDirector()); ?></td>
+              <td class="px-4 py-3" data-form-field="cast"><?php echo safeString(implode(", ", $movie->getActors())); ?></td>
+              <td class="px-4 py-3 flex gap-3">
+                <button onclick="openModal('movieModal', this)" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
+                <button onclick="confirmDelete('movie', <?php echo safeString($movie->getMovieID()); ?>)" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
@@ -126,10 +129,10 @@
         <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
             <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
                 <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3"><?php echo safeString($showing->getId()); ?></td>
+                    <td class="px-4 py-3"><?php echo safeString($showing->getShowingId()); ?></td>
                     <td class="px-4 py-3"><?php echo safeString($showing->getMovie()->getTitle()); ?></td>
                     <td class="px-4 py-3"><?php echo safeString($showing->getDate()->format("Y-m-d")); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getStartTime()->format("H:i")); ?></td>
+                    <td class="px-4 py-3"><?php echo safeString($showing->getDate()->format("H:i")); ?></td>
                     <td class="px-4 py-3"><?php echo safeString($showing->getType()); ?></td>
                     <td class="px-4 py-3"><?php echo safeString($showing->getPrice()); ?> DKK</td>
                     <td class="px-4 py-3"><?php echo safeString($showing->getHall()); ?></td>
@@ -166,7 +169,7 @@
         <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
             <?php /** @var News $news */ foreach($viewModel->getNews() as $index => $news): ?>
                 <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3"><?php echo safeString($index + 1); ?></td>
+                    <td class="px-4 py-3"><?php echo safeString($news->getNewsID()); ?></td>
                     <td class="px-4 py-3"><?php echo safeString($news->getTitle()) ?></td>
                     <td class="px-4 py-3"><?php echo safeString($news->getDescription()) ?></td>
                     <td class="px-4 py-3"><?php echo safeString($news->getReleaseDate()->format("d/m/Y")) ?></td>
@@ -201,21 +204,24 @@
         </thead>
         <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
           <tr class="hover:bg-white/5 align-top">
-            <td class="px-4 py-3"><?php echo safeString($about->getId()); ?></td>
+            <?php $about = $viewModel->getAbout(); ?>
+            <?php if ($about): ?>
+            <td class="px-4 py-3"><?php echo safeString($about->getAboutId()); ?></td>
             <td class="px-4 py-3"><?php echo safeString($about->getTitle()); ?></td>
             <td class="px-4 py-3"><?php echo safeString($about->getSubtitle()); ?></td>
             <td class="px-4 py-3"><?php echo safeString($about->getEmail()); ?></td>
             <td class="px-4 py-3"><?php echo safeString($about->getPhone()); ?></td>
-            <td class="px-4 py-3 whitespace-pre-line text-gray-300 leading-tight">
-              Mon–Thu:<?php echo safeString($about->getOpeningHoursMonThu()); ?><br>
-              Fri:<?php echo safeString($about->getOpeningHoursFri()); ?><br>
-              Sat:<?php echo safeString($about->getOpeningHoursSat()); ?><br>
-              Sun:<?php echo safeString($about->getOpeningHoursSun()); ?>
-            </td>
+            <!-- <td class="px-4 py-3 whitespace-pre-line text-gray-300 leading-tight">
+              Mon–Thu:<?php //echo safeString($about->getOpeningHoursMonThu()); ?><br>
+              Fri:<?php //echo safeString($about->getOpeningHoursFri()); ?><br>
+              Sat:<?php //echo safeString($about->getOpeningHoursSat()); ?><br>
+              Sun:<?php //echo safeString($about->getOpeningHoursSun()); ?>
+            </td> -->
             <td class="px-4 py-3 flex gap-3">
               <button onclick="openModal('aboutModal')" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
               <button onclick="openModal('deleteModal')" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
             </td>
+            <?php endif; ?>
           </tr>
         </tbody>
       </table>
@@ -223,7 +229,8 @@
   </section>
 
   <!-- Modals -->
-  <div id="movieModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+   <?php require __DIR__ . "/admin/movie-modal.php"; ?>
+  <!-- <div id="movieModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
     <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
       <button onclick="closeModal('movieModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
       <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit Movie</h3>
@@ -233,7 +240,7 @@
         <button class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90">Save</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div id="showingModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
     <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
@@ -277,7 +284,7 @@
       <p class="text-gray-300 mb-6">Are you sure you want to delete this item?</p>
       <div class="flex justify-center gap-3">
         <button onclick="closeModal('deleteModal')" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600">Cancel</button>
-        <button onclick="closeModal('deleteModal')" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Delete</button>
+        <a href="#" data-delete-type="" data-delete-id="" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700">Delete</a>
       </div>
     </div>
   </div>
@@ -293,9 +300,28 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function confirmDelete(type, id) {
+      const deleteLink = document.querySelector('#deleteModal a');
+      deleteLink.setAttribute('data-delete-type', type);
+      deleteLink.setAttribute('data-delete-id', id);
+      deleteLink.href = `<?php echo generateUrl("admin-delete") ?>?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
+      openModal('deleteModal');
+    }
+
     // Åbn/Luk modaler
-    function openModal(id) {
+    function openModal(id, sender) {
       document.getElementById(id).classList.remove('hidden');
+      if(sender) {
+        const row = sender.closest('tr');
+        const modal = document.getElementById(id);
+        row.querySelectorAll('[data-form-field]').forEach(field => {
+          const fieldName = field.getAttribute('data-form-field');
+          const modalField = modal.querySelector(`[name="${fieldName}"]`);
+          if(modalField) {
+            modalField.value = field.textContent.trim();
+          }
+        });
+      }
     }
 
     function closeModal(id) {

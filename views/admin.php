@@ -53,135 +53,17 @@
 
   <!-- Movies Section -->
   <section id="movies" class="hidden mt-8 px-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <h3 class="text-2xl font-semibold">Movies</h3>
-      <button onclick="openModal('movieModal')" class="px-3 py-2 rounded border border-[#FE04FF] text-[#FE04FF] hover:bg-[#FE04FF]/10 transition text-sm flex items-center gap-1">
-        <i data-feather="plus" class="w-4 h-4"></i> Add Movie
-      </button>
-    </div>
-    <div class="overflow-auto rounded-lg border border-gray-800">
-      <table class="min-w-full text-sm">
-        <thead class="bg-[#0f0f10] text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3">MovieID</th>
-            <th class="px-4 py-3">Title</th>
-            <th class="px-4 py-3">Description</th>
-            <th class="px-4 py-3">Genre</th>
-            <th class="px-4 py-3">Release Year</th>
-            <th class="px-4 py-3">Length</th>
-            <th class="px-4 py-3">Language</th>
-            <th class="px-4 py-3">Age Limit</th>
-            <th class="px-4 py-3">Ranking</th>
-            <th class="px-4 py-3">Company</th>
-            <th class="px-4 py-3">Director</th>
-            <th class="px-4 py-3">Main Cast</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-          <?php /** @var Movie $movie */ foreach($viewModel->getMovies() as $index => $movie): ?>
-            <tr class="hover:bg-white/5">
-              <td class="px-4 py-3" data-form-field="id"><?php echo safeString($movie->getMovieID()); ?></td>
-              <td class="px-4 py-3" data-form-field="title"><?php echo safeString($movie->getTitle()); ?></td>
-              <td class="px-4 py-3" data-form-field="description"><?php echo safeString($movie->getDescription()); ?></td>
-              <td class="px-4 py-3" data-form-field="genre"><?php echo safeString(implode(", ", $movie->getGenres())); ?></td>
-              <td class="px-4 py-3" data-form-field="releaseYear"><?php echo safeString($movie->getReleaseYear()); ?></td>
-              <td class="px-4 py-3" data-form-field="length"><?php echo safeString($movie->getLength()); ?></td>
-              <td class="px-4 py-3" data-form-field="language"><?php echo safeString($movie->getLanguage()); ?></td>
-              <td class="px-4 py-3" data-form-field="ageLimit"><?php echo safeString($movie->getAgeLimit()); ?></td>
-              <td class="px-4 py-3" data-form-field="ranking"><?php echo safeString($movie->getRanking()); ?></td>
-              <td class="px-4 py-3" data-form-field="company"><?php echo safeString($movie->getCompany()); ?></td>
-              <td class="px-4 py-3" data-form-field="director"><?php echo safeString($movie->getDirector()); ?></td>
-              <td class="px-4 py-3" data-form-field="cast"><?php echo safeString(implode(", ", $movie->getActors())); ?></td>
-              <td class="px-4 py-3 flex gap-3">
-                <button onclick="openModal('movieModal', this)" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-                <button onclick="confirmDelete('movie', <?php echo safeString($movie->getMovieID()); ?>)" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
+      <?php require __DIR__ . "/admin/movie-section.php"; ?>
   </section>
 
   <!-- Showings Section -->
   <section id="showings" class="hidden mt-8 px-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <h3 class="text-2xl font-semibold">Showings</h3>
-      <button onclick="openModal('showingModal')" class="px-3 py-2 rounded border border-[#FE04FF] text-[#FE04FF] hover:bg-[#FE04FF]/10 transition text-sm flex items-center gap-1">
-        <i data-feather="plus" class="w-4 h-4"></i> Add Showing
-      </button>
-    </div>
-    <div class="overflow-auto rounded-lg border border-gray-800">
-      <table class="min-w-full text-sm">
-        <thead class="bg-[#0f0f10] text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3">Showing ID</th>
-            <th class="px-4 py-3">Movie</th>
-            <th class="px-4 py-3">Date</th>
-            <th class="px-4 py-3">Start Time</th>
-            <th class="px-4 py-3">Type</th>
-            <th class="px-4 py-3">Price</th>
-            <th class="px-4 py-3">Hall</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-            <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
-                <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3" data-form-field="id"><?php echo safeString($showing->getShowingId()); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getMovie()->getTitle()); ?><span class="hidden" data-form-field="movie"><?php echo safeString($showing->getMovie()->getMovieID()); ?></span></td>
-                    <td class="px-4 py-3" data-form-field="date"><?php echo safeString($showing->getDate()->format("Y-m-d")); ?></td>
-                    <td class="px-4 py-3" data-form-field="startTime"><?php echo safeString($showing->getDate()->format("H:i")); ?></td>
-                    <td class="px-4 py-3" data-form-field="type"><?php echo safeString($showing->getType()); ?></td>
-                    <td class="px-4 py-3"><span data-form-field="price"><?php echo safeString($showing->getPrice()); ?></span> DKK</td>
-                    <td class="px-4 py-3"><?php echo safeString($showing->getHall()); ?><span class="hidden" data-form-field="hall"><?php echo safeString($showing->getHall()->getHallID()); ?></span></td>
-                    <td class="px-4 py-3 flex gap-3">
-                        <button onclick="openModal('showingModal', this)" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-                        <button onclick="confirmDelete('showing', <?php echo safeString($showing->getShowingId()); ?>)" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
+    <?php require __DIR__ . "/admin/showing-section.php"; ?>
   </section>
 
   <!-- News Section -->
   <section id="news" class="hidden mt-8 px-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <h3 class="text-2xl font-semibold">News</h3>
-      <button onclick="openModal('newsModal')" class="px-3 py-2 rounded border border-[#FE04FF] text-[#FE04FF] hover:bg-[#FE04FF]/10 transition text-sm flex items-center gap-1">
-        <i data-feather="plus" class="w-4 h-4"></i> Add News
-      </button>
-    </div>
-    <div class="overflow-auto rounded-lg border border-gray-800">
-      <table class="min-w-full text-sm">
-        <thead class="bg-[#0f0f10] text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3">News ID</th>
-            <th class="px-4 py-3">Title</th>
-            <th class="px-4 py-3">Description</th>
-            <th class="px-4 py-3">Release Date</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-            <?php /** @var News $news */ foreach($viewModel->getNews() as $index => $news): ?>
-                <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3"><?php echo safeString($news->getNewsID()); ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($news->getTitle()) ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($news->getDescription()) ?></td>
-                    <td class="px-4 py-3"><?php echo safeString($news->getReleaseDate()->format("d/m/Y")) ?></td>
-                    <td class="px-4 py-3 flex gap-3">
-                        <button onclick="openModal('newsModal')" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-                        <button onclick="openModal('deleteModal')" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
+    <?php require __DIR__ . "/admin/news-section.php"; ?>
   </section>
 
   <!-- About Section -->
@@ -229,44 +111,6 @@
   </section>
 
   <!-- Modals -->
-   <?php require __DIR__ . "/admin/movie-modal.php"; ?>
-  <!-- <div id="movieModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
-      <button onclick="closeModal('movieModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
-      <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit Movie</h3>
-      <p class="text-gray-300 text-sm mb-6">Here admin can edit movie data (mock demo).</p>
-      <div class="flex justify-end gap-3">
-        <button onclick="closeModal('movieModal')" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600">Cancel</button>
-        <button class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90">Save</button>
-      </div>
-    </div>
-  </div> -->
-
-  <?php require __DIR__ . "/admin/showing-modal.php"; ?>
-  <!-- <div id="showingModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
-      <button onclick="closeModal('showingModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
-      <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit Showing</h3>
-      <p class="text-gray-300 text-sm mb-6">Here admin can edit showing data (mock demo).</p>
-      <div class="flex justify-end gap-3">
-        <button onclick="closeModal('showingModal')" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600">Cancel</button>
-        <button class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90">Save</button>
-      </div>
-    </div>
-  </div> -->
-
-  <div id="newsModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
-      <button onclick="closeModal('newsModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
-      <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit News</h3>
-      <p class="text-gray-300 text-sm mb-6">Here admin can edit news data (mock demo).</p>
-      <div class="flex justify-end gap-3">
-        <button onclick="closeModal('newsModal')" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600">Cancel</button>
-        <button class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90">Save</button>
-      </div>
-    </div>
-  </div>
-
   <div id="aboutModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
     <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
       <button onclick="closeModal('aboutModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
@@ -318,10 +162,16 @@
         row.querySelectorAll('[data-form-field]').forEach(field => {
           const fieldName = field.getAttribute('data-form-field');
           const modalField = modal.querySelector(`[name="${fieldName}"]`);
-          console.log('Filling modal field:', fieldName, modalField);
+          console.log('Filling modal field:', fieldName, modalField, field.textContent.trim());
           if(modalField) {
             modalField.value = field.textContent.trim();
           }
+        });
+      } else {
+        // Clear form fields if no sender
+        const modal = document.getElementById(id);
+        modal.querySelectorAll('input, select, textarea').forEach(field => {
+          field.value = '';
         });
       }
     }
@@ -331,7 +181,7 @@
     }
 
     // Standardvisning
-    showSection('showings');
+    showSection('news');
   </script>
 </body>
 </html>

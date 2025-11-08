@@ -57,4 +57,43 @@ class NewsRepository extends BaseRepository {
 
         return $newsList;
     }
+
+    public function saveNews(News $news): void {
+        UserRepository::dieIfNotAdmin();
+
+        $db = $this->connectDatabase();
+        if (!$db) return;
+
+        try {
+            if ($news->getNewsID() > 0) {
+                $stmt = $db->prepare("UPDATE News SET title = :title, description = :description, releaseDate = :releaseDate WHERE newsID = :newsID");
+                $stmt->bindValue(':newsID', $news->getNewsID(), PDO::PARAM_INT);
+            } else {
+                $stmt = $db->prepare("INSERT INTO News (title, description, releaseDate) VALUES (:title, :description, :releaseDate)");
+            }
+
+            $stmt->bindValue(':title', $news->getTitle(), PDO::PARAM_STR);
+            $stmt->bindValue(':description', $news->getDescription(), PDO::PARAM_STR);
+            $stmt->bindValue(':releaseDate', $news->getReleaseDate()->format('Y-m-d'), PDO::PARAM_STR);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        }
+    }
+
+    public function deleteNews(int $newsID): void {
+        UserRepository::dieIfNotAdmin();
+
+        $db = $this->connectDatabase();
+        if (!$db) return;
+
+        try {
+            $stmt = $db->prepare("DELETE FROM News WHERE newsID = :newsID");
+            $stmt->bindValue(':newsID', $newsID, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        }
+    }
 }

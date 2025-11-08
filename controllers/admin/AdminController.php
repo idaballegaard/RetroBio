@@ -18,6 +18,8 @@ class AdminController extends BaseAdminController {
     private CompanyRepository $companyRepository;
     private HallRepository $hallRepository;
     private ShowingRepository $showingRepository;
+    private NewsRepository $newsRepository;
+    private AboutRepository $aboutRepository;
 
     public function __construct() {
         parent::__construct();
@@ -27,21 +29,19 @@ class AdminController extends BaseAdminController {
         $this->companyRepository = new CompanyRepository();
         $this->hallRepository = new HallRepository();
         $this->showingRepository = new ShowingRepository();
+        $this->newsRepository = new NewsRepository();
+        $this->aboutRepository = new AboutRepository();
     }
 
     public function adminFrontpage() {
         $viewModel = new AdminViewModel(__DIR__ . "/../../views/admin.php");
 
-        $movieRepository = new MovieRepository();
-        $showingRepository = new ShowingRepository();
-        $newsRepository = new NewsRepository();
-        $aboutRepository = new AboutRepository();
-
-        $viewModel->setMovies($movieRepository->getAllMovies());
-        $viewModel->setShowings($showingRepository->getAllShowings());
-        $viewModel->setNews($newsRepository->getAllNews());
-        $viewModel->setAbout($aboutRepository->getAboutInfo());
+        $viewModel->setMovies($this->movieRepository->getAllMovies());
+        $viewModel->setShowings($this->showingRepository->getAllShowings());
+        $viewModel->setNews($this->newsRepository->getAllNews());
+        $viewModel->setAbout($this->aboutRepository->getAboutInfo());
         $viewModel->setHalls($this->hallRepository->getAllHalls());
+        $viewModel->setNews($this->newsRepository->getAllNews());
 
         return $viewModel;
     }
@@ -104,6 +104,21 @@ class AdminController extends BaseAdminController {
         $this->showingRepository->saveShowing($showing);
     }
 
+    public function saveNews() {
+        $id = $_POST["id"];
+        $title = $_POST["title"];
+        $description = $_POST["description"];
+        $releaseDate = $_POST["releaseDate"];
+
+        $news = new News();
+        $news->setNewsID((int)$id);
+        $news->setTitle($title);
+        $news->setDescription($description);
+        $news->setReleaseDate(new DateTime($releaseDate));
+
+        $this->newsRepository->saveNews($news);
+    }
+
     public function delete(string $type, int $id) {
         if($type === 'movie') {
             $this->movieRepository->deleteMovie($id);
@@ -111,6 +126,9 @@ class AdminController extends BaseAdminController {
         else if($type === 'showing') {
             $this->showingRepository->deleteShowing($id);
         }
-    }   
+        else if($type === 'news') {
+            $this->newsRepository->deleteNews($id);
+        }
+    }
 
 }

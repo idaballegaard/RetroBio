@@ -98,6 +98,12 @@ if(UserRepository::isAdmin()) {
         $controller->saveShowing();
         header("Location: " . generateUrl("admin"));
     });
+    post(generateUrl("admin-save-news"), function() {
+        require_once __DIR__ . "/controllers/admin/AdminController.php";
+        $controller = new AdminController();
+        $controller->saveNews();
+        header("Location: " . generateUrl("admin"));
+    });
     get(generateUrl("admin-delete"), function() {
         require_once __DIR__ . "/controllers/admin/AdminController.php";
         $controller = new AdminController();

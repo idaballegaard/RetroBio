@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/BaseController.php";
 require_once __DIR__ . "/../repositories/MovieRepository.php";
-require_once __DIR__ . "/../viewmodels/MovieDetailsViewModel.php";
+require_once __DIR__ . "/../viewModels/MovieDetailsViewModel.php";
 
 class MovieController extends BaseController {
     public function showMovieDetails(int $movieID): MovieDetailsViewModel {

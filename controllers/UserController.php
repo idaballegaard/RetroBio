@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . "/BaseController.php";
 require_once __DIR__ . "/../controllers/HomeController.php";
-require_once __DIR__ . "/../viewmodels/BasicViewModel.php";
-require_once __DIR__ . "/../viewmodels/ProfileViewModel.php";
+require_once __DIR__ . "/../viewModels/BasicViewModel.php";
+require_once __DIR__ . "/../viewModels/ProfileViewModel.php";
 require_once __DIR__ . "/../repositories/UserRepository.php";
 
 class UserController extends BaseController {

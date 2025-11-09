@@ -4,7 +4,7 @@ require_once __DIR__ . "/../repositories/MovieRepository.php";
 require_once __DIR__ . "/../repositories/ShowingRepository.php";
 require_once __DIR__ . "/../repositories/NewsRepository.php";
 require_once __DIR__ . "/../repositories/AboutRepository.php";
-require_once __DIR__ . "/../viewmodels/FrontpageViewModel.php";
+require_once __DIR__ . "/../viewModels/FrontpageViewModel.php";
 
 class HomeController extends BaseController {
 

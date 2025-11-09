@@ -112,6 +112,12 @@ if(UserRepository::isAdmin()) {
         $controller->delete($type, $id);
         header("Location: " . generateUrl("admin"));
     });
+} else {
+    // Hvis brugeren ikke er admin, omdiriger til login-siden
+    get(generateUrl("admin"), function() {
+        header("Location: " . generateUrl("login"));
+        exit();
+    });
 }
 
 // 404

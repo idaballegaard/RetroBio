@@ -10,7 +10,7 @@ $menuLinks = [
 
 // Tilføj "Profile" kun hvis brugeren er logget ind
 if (isset($_SESSION['username'])) {
-    $menuLinks[generateUrl('profile.php')] = 'Profile';
+    $menuLinks[generateUrl('profile')] = 'Profile';
 }
 ?>
 <!DOCTYPE html>

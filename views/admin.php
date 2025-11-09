@@ -162,7 +162,6 @@
         row.querySelectorAll('[data-form-field]').forEach(field => {
           const fieldName = field.getAttribute('data-form-field');
           const modalField = modal.querySelector(`[name="${fieldName}"]`);
-          console.log('Filling modal field:', fieldName, modalField, field.textContent.trim());
           if(modalField) {
             modalField.value = field.textContent.trim();
           }

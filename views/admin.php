@@ -181,7 +181,7 @@
     }
 
     // Standardvisning
-    showSection('news');
+    showSection('movies');
   </script>
 </body>
 </html>

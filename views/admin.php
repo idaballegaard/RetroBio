@@ -1,17 +1,11 @@
+<?php require_once __DIR__ . '/partials/header.php'; ?>
 <?php /** @var AdminViewModel $viewModel */ ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetroBio Admin Panel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
-</head>
+
+<link href="assets/admin.css" rel="stylesheet">
 
 <body class="bg-black text-white font-sans min-h-screen">
   <!-- Hero Section -->
-  <header class="bg-black text-center py-8">
+  <header class="pt-20 bg-black text-center py-8">
     <h1 class="text-4xl font-bold text-[#FE04FF]">RetroBio Admin Panel</h1>
     <p class="text-gray-300 text-lg mt-2">Access and manage all cinema data efficiently and professionally.</p>
   </header>
@@ -112,7 +106,7 @@
 
   <!-- Modals -->
   <div id="aboutModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-    <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
+    <div class="modal-box bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
       <button onclick="closeModal('aboutModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
       <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]">Edit About</h3>
       <p class="text-gray-300 text-sm mb-6">Here admin can edit about information (mock demo).</p>
@@ -134,53 +128,7 @@
     </div>
   </div>
 
-  <!-- JavaScript -->
-  <script>
-    feather.replace();
 
-    // Viser én sektion ad gangen
-    function showSection(sectionId) {
-      document.querySelectorAll('section').forEach((section) => section.classList.add('hidden'));
-      document.getElementById(sectionId).classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+<script src="assets/admin.js"></script>
 
-    function confirmDelete(type, id) {
-      const deleteLink = document.querySelector('#deleteModal a');
-      deleteLink.setAttribute('data-delete-type', type);
-      deleteLink.setAttribute('data-delete-id', id);
-      deleteLink.href = `<?php echo generateUrl("admin-delete") ?>?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
-      openModal('deleteModal');
-    }
-
-    // Åbn/Luk modaler
-    function openModal(id, sender) {
-      document.getElementById(id).classList.remove('hidden');
-      if(sender) {
-        const row = sender.closest('tr');
-        const modal = document.getElementById(id);
-        row.querySelectorAll('[data-form-field]').forEach(field => {
-          const fieldName = field.getAttribute('data-form-field');
-          const modalField = modal.querySelector(`[name="${fieldName}"]`);
-          if(modalField) {
-            modalField.value = field.textContent.trim();
-          }
-        });
-      } else {
-        // Clear form fields if no sender
-        const modal = document.getElementById(id);
-        modal.querySelectorAll('input, select, textarea').forEach(field => {
-          field.value = '';
-        });
-      }
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    // Standardvisning
-    showSection('movies');
-  </script>
-</body>
-</html>
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

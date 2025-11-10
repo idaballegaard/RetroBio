@@ -1,0 +1,43 @@
+/* Pink ring på aktive modaler */
+.rb-modal-ring {
+box-shadow: 0 0 0 2px #FE04FF inset, 0 0 0 2px #FE04FF;
+border-radius: 0.5rem; /* matcher Tailwinds rounded-lg */
+}
+
+/* Mørk styling på alle inputfelter, dropdowns og textareas */
+.rb-input, .rb-select, .rb-textarea {
+background-color: #0f0f10;
+color: #ffffff;
+border: 1px solid #374151; /* gray-700 */
+border-radius: 0.375rem;   /* rounded */
+padding: 0.5rem;
+outline: none;
+width: 100%;
+}
+
+.rb-input::placeholder, .rb-textarea::placeholder {
+color: #9CA3AF; /* gray-400 */
+}
+
+.rb-input:focus, .rb-select:focus, .rb-textarea:focus {
+border-color: #FE04FF;
+box-shadow: 0 0 0 2px rgba(254, 4, 255, 0.5);
+}
+
+.rb-select:hover { border-color: #FE04FF; }
+
+/* Grid-layout i modaler (1 kolonne -> 2 kolonner fra sm:) */
+.rb-form-grid {
+display: grid;
+grid-template-columns: 1fr;
+gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .rb-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .rb-span-2 {
+        grid-column: span 2 / span 2;
+    }
+}

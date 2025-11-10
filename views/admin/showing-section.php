@@ -44,7 +44,7 @@
 
 <!-- Showing Modal -->
 <div id="showingModal" class="hidden fixed inset-0 bg-black/80 items-center justify-center z-50 p-4">
-  <div class="bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
+  <div class="modal-box bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
     <button onclick="closeModal('showingModal')" class="btn-close absolute top-3 right-3 text-gray-400 hover:text-white" data-target="modal-showing"><i data-feather="x"></i></button>
     <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]" id="showing-modal-title">Edit Showing</h3>
     <form id="form-showing" method="post" action="<?php echo generateUrl("admin-save-showing") ?>" class="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -28,7 +28,7 @@ if (isset($_SESSION['username'])) {
     <link href="assets/style.css" rel="stylesheet">
 </head>
 <body class="bg-black text-white">
-<nav class="custom-navbar bg-black border-b border-[#FFDF00]/50 fixed w-full z-20 top-0 left-0 shadow-lg">
+<nav class="custom-navbar bg-black border-b border-[#FFDF00]/50 sticky w-full z-20 top-0 left-0 shadow-lg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->

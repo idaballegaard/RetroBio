@@ -359,9 +359,6 @@ INSERT INTO Showing(`type`,startTime,`date`,showingPrice,hallID,movieID) VALUES
 ('3D','21:00:00','2025-12-14',12,3,27);
 
 -- --- BILLETTER ---
--- Vi laver 1-4 sæder pr. ticket, tilfældige brugere
--- Eksempelvis 120 billetter spredt over alle visninger
-
 INSERT INTO Ticket(purchasePrice,dateOfPurchase,purchaseStatus,numberOfTickets,userID,showingID,seatID) VALUES
 (14,'2025-11-10','Paid',2,1,1,1),
 (9,'2025-11-11','Paid',1,2,2,10),
@@ -374,11 +371,7 @@ INSERT INTO Ticket(purchasePrice,dateOfPurchase,purchaseStatus,numberOfTickets,u
 (7,'2025-11-18','Paid',1,9,9,3),
 (24,'2025-11-19','Paid',2,10,10,30);
 
--- Tilføj flere billetter på samme mønster til hele måneden
--- Hver billet bruger 1-4 sæder og en tilfældig brugerID 1-50
-
 -- --- CONTAINS ---
--- Kobling af billetter til sæder
 INSERT INTO Contains(ticketID,seatID) VALUES
 (1,1),(1,2),
 (2,10),
@@ -390,9 +383,6 @@ INSERT INTO Contains(ticketID,seatID) VALUES
 (8,22),(8,23),(8,24),
 (9,3),
 (10,30),(10,31);
-
--- Fortsæt mønster for alle billetter
--- Hvert ticketID skal have seatID for alle købte billetter
 
 
 -- OpeningHours
@@ -424,3 +414,33 @@ VALUES
   ('16:00:00','00:00:00','Fri'),
   ('12:00:00','00:00:00','Sat'),
   ('12:00:00','22:00:00','Sun');
+
+
+
+-- VIEWS
+-- Movie details view
+CREATE OR REPLACE VIEW MovieDetails AS
+SELECT m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, m.ageLimit, m.ranking,
+       CONCAT(d.firstName, ' ', d.lastName) AS director,
+       c.name AS company,
+       GROUP_CONCAT(DISTINCT g.name) AS genres,
+       GROUP_CONCAT(DISTINCT CONCAT(a.firstName, ' ', a.lastName)) AS actors
+FROM Movie m
+JOIN CastMember d ON m.directorID = d.castMemberID
+JOIN Company c ON m.companyID = c.companyID
+LEFT JOIN MovieGenre mg ON m.movieID = mg.movieID
+LEFT JOIN Genre g ON mg.genreID = g.genreID
+LEFT JOIN MovieActor ma ON m.movieID = ma.movieID
+LEFT JOIN CastMember a ON ma.castMemberID = a.castMemberID
+GROUP BY m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, m.ageLimit, m.ranking,
+          g.name, c.name, d.firstName, d.lastName, a.firstName, a.lastName;
+
+
+-- Showing details view
+CREATE OR REPLACE VIEW ShowingDetails AS
+SELECT s.showingID, m.title AS movieTitle, s.date AS showingDate, s.startTime AS showingTime,
+       h.name AS hallName, h.number AS hallNumber, s.price AS showingPrice
+FROM Showing s
+JOIN Movie m ON s.movieID = m.movieID
+JOIN Hall h ON s.hallID = h.hallID
+GROUP BY s.showingID, m.title, s.date, s.startTime, h.name, h.number, s.price;

@@ -415,7 +415,18 @@ VALUES
   ('12:00:00','00:00:00','Sat'),
   ('12:00:00','22:00:00','Sun');
 
-
+-- Company
+INSERT INTO Company (name) VALUES
+('Miramax Films'),
+('Fox 2000 Pictures'),
+('Working Title Films'),
+('Amblin Entertainment'),
+('Hawk Films'),
+('Michael White Productions'),
+('American Film Institute (AFI)'),
+('Edge City Productions'),
+('Shamley Productions'),
+('Amblin Entertainment');
 
 -- VIEWS
 -- Movie details view

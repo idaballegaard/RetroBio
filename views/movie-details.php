@@ -2,8 +2,8 @@
 require_once __DIR__ . '/partials/header.php';
 
 // Hent data fra ViewModel
-$allMovies = $viewModel->getAllMovies();       // Alle film til dropdown
-$selectedMovie = $viewModel->getSelectedMovie(); // Den valgte film
+$allMovies = $viewModel->getAllMovies();
+$selectedMovie = $viewModel->getSelectedMovie();
 ?>
 
 <style>
@@ -17,7 +17,7 @@ $selectedMovie = $viewModel->getSelectedMovie(); // Den valgte film
 <div class="max-w-6xl mx-auto px-6 pt-20 pb-20">
   <!-- Selection Controls -->
   <div class="flex flex-col md:flex-row md:items-center gap-6 mb-12">
-    <!-- 🎬 Movie Dropdown (bevarer dit pseudo-dropdown design) -->
+    <!-- Movie Dropdown -->
     <div class="relative w-full md:w-1/2">
       <form method="get" action="<?= generateUrl('movie-details') ?>">
         <input type="text" id="movieInput" name="id" placeholder="Select movie"
@@ -39,7 +39,7 @@ $selectedMovie = $viewModel->getSelectedMovie(); // Den valgte film
       </form>
     </div>
 
-    <!-- Calendar (urørt) -->
+    <!-- Calendar -->
     <div class="relative w-full md:w-1/2">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <i data-feather="calendar" class="text-white w-5 h-5"></i>
@@ -67,7 +67,7 @@ $selectedMovie = $viewModel->getSelectedMovie(); // Den valgte film
     </div>
   </div>
 
-  <!-- Showtimes (urørt) -->
+  <!-- Showtimes -->
   <div class="mb-6">
     <h3 class="text-xl text-[#00e7ec] mb-3">Available Showtimes</h3>
     <div class="flex flex-wrap items-center gap-3" id="showtimes">
@@ -111,7 +111,6 @@ $selectedMovie = $viewModel->getSelectedMovie(); // Den valgte film
 </div>
 
 <script>
-  // Simpel vis/skjul dropdown – samme UX som før
   const movieInput = document.getElementById('movieInput');
   const dropdown = document.getElementById('movieDropdown');
 

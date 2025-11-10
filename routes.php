@@ -31,7 +31,8 @@ get(generateUrl("logout"), function() {
 get(generateUrl("movie-details"), function() {
     require_once __DIR__ . "/controllers/MovieController.php";
     $controller = new MovieController();
-    $controller->showMovieDetails($_GET['id'] ?? 1)->presentView();
+    $movieID = isset($_GET['id']) && is_numeric($_GET['id']) ? (int)$_GET['id'] : null;
+    $controller->showMovieDetails($movieID)->presentView();
 });
 
 // Test

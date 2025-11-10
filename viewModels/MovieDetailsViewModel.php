@@ -7,7 +7,7 @@ class MovieDetailsViewModel extends BasicViewModel {
     /** @var Movie[] Liste over alle film */
     private array $allMovies = [];
 
-    /** @var ?Movie Den valgte film (kan være null, hvis ingen valgt) */
+    /** @var ?Movie */
     private ?Movie $selectedMovie = null;
 
     // Setters

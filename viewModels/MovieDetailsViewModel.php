@@ -3,23 +3,28 @@ require_once __DIR__ . "/BasicViewModel.php";
 require_once __DIR__ . "/../models/Movie.php";
 
 class MovieDetailsViewModel extends BasicViewModel {
-    private Movie $movie;
-    private string $company;
-    private array $genres = [];
-    private array $cast = [];
-    private array $showings = [];
+
+    /** @var Movie[] Liste over alle film */
+    private array $allMovies = [];
+
+    /** @var ?Movie Den valgte film (kan være null, hvis ingen valgt) */
+    private ?Movie $selectedMovie = null;
 
     // Setters
-    public function setMovie(Movie $movie): void { $this->movie = $movie; }
-    public function setCompany(string $company): void { $this->company = $company; }
-    public function setGenres(array $genres): void { $this->genres = $genres; }
-    public function setCast(array $cast): void { $this->cast = $cast; }
-    public function setShowings(array $showings): void { $this->showings = $showings; }
+    public function setAllMovies(array $movies): void {
+        $this->allMovies = $movies;
+    }
+
+    public function setSelectedMovie(?Movie $movie): void {
+        $this->selectedMovie = $movie;
+    }
 
     // Getters
-    public function getMovie(): Movie { return $this->movie; }
-    public function getCompany(): string { return $this->company; }
-    public function getGenres(): array { return $this->genres; }
-    public function getCast(): array { return $this->cast; }
-    public function getShowings(): array { return $this->showings; }
+    public function getAllMovies(): array {
+        return $this->allMovies;
+    }
+
+    public function getSelectedMovie(): ?Movie {
+        return $this->selectedMovie;
+    }
 }

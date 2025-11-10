@@ -7,117 +7,96 @@ require_once __DIR__ . "/../models/Company.php";
 
 class MovieRepository extends BaseRepository {
 
-    // Helper metoder
-    private function mapRowToMovie(array $row): Movie {
-        $movie = new Movie();
-        $movie->setMovieID((int)$row['movieID']);
-        $movie->setTitle($row['title']);
-        $movie->setDescription($row['description']);
-        $movie->setLength((int)$row['length']);
-        $movie->setLanguage($row['language']);
-        $movie->setAgeLimit((int)$row['ageLimit']);
-        $movie->setRanking($row['ranking']);
-        $movie->setReleaseYear((int)$row['releaseYear']);
-        $movie->setCompany(new Company((int)$row['companyID'], $row['name']));
-        $movie->getDirector()->setFirstName($row['firstName']);
-        $movie->getDirector()->setLastName($row['lastName']);
-
-        $this->loadGenre($movie->getMovieID(), $movie);
-        return $movie;
-    }
-
-    // Hent cast til en film
-    private function loadCast(int $movieID, Movie $movie): void {
-        $db = $this->connectDatabase();
-        $stmt = $db->prepare("
-            SELECT cm.* 
-            FROM CastMember cm
-            JOIN MovieActor ma ON cm.castMemberID = ma.castMemberID
-            WHERE ma.movieID = :movieID
-        ");
-        $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($rows as $row){
-            $actor = new CastMember();
-            $actor->setCastMemberID($row['castMemberID']);
-            $actor->setFirstName($row['firstName']);
-            $actor->setLastName($row['lastName']);
-            $movie->addActor($actor);
-        }
-    }
-
-    // Hent genre til en film
-    private function loadGenre(int $movieID, Movie $movie): void {
-        $db = $this->connectDatabase();
-        $stmt = $db->prepare("
-            SELECT g.* 
-            FROM MovieGenre mg
-            JOIN Genre g ON g.genreId = mg.genreId
-            WHERE mg.movieID = :movieID
-        ");
-        $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($rows as $row){
-            $genre = new Genre();
-            $genre->setGenreID((int)$row["genreID"]);
-            $genre->setName($row["name"]);
-            $movie->addGenre($genre);
-        }
-    }
-
-    // Film på forsiden
+    // Henter alle film
     public function getAllMovies(): array {
         $movies = [];
         $db = $this->connectDatabase();
         if (!$db) return $movies;
 
         try {
-            $stmt = $db->query("SELECT * FROM Movie m JOIN Company c ON c.companyID = m.companyID JOIN CastMember cm ON m.directorID = cm.castMemberID");
+            $stmt = $db->query("
+                SELECT movieID, 
+                    COALESCE(title, 'Ukendt titel') AS title, 
+                    releaseYear 
+                FROM moviedetail 
+                ORDER BY title ASC
+            ");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($rows as $row) {
-                $movie = $this->mapRowToMovie($row);
-                $this->loadCast($row['movieID'], $movie);
+                $movie = new Movie();
+                $movie->setMovieID((int)$row['movieID']);
+                $movie->setTitle($row['title']);
+                $movie->setReleaseYear((int)$row['releaseYear']);
                 $movies[] = $movie;
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo "Fejl ved hentning af film: " . $e->getMessage();
         }
 
         return $movies;
     }
 
-    // Film på movie-details siden
+    // Henter én film baseret på ID
     public function getMovieById(int $movieID): ?Movie {
         $db = $this->connectDatabase();
         if (!$db) return null;
 
         try {
-            $stmt = $db->prepare("
-                SELECT * FROM Movie m 
-                LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
-                LEFT JOIN Company c ON c.companyID = m.companyID
-                WHERE m.movieID = :movieID
-            ");
+            $stmt = $db->prepare("SELECT * FROM moviedetail WHERE movieID = :movieID");
             $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
             if (!$row) return null;
 
-            $movie = $this->mapRowToMovie($row);
-            $this->loadCast($movieID, $movie);
+            $movie = new Movie();
+            $movie->setMovieID((int)$row['movieID']);
+            $movie->setTitle($row['title'] ?? '');
+            $movie->setDescription($row['description'] ?? '');
+            $movie->setReleaseYear((int)($row['releaseYear'] ?? 0));
+            $movie->setLength((int)($row['length'] ?? 0));
+            $movie->setLanguage($row['language'] ?? '');
+            $movie->setAgeLimit((int)($row['ageLimit'] ?? 0));
+            $movie->setRanking($row['ranking'] ?? '');
+
+            // Instruktør
+            $director = new CastMember();
+            $directorName = trim($row['director'] ?? '');
+            $parts = explode(' ', $directorName);
+            $director->setFirstName($parts[0] ?? '');
+            $director->setLastName(end($parts) !== $parts[0] ? end($parts) : '');
+            $movie->setDirector($director);
+
+            // Firma
+            $company = new Company(0, $row['company'] ?? '');
+            $movie->setCompany($company);
+
+            // Genrer
+            $genres = array_filter(array_map('trim', explode(',', $row['genres'] ?? '')));
+            foreach ($genres as $g) {
+                $genre = new Genre();
+                $genre->setName($g);
+                $movie->addGenre($genre);
+            }
+
+            // Skuespillere
+            $actors = array_filter(array_map('trim', explode(',', $row['actors'] ?? '')));
+            foreach ($actors as $a) {
+                $actor = new CastMember();
+                $parts = explode(' ', $a);
+                $actor->setFirstName($parts[0] ?? '');
+                $actor->setLastName(end($parts) !== $parts[0] ? end($parts) : '');
+                $movie->addActor($actor);
+            }
 
             return $movie;
-        } catch(PDOException $e){
-            echo $e->getMessage();
+        } catch (PDOException $e) {
+            echo "Fejl ved hentning af film med ID $movieID: " . $e->getMessage();
             return null;
         }
     }
-
+    
     public function getCompanyForMovie(int $movieID): string {
         $db = $this->connectDatabase();
         $stmt = $db->prepare("
@@ -165,12 +144,17 @@ class MovieRepository extends BaseRepository {
         if (!$db) return $movies;
 
         try {
-            $stmt = $db->query("SELECT * FROM Movie m JOIN Company c ON c.companyID = m.companyID JOIN CastMember cm ON m.directorID = cm.castMemberID");
+            $stmt = $db->query("SELECT * FROM moviedetail");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($rows as $row) {
-                $movie = $this->mapRowToMovie($row);
-                $this->loadCast($row['movieID'], $movie);
+                $movie = new Movie();
+                $movie->setMovieID((int)$row['movieID']);
+                $movie->setTitle($row['title']);
+                $movie->setDescription($row['description']);
+                $movie->setReleaseYear((int)$row['releaseYear']);
+                $movie->setLanguage($row['language']);
+                $movie->setRanking($row['ranking']);
                 $movies[] = $movie;
             }
         } catch (PDOException $e) {
@@ -186,7 +170,6 @@ class MovieRepository extends BaseRepository {
         if (!$db) return;
 
         try {
-            // Begin transaction
             $db->beginTransaction();
             $stmt = $db->prepare("
                 UPDATE Movie 
@@ -202,7 +185,7 @@ class MovieRepository extends BaseRepository {
                     companyID = :companyID
                 WHERE movieID = :movieID
             ");
-            
+
             $title = $movie->getTitle();
             $description = $movie->getDescription();
             $length = $movie->getLength();
@@ -227,7 +210,6 @@ class MovieRepository extends BaseRepository {
             $stmt->execute();
 
             if($stmt->rowCount() === 0) {
-                // insert instead
                 $insertStmt = $db->prepare("
                     INSERT INTO Movie (title, description, length, language, ageLimit, ranking, releaseYear, directorID, companyID) 
                     VALUES (:title, :description, :length, :language, :ageLimit, :ranking, :releaseYear, :directorID, :companyID)
@@ -259,13 +241,10 @@ class MovieRepository extends BaseRepository {
                 $insertGenreStmt->execute();
             }
 
-            // Commit transaction
             $db->commit();
         } catch (PDOException $e) {
             $db->rollBack();
             echo $e->getMessage();
-            // print line number
-            echo "Error on line: " . $e->getLine();
         }
     }
 

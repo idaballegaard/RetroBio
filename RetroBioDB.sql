@@ -419,12 +419,20 @@ VALUES
 
 -- VIEWS
 -- Movie details view
-CREATE OR REPLACE VIEW MovieDetails AS
-SELECT m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, m.ageLimit, m.ranking,
-       CONCAT(d.firstName, ' ', d.lastName) AS director,
-       c.name AS company,
-       GROUP_CONCAT(DISTINCT g.name) AS genres,
-       GROUP_CONCAT(DISTINCT CONCAT(a.firstName, ' ', a.lastName)) AS actors
+CREATE OR REPLACE VIEW MovieDetail AS
+SELECT 
+    m.movieID, 
+    m.title, 
+    m.description, 
+    m.releaseYear, 
+    m.length, 
+    m.language, 
+    m.ageLimit, 
+    m.ranking,
+    CONCAT(d.firstName, ' ', d.lastName) AS director,
+    c.name AS company,
+    GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres,
+    GROUP_CONCAT(DISTINCT CONCAT(a.firstName, ' ', a.lastName) ORDER BY a.lastName SEPARATOR ', ') AS actors
 FROM Movie m
 JOIN CastMember d ON m.directorID = d.castMemberID
 JOIN Company c ON m.companyID = c.companyID
@@ -432,8 +440,9 @@ LEFT JOIN MovieGenre mg ON m.movieID = mg.movieID
 LEFT JOIN Genre g ON mg.genreID = g.genreID
 LEFT JOIN MovieActor ma ON m.movieID = ma.movieID
 LEFT JOIN CastMember a ON ma.castMemberID = a.castMemberID
-GROUP BY m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, m.ageLimit, m.ranking,
-          g.name, c.name, d.firstName, d.lastName, a.firstName, a.lastName;
+GROUP BY 
+    m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, 
+    m.ageLimit, m.ranking, d.firstName, d.lastName, c.name;
 
 
 -- Showing details view

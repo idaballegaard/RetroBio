@@ -4,7 +4,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 $menuLinks = [
     generateUrl("") => 'Home',
     generateUrl('movie-details?id=1') => 'Movies',
-    generateUrl('news.php') => 'News',
     generateUrl('contact.php') => 'Contact'
 ];
 

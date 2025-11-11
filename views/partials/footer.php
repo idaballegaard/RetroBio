@@ -16,7 +16,6 @@
             <ul class="space-y-2">
                 <li><a href="/RetroBio/Views/index.php" class="text-[#FFDF00] hover:text-[#FE04FF] transition duration-300">Home</a></li>
                 <li><a href="/RetroBio/Views/movie.php" class="text-[#FFDF00] hover:text-[#FE04FF] transition duration-300">Movies</a></li>
-                <li><a href="/RetroBio/Views/news.php" class="text-[#FFDF00] hover:text-[#FE04FF] transition duration-300">News</a></li>
                 <li><a href="/RetroBio/Views/contact.php" class="text-[#FFDF00] hover:text-[#FE04FF] transition duration-300">Contact</a></li>
             </ul>
         </div>

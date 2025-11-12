@@ -14,6 +14,7 @@ class UserController extends BaseController {
         if ($user && password_verify($password, $user->getHashedPassword())) {
             $_SESSION['user_id'] = $user->getUserID();
             $_SESSION['username'] = $user->getUsername();
+            $_SESSION['role'] = $user->getIsAdmin() ? "admin" : "user";
 
             $homeController = new HomeController();
             return $homeController->frontpage();

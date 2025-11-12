@@ -40,7 +40,6 @@
     <p class="text-[#FE04FF] text-sm text-center mt-8">&copy; <?php echo date("Y"); ?> RetroBio. All rights reserved.</p>
 </footer>
 
-<script src="https://unpkg.com/feather-icons"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     feather.replace();

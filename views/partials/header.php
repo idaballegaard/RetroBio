@@ -11,6 +11,12 @@ $menuLinks = [
 if (isset($_SESSION['username'])) {
     $menuLinks[generateUrl('profile')] = 'Profile';
 }
+
+// Tilføj "Admin" kun hvis brugeren er admin
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    $menuLinks[generateUrl('admin')] = 'Admin';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

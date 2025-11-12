@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/BaseRepository.php";
 require_once __DIR__ . "/../models/Movie.php";
+require_once __DIR__ . "/../models/MovieDetails.php";
 require_once __DIR__ . "/../models/Genre.php";
 require_once __DIR__ . "/../models/CastMember.php";
 require_once __DIR__ . "/../models/Company.php";
@@ -8,6 +9,7 @@ require_once __DIR__ . "/../models/Company.php";
 class MovieRepository extends BaseRepository {
 
     // Henter alle film
+    /** @return MovieDetails[] */
     public function getAllMovies(): array {
         $movies = [];
         $db = $this->connectDatabase();
@@ -16,18 +18,36 @@ class MovieRepository extends BaseRepository {
         try {
             $stmt = $db->query("
                 SELECT movieID, 
-                    COALESCE(title, 'Ukendt titel') AS title, 
-                    releaseYear 
+                    title,
+                    description,
+                    releaseYear,
+                    length,
+                    language,
+                    ageLimit,
+                    ranking,
+                    director,
+                    company,
+                    genres,
+                    actors 
                 FROM moviedetail 
                 ORDER BY title ASC
             ");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($rows as $row) {
-                $movie = new Movie();
+                $movie = new MovieDetails();
                 $movie->setMovieID((int)$row['movieID']);
                 $movie->setTitle($row['title']);
+                $movie->setDescription($row['description']);
                 $movie->setReleaseYear((int)$row['releaseYear']);
+                $movie->setLength((int)$row['length']);
+                $movie->setLanguage($row['language']);
+                $movie->setAgeLimit($row['ageLimit']);
+                $movie->setRanking($row['ranking']);
+                $movie->setDirector($row['director']);
+                $movie->setCompany($row['company']);
+                $movie->setGenres($row['genres']);
+                $movie->setActors($row['actors']);
                 $movies[] = $movie;
             }
         } catch (PDOException $e) {

@@ -24,12 +24,12 @@
       </tr>
     </thead>
     <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-      <?php /** @var Movie $movie */ foreach ($viewModel->getMovies() as $index => $movie): ?>
+      <?php /** @var MovieDetails $movie */ foreach ($viewModel->getMovies() as $movie): ?>
         <tr class="hover:bg-white/5">
           <td class="px-4 py-3" data-form-field="id"><?php echo safeString($movie->getMovieID()); ?></td>
           <td class="px-4 py-3" data-form-field="title"><?php echo safeString($movie->getTitle()); ?></td>
           <td class="px-4 py-3" data-form-field="description"><?php echo safeString($movie->getDescription()); ?></td>
-          <td class="px-4 py-3" data-form-field="genre"><?php echo safeString(implode(", ", $movie->getGenres())); ?></td>
+          <td class="px-4 py-3" data-form-field="genre"><?php echo safeString($movie->getGenres()); ?></td>
           <td class="px-4 py-3" data-form-field="releaseYear"><?php echo safeString($movie->getReleaseYear()); ?></td>
           <td class="px-4 py-3" data-form-field="length"><?php echo safeString($movie->getLength()); ?></td>
           <td class="px-4 py-3" data-form-field="language"><?php echo safeString($movie->getLanguage()); ?></td>
@@ -37,7 +37,7 @@
           <td class="px-4 py-3" data-form-field="ranking"><?php echo safeString($movie->getRanking()); ?></td>
           <td class="px-4 py-3" data-form-field="company"><?php echo safeString($movie->getCompany()); ?></td>
           <td class="px-4 py-3" data-form-field="director"><?php echo safeString($movie->getDirector()); ?></td>
-          <td class="px-4 py-3" data-form-field="cast"><?php echo safeString(implode(", ", $movie->getActors())); ?></td>
+          <td class="px-4 py-3" data-form-field="cast"><?php echo safeString($movie->getActors()); ?></td>
           <td class="px-4 py-3 flex gap-3">
             <button onclick="openModal('movieModal', this)" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
             <button onclick="confirmDelete('movie', <?php echo safeString($movie->getMovieID()); ?>)" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>

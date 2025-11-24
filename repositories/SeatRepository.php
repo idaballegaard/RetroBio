@@ -1,0 +1,24 @@
+<?php
+require_once __DIR__ . "/BaseRepository.php";
+require_once __DIR__ . "/../models/Seat.php";
+
+class SeatRepository extends BaseRepository {
+    
+    function getSeatsByHallId($hallID): array {
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("SELECT seatID, `number`, rowNumber, hallID FROM Seat WHERE hallID = :hallID");
+        $stmt->bindValue(":hallID", $hallID, PDO::PARAM_INT);
+        $stmt->execute();
+        $seats = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $seat = new Seat();
+            $seat->setSeatID($row['seatID']);
+            $seat->setNumber($row['number']);
+            $seat->setRowNumber($row['rowNumber']);
+            $seat->setHallID($row['hallID']);
+            $seats[] = $seat;
+        }
+        return $seats;
+    }
+
+}

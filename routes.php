@@ -73,6 +73,14 @@ post(generateUrl("register"), function() {
     )->presentView();
 });
 
+// Booking
+get(generateUrl("booking"), function() {
+    require_once __DIR__ . "/controllers/BookingController.php";
+    $controller = new BookingController();
+    $showingID = isset($_GET['showing_id']) && is_numeric($_GET['showing_id']) ? (int)$_GET['showing_id'] : null;
+    $controller->showBookingPage($showingID)->presentView();
+});
+
 // Profil
 get(generateUrl("profile"), function() {
     require_once __DIR__ . "/controllers/UserController.php";

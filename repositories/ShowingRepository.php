@@ -5,6 +5,50 @@ require_once __DIR__ . "/../models/Showing.php";
 
 class ShowingRepository extends BaseRepository {
 
+    public function getShowingById($showingID): ?Showing {
+        // Implementation can be added as needed
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
+                                    h.name, h.number,
+                                    cm.firstName, cm.lastName,
+                                    m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
+                            FROM Showing s
+                            LEFT JOIN Movie m ON s.movieID = m.movieID
+                            LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
+                            LEFT JOIN Hall h ON s.hallID = h.hallID
+                            WHERE s.showingID = :showingID
+        ");
+        $stmt->bindValue(":showingID", $showingID, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($row) {
+            $showing = new Showing();
+            $showing->setShowingID($row['showingID']);
+            $showing->setType($row['type']);
+            $showing->addReelTime($row['startTime']);
+            $showing->setDate(new DateTime($row['date']));
+            $showing->setPrice($row['price']);
+            $showing->getHall()->setHallID($row['hallID']);
+            $showing->getHall()->setName($row['name']);
+            $showing->getHall()->setNumber($row['number']);
+            $showing->getMovie()->setMovieID($row['movieID']);
+            $showing->getMovie()->setTitle($row['title']);
+            $showing->getMovie()->setDescription($row['description']);
+            $showing->getMovie()->setLength($row['length']);
+            $showing->getMovie()->setLanguage($row['language']);
+            $showing->getMovie()->getDirector()->setCastMemberID($row['directorID']);
+            $showing->getMovie()->getDirector()->setFirstName($row['firstName']);
+            $showing->getMovie()->getDirector()->setLastName($row['lastName']);
+            $genreReository = new GenreRepository();
+            $showing->getMovie()->setGenres($genreReository->getGenresByMovieId($row['movieID']));
+            $showing->getMovie()->setAgeLimit($row['ageLimit']);
+            $showing->getMovie()->setRanking($row['ranking']);
+            $showing->getMovie()->setReleaseYear($row['releaseYear']);
+            return $showing;
+        }
+
+    }
+
     // @return Showing[]
     public function getShowingsThisWeek() : array {
         $genreReository = new GenreRepository();

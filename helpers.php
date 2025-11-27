@@ -30,3 +30,13 @@ function generateUrl(string $path) {
 function safeString(string $input): string {
     return trim(htmlspecialchars($input));
 }
+
+function requestLoginRedirectIfNeeded(): void {
+    if (isset($_SESSION['user_id'])) {
+        return; // User is logged in, no need to redirect
+    }
+    
+    $loginUrl = generateUrl("login") . "?showRequestLogin=1";
+    header("Location: " . $loginUrl);
+    exit();
+}

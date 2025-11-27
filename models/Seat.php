@@ -29,4 +29,7 @@ class Seat {
     public function setHallID(int $hallID) : void {
         $this->hallID = $hallID;
     }
+    public function __toString() : string {
+        return $this->rowNumber . '-' . $this->number;
+    }
 }

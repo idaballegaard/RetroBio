@@ -42,6 +42,23 @@ get(generateUrl("test"), function() {
     $testController->showFrontpage()->presentView();
 });
 
+// Contact
+get(generateUrl("contact"), function() {
+    requestLoginRedirectIfNeeded();
+
+    require_once __DIR__ . "/controllers/ContactController.php";
+    $controller = new ContactController();
+    $controller->showContactForm()->presentView();
+});
+
+post(generateUrl("contact"), function() {
+    requestLoginRedirectIfNeeded();
+
+    require_once __DIR__ . "/controllers/ContactController.php";
+    $controller = new ContactController();
+    $controller->sendMail()->presentView();
+});
+
 // Register
 get(generateUrl("register"), function() {
     require_once __DIR__ . "/views/register.php";

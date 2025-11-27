@@ -9,6 +9,9 @@ class BookingViewModel extends BasicViewModel {
     // @var Seat[]|null
     private $seats = null;
 
+    // @var Seat[]|null
+    private $soldSeats = null;
+
     public function __construct($viewPath) {
         parent::__construct($viewPath);
     }
@@ -29,17 +32,15 @@ class BookingViewModel extends BasicViewModel {
         $this->seats = $seats;
     }
 
-    public function getSeatMap() {
+    public function getSoldSeats() {
+        return $this->soldSeats;
+    }
 
-        /*
-            const rows = [
-      { id:1, seats:12 },
-      { id:2, seats:12 },
-      { id:3, seats:12 },
-      { id:4, seats:12 },
-      { id:5, seats:12 },
-    ];
-        */
+    public function setSoldSeats($soldSeats): void {
+        $this->soldSeats = $soldSeats;
+    }
+
+    public function getSeatMap() {
         // Transform seats into the desired format with row id and seat count
         $rows = [];
         if ($this->seats !== null) {
@@ -60,5 +61,15 @@ class BookingViewModel extends BasicViewModel {
             }
         }
         return $rows;
+    }
+
+    public function getSoldSeatMap() {
+        $soldSeatIds = [];
+        if ($this->soldSeats !== null) {
+            foreach ($this->soldSeats as $seat) {
+                $soldSeatIds[] = $seat->__toString();
+            }
+        }
+        return $soldSeatIds;
     }
 }

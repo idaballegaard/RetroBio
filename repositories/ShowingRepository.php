@@ -47,6 +47,7 @@ class ShowingRepository extends BaseRepository {
             return $showing;
         }
 
+        return null;
     }
 
     // @return Showing[]

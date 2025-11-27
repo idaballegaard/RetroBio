@@ -1,15 +1,10 @@
+<?php require_once __DIR__ . '/partials/header.php'; ?>
+
 <?php
 /** @var BookingViewModel $viewModel */
 $showing = $viewModel->getShowing();
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RetroBio — Seat Selection</title>
-  <!-- Tailwind CDN for quick prototype (replace with your build in production) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     /* Theme tokens that match your site */
     :root{
@@ -137,6 +132,10 @@ $showing = $viewModel->getShowing();
           <!-- Seats grid container -->
 
           <div id="seat-map" class="w-full flex flex-col items-center gap-3">
+            <?php echo json_encode($viewModel->getSeatMap()); ?>
+          </div>
+          <div id="sold-map" class="hidden">
+            <?php echo json_encode($viewModel->getSoldSeatMap()); ?>
           </div>
 
           <!-- Legend -->
@@ -161,11 +160,12 @@ $showing = $viewModel->getShowing();
 
   <script>
     /* Configuration for the map (rows, seats per row, and reserved seats) */
-    const rows = <?php echo json_encode($viewModel->getSeatMap()); ?>;
+    const rows = JSON.parse(document.getElementById('seat-map').textContent);
+    document.getElementById('seat-map').textContent = ''; // clear placeholder
     
     /* Example seat metadata (sold) -- in real app replace with API data */
     // const sold = new Set(['1-3','1-4','2-8','3-7','4-9']);
-    const sold = new Set();
+    const sold = new Set(JSON.parse(document.getElementById('sold-map').textContent.trim()));
 
     // State
     let selected = new Set();
@@ -380,5 +380,5 @@ $showing = $viewModel->getShowing();
     refreshSelectedList();
 
   </script>
-</body>
-</html>
+
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

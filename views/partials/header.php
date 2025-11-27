@@ -4,7 +4,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 $menuLinks = [
     generateUrl("") => 'Home',
     generateUrl('movie-details?id=1') => 'Movies',
-    generateUrl('contact.php') => 'Contact'
+    generateUrl('contact') => 'Contact'
 ];
 
 // Tilføj "Profile" kun hvis brugeren er logget ind

@@ -4,6 +4,12 @@
     <div class="w-full max-w-md p-8 bg-black border border-[#FE04FF] rounded-xl shadow-[0_0_25px_#FE04FF]">
         <h2 class="text-3xl font-bold text-[#FE04FF] mb-6 text-center animate-neon-flicker">RetroBio Login</h2>
         
+        <?php if($_GET["showRequestLogin"] ?? false): ?>
+            <div class="mb-4 p-3 bg-yellow-500 text-black rounded-lg text-center">
+                Please log in to access the requested page.
+            </div>
+        <?php endif; ?>
+
         <form action="login" method="POST" class="space-y-4">
             <!-- Username / Email -->
             <div>

@@ -21,4 +21,25 @@ class SeatRepository extends BaseRepository {
         return $seats;
     }
 
+    function getSoldSeatsByShowingId($showingID): array {
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("SELECT s.seatID, s.`number`, s.rowNumber, s.hallID 
+                               FROM Seat s
+                               JOIN OrderSeat os ON s.seatID = os.seatID
+                               JOIN `Order` o ON os.orderID = o.orderID
+                               WHERE o.showingID = :showingID");
+        $stmt->bindValue(":showingID", $showingID, PDO::PARAM_INT);
+        $stmt->execute();
+        $seats = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $seat = new Seat();
+            $seat->setSeatID($row['seatID']);
+            $seat->setNumber($row['number']);
+            $seat->setRowNumber($row['rowNumber']);
+            $seat->setHallID($row['hallID']);
+            $seats[] = $seat;
+        }
+        return $seats;
+    }
+
 }

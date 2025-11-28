@@ -26,7 +26,7 @@ CREATE TABLE Movie (
     `length` int NOT NULL,
     `language` varchar (100) NOT NULL,
     ageLimit int NOT NULL,
-    ranking float NULL,
+    ranking decimal(3,1) NULL,
     directorID int NOT NULL,
     companyID int NOT NULL
 );
@@ -77,7 +77,7 @@ CREATE TABLE Seat (
 
 CREATE TABLE `Order` (
     orderID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    price float NOT NULL,
+    price decimal(10,2) NOT NULL,
     `date` date NOT NULL,
     `status` varchar (100) NOT NULL,
     numberOfTickets int NOT NULL,

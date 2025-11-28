@@ -2,6 +2,7 @@
 require_once __DIR__ . '/partials/header.php';
 
 // Hent data fra ViewModel
+/** @var MovieDetailsViewModel $viewModel */
 $allMovies = $viewModel->getAllMovies();
 $selectedMovie = $viewModel->getSelectedMovie();
 ?>
@@ -39,32 +40,27 @@ $selectedMovie = $viewModel->getSelectedMovie();
       </form>
     </div>
 
-    <!-- Calendar -->
+    <!-- Date Dropdown -->
     <div class="relative w-full md:w-1/2">
-      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-        <i data-feather="calendar" class="text-white w-5 h-5"></i>
-      </div>
-      <input id="dateInput" type="text"
-        class="bg-black border border-[#00e7ec] text-white text-sm rounded-lg focus:ring-[#00e7ec] focus:border-[#00e7ec] block w-full pl-10 p-2.5"
-        placeholder="Select date" readonly>
-      <div id="calendar" class="absolute left-0 mt-1 w-64 bg-black border border-[#00e7ec] rounded-lg shadow-lg hidden z-50 p-2 text-sm overflow-y-auto max-h-80">
-        <div class="flex justify-between items-center mb-1 text-[#00e7ec] text-sm">
-          <button id="prevMonth" class="px-2 py-1 bg-black rounded hover:bg-[#003133]">&lt;</button>
-          <span id="monthYear" class="font-semibold text-[#00e7ec]"></span>
-          <button id="nextMonth" class="px-2 py-1 bg-black rounded hover:bg-[#003133]">&gt;</button>
-        </div>
-        <div class="grid grid-cols-7 gap-1 text-center font-medium text-xs">
-          <div class="text-[#00e7ec]">Sun</div>
-          <div class="text-white">Mon</div>
-          <div class="text-white">Tue</div>
-          <div class="text-white">Wed</div>
-          <div class="text-white">Thu</div>
-          <div class="text-white">Fri</div>
-          <div class="text-[#00e7ec]">Sat</div>
-        </div>
-        <div id="dates" class="grid grid-cols-7 gap-1 mt-1 text-center text-white text-sm"></div>
-      </div>
+      <!--<form method="get" action="<?= generateUrl('movie-details') ?>">-->
+          <input type="text" id="dateInput" name="id" placeholder="Select date"
+                 class="bg-black border border-[#00e7ec] text-[#00e7ec] text-sm rounded-lg focus:ring-[#00e7ec] focus:border-[#00e7ec] block w-full pl-3 p-2.5 cursor-pointer"
+                 readonly>
+          <i data-feather="chevron-down" class="absolute right-3 top-3 text-[#00e7ec] pointer-events-none"></i>
+
+          <!-- Dropdown-liste -->
+          <div id="dateDropdown"
+               class="absolute left-0 mt-1 w-full bg-black border border-[#00e7ec] rounded-lg shadow-lg hidden z-50 max-h-60 overflow-y-auto">
+              <?php foreach ($viewModel->getFutureShowings() as $showing): ?>
+                  <div class="px-3 py-2 hover:bg-[#003133] cursor-pointer text-[#00e7ec]"
+                       onclick="document.getElementById('dateInput').value='<?= safeString($showing->getDate()->format('F j Y')) . ')' ?>';">
+                      <?= safeString($showing->getDate()->format('F j Y')); ?>
+                  </div>
+              <?php endforeach; ?>
+          </div>
+      <!--</form>-->
     </div>
+
   </div>
 
   <!-- Showtimes -->
@@ -112,23 +108,25 @@ $selectedMovie = $viewModel->getSelectedMovie();
 
 <script>
   const movieInput = document.getElementById('movieInput');
-  const dropdown = document.getElementById('movieDropdown');
+  const movieDropdown = document.getElementById('movieDropdown');
+  const dateInput = document.getElementById('dateInput');
+const dateDropdown = document.getElementById('dateDropdown');
 
-  movieInput.addEventListener('click', () => {
-    dropdown.classList.toggle('hidden');
-  });
+  function prepareDropdown(input, dropdown) {
+      input.addEventListener('click', () => {
+          dropdown.classList.toggle('hidden');
+      });
 
-  document.addEventListener('click', (e) => {
-    if (!movieInput.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add('hidden');
-    }
-  });
+      document.addEventListener('click', (e) => {
+          if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+              dropdown.classList.add('hidden');
+          }
+      });
+  }
+
+  prepareDropdown(movieInput, movieDropdown);
+  prepareDropdown(dateInput, dateDropdown);
+
 </script>
 
-<script>
-  window.showings = <?= json_encode($viewModel->getShowings() ?? []); ?>;
-</script>
-<script src="assets/movie-details.js"></script>
-
-<script src="assets/movie-details.js"></script>
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

@@ -66,7 +66,7 @@ class BookingController extends BaseController {
             ],
         ]],
         'mode' => 'payment',
-        'success_url' => $this->getEnvVariable("BASE_URL") . '/confirmBooking?orderId=' . $orderId,
+        'success_url' => $this->getEnvVariable("BASE_URL") . '/confirmBooking?orderId=' . $orderId . '&session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => $this->getEnvVariable("BASE_URL") . '/cancelBooking?orderId=' . $orderId,
         'automatic_tax' => [
             'enabled' => true,
@@ -80,12 +80,47 @@ class BookingController extends BaseController {
   public function confirmBooking() : BasicViewModel {
     require_once __DIR__ . "/../repositories/OrderRepository.php";
 
-    $orderId = (int)$_GET['orderId'];
-    $orderRepository = new OrderRepository();
-    $orderRepository->completeOrder($orderId);
+    // Require Stripe and set API key
+    require_once __DIR__ . "/../stripe/init.php";
+    \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));
 
-    return new BasicViewModel("__DIR__ . /../views/booking-confirm.php");
-  }
+    // Read parameters
+    $orderId = isset($_GET['orderId']) ? (int)$_GET['orderId'] : null;
+    $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+
+    // Basic validation
+    if (!$orderId || !$sessionId) {
+        // Missing parameters -> treat as cancelled/invalid
+        return new BasicViewModel(__DIR__ . "/../views/booking-cancel.php");
+    }
+
+    try {
+        // Retrieve the Checkout Session from Stripe
+        $session = \Stripe\Checkout\Session::retrieve($sessionId);
+    } catch (\Exception $e) {
+        // If Stripe API call fails, treat as cancelled/failed
+        // (You may want to log $e->getMessage() to your application log.)
+        return new BasicViewModel(__DIR__ . "/../views/booking-cancel.php");
+    }
+
+    // Verify that the session matches the expected order (extra safety)
+    if (!isset($session->client_reference_id) || (string)$session->client_reference_id !== (string)$orderId) {
+        // Mismatch -> do not complete the order
+        return new BasicViewModel(__DIR__ . "/../views/booking-cancel.php");
+    }
+
+    // Stripe Checkout Session has a payment_status property. It will be 'paid' when completed.
+    if (isset($session->payment_status) && $session->payment_status === 'paid') {
+        $orderRepository = new OrderRepository();
+        $orderRepository->completeOrder($orderId);
+        return new BasicViewModel(__DIR__ . "/../views/booking-confirm.php");
+    } else {
+        // Payment not completed — cancel the order to free seats
+        $orderRepository = new OrderRepository();
+        $orderRepository->cancelOrder($orderId);
+        return new BasicViewModel(__DIR__ . "/../views/booking-cancel.php");
+    }
+}
 
   public function cancelBooking() {
     require_once __DIR__ . "/../repositories/OrderRepository.php";

@@ -181,10 +181,7 @@ $showing = $viewModel->getShowing();
                                 </button>
                             <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>?
-                </div>
-                <div id="sold-map" class="hidden">
-                    <?php echo json_encode($viewModel->getSoldSeatMap()); ?>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Legend -->
@@ -236,8 +233,6 @@ $showing = $viewModel->getShowing();
     function getTotalTickets() {
         // derive ticket count from the hidden field so seat selection logic uses the current ticket count
         const n = parseInt(numberOfTicketsField.value, 10);
-        // console.log(numberOfTicketsField);
-        // console.log(n);
         return isNaN(n) ? 0 : n;
     }
 

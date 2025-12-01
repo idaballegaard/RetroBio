@@ -26,40 +26,48 @@ class BookingController extends BaseController {
     }
 
   public function processBooking() {
-    $seats = $_POST['seats'];
-    $showingID = (int)$_POST['showingId'];
-    $tickets = $_POST['tickets'];
 
-    print_r($seats);
-    print_r($showingID);
-    print_r($tickets);
+    require_once __DIR__ . "/../repositories/OrderRepository.php";
+    $seats = explode(",", $_POST['seats']);
 
-    return;
+    require_once __DIR__ . "/../repositories/ShowingRepository.php";
+    $showingRepository = new ShowingRepository();
+    $price = $showingRepository->getShowingPrice((int)$_POST['showingId']);
 
+    $orderRepository = new OrderRepository();
+    $orderId = $orderRepository->createOrder(
+        $price,
+        count($seats),
+        $_SESSION['user_id'],
+        (int)$_POST['showingId'],
+        $seats
+    );
 
+    require_once __DIR__ . "/../repositories/MovieRepository.php";
+    $movieRepository = new MovieRepository();
+    $movieTitle = $movieRepository->getMovieTitleByShowingId((int)$_POST['showingId']);
 
     require_once __DIR__ . "/../stripe/init.php";
-
-    $env = parse_ini_file(__DIR__ . "/../.env");
     \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));
     header('Content-Type: application/json');
 
     $YOUR_DOMAIN = 'http://localhost:4242';
 
     $checkout_session = \Stripe\Checkout\Session::create([
-        'client_reference_id' => $showingID,
+        'client_reference_id' => (string)$orderId,
         'line_items' => [[
-            'quantity' => 1,
+            'quantity' => count($seats),
             'price_data' => [
-                'currency' => 'usd',
-                'unit_amount' => 2000, // amount in cents (e.g., $20.00)
+                'currency' => 'dkk',
+                'unit_amount' => $price * 100, // amount in cents (e.g., $20.00)
                 'product_data' => [
-                    'name' => 'My Product'
+                    'name' => $movieTitle
                 ],
             ],
         ]],
         'mode' => 'payment',
-        'success_url' => $YOUR_DOMAIN . '/success.html',
+        'success_url' => $this->getEnvVariable("BASE_URL") . '/confirmBooking?orderId=' . $orderId,
+        'cancel_url' => $this->getEnvVariable("BASE_URL") . '/cancelBooking?orderId=' . $orderId,
         'automatic_tax' => [
             'enabled' => true,
         ],
@@ -67,5 +75,25 @@ class BookingController extends BaseController {
 
     header("HTTP/1.1 303 See Other");
     header("Location: " . $checkout_session->url);
+  }
+
+  public function confirmBooking() : BasicViewModel {
+    require_once __DIR__ . "/../repositories/OrderRepository.php";
+
+    $orderId = (int)$_GET['orderId'];
+    $orderRepository = new OrderRepository();
+    $orderRepository->completeOrder($orderId);
+
+    return new BasicViewModel("__DIR__ . /../views/booking-confirm.php");
+  }
+
+  public function cancelBooking() {
+    require_once __DIR__ . "/../repositories/OrderRepository.php";
+
+    $orderId = (int)$_GET['orderId'];
+    $orderRepository = new OrderRepository();
+    $orderRepository->cancelOrder($orderId);
+
+    return new BasicViewModel("__DIR__ . /../views/booking-cancel.php");
   }
 }

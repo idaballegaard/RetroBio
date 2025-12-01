@@ -4,6 +4,7 @@ require_once __DIR__ . "/../controllers/HomeController.php";
 require_once __DIR__ . "/../viewModels/BasicViewModel.php";
 require_once __DIR__ . "/../viewModels/ProfileViewModel.php";
 require_once __DIR__ . "/../repositories/UserRepository.php";
+require_once __DIR__ . "/../repositories/OrderRepository.php";
 
 class UserController extends BaseController {
 
@@ -94,11 +95,13 @@ class UserController extends BaseController {
 
     public function showProfile(int $userID) : BasicViewModel {
         $userRepository = new UserRepository();
+        $orderRepository = new OrderRepository();
         $user = $userRepository->getUserByID($userID);
 
         if ($user) {
             $viewModel = new ProfileViewModel(__DIR__ . "/../views/profile.php");
             $viewModel->setUser($user);
+            $viewModel->setOrders($orderRepository->getOrdersByUserID($userID));
             return $viewModel;
         } else {
             $viewModel = new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");

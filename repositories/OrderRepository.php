@@ -1,18 +1,87 @@
 <?php
-require_once __DIR__ . "/repositories/BaseRepository.php";
+require_once __DIR__ . "/BaseRepository.php";
+require_once __DIR__ . "/../models/Order.php";
 
-class OrderRepository extends BaseRepository {
+class OrderRepository extends BaseRepository
+{
+  public function createOrder(float $unitPrice, int $numberOfTickets, int $userId, int $showingId, array $seats): int
+  {
+    $date = date("Y-m-d");
+    $status = "pending";
+    $totalPrice = $unitPrice * $numberOfTickets;
 
-    public function __construct() {
-        parent::__construct();
+    $db = $this->connectDatabase();
+
+    $db->beginTransaction();
+
+    $stmt = $db->prepare("INSERT INTO `Order` (price, date, status, numberOfTickets, userId, showingId) VALUES (:price, :date, :status, :numberOfTickets, :userId, :showingId)");
+    $stmt->execute([
+      ':price' => $totalPrice,
+      ':date' => $date,
+      ':status' => $status,
+      ':numberOfTickets' => $numberOfTickets,
+      ':userId' => $userId,
+      ':showingId' => $showingId,
+    ]);
+
+    $orderId = $db->lastInsertId();
+    $seatStmt = $db->prepare("INSERT INTO OrderSeat (orderId, seatId) VALUES (:orderId, :seatId)");
+    foreach ($seats as $seatId) {
+      $seatStmt->execute([
+        ':orderId' => $orderId,
+        ':seatId' => $seatId,
+      ]);
     }
 
-    public function createOrder(float $price, int $numberOfTickets, int $userId, int $showingId, array $seats): int {
-      $db = $this->connectDatabase();
-      $stmt = $db->prepare("INSERT INTO Order (price, date, status, numberOfTickets, userId, showingId) VALUES (?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("id", $userId, $totalAmount);
-      $stmt->execute();
-      return $stmt->insert_id;
+    $db->commit();
 
+    return $orderId;
+  }
 
+  public function completeOrder(int $orderId) {
+    $db = $this->connectDatabase();
+
+    $stmt = $db->prepare("UPDATE `Order` SET status = 'completed' WHERE orderId = :orderId");
+    $stmt->execute([
+      ':orderId' => $orderId,
+    ]);
+  }
+
+  public function cancelOrder(int $orderId) {
+    $db = $this->connectDatabase();
+
+    $db->beginTransaction();
+
+    $stmt = $db->prepare("DELETE FROM `Order` WHERE orderId = :orderId");
+    $stmt->execute([
+      ':orderId' => $orderId,
+    ]);
+
+    $seatStmt = $db->prepare("DELETE FROM OrderSeat WHERE orderId = :orderId");
+    $seatStmt->execute([
+      ':orderId' => $orderId,
+    ]);
+
+    $db->commit();
+  }
+
+  public function getOrdersByUserId(int $userId): array {
+    $db = $this->connectDatabase();
+    $stmt = $db->prepare("SELECT * FROM `Order` WHERE userId = :userId ORDER BY date DESC");
+    $stmt->execute([':userId' => $userId]);
+
+    $orders = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $order = new Order();
+      $order->setOrderId((int)$row['orderID']);
+      $order->setPrice((float)$row['price']);
+      $order->setDate($row['date']);
+      $order->setStatus($row['status']);
+      $order->setNumberOfTickets((int)$row['numberOfTickets']);
+      $order->setUserId((int)$row['userID']);
+      $order->setShowingId((int)$row['showingID']);
+      $orders[] = $order;
+    }
+    return $orders;
+  }
 }

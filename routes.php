@@ -104,6 +104,18 @@ post(generateUrl("booking"), function() {
   $controller->processBooking();
 });
 
+get(generateUrl("confirmBooking"), function() {
+  require_once __DIR__ . "/controllers/BookingController.php";
+  $controller = new BookingController();
+  $controller->confirmBooking()->presentView();
+});
+
+get(generateUrl("cancelBooking"), function() {
+  require_once __DIR__ . "/controllers/BookingController.php";
+  $controller = new BookingController();
+  $controller->cancelBooking()->presentView();
+});
+
 // Profil
 get(generateUrl("profile"), function() {
     require_once __DIR__ . "/controllers/UserController.php";

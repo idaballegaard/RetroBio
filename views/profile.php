@@ -98,6 +98,29 @@ if(!isset($_SESSION['username'])) {
                     </div>
                 </div>
             </section>
+
+            <!-- Orders -->
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Order ID</th>
+                        <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Date</th>
+                        <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Status</th>
+                        <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($viewModel->getOrders() as $order): ?>
+                    <tr>
+                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
+                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
+                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
+                        <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
         </div>
 
     </div>

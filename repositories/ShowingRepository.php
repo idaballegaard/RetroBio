@@ -250,4 +250,13 @@ class ShowingRepository extends BaseRepository {
         $stmt->bindValue(":showingID", $showingID, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+    public function getShowingPrice(int $showingID): float {
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("SELECT price FROM Showing WHERE showingID = :showingID");
+        $stmt->bindValue(":showingID", $showingID, PDO::PARAM_INT);
+        $stmt->execute();
+        $price = $stmt->fetchColumn();
+        return $price !== false ? (float)$price : 0.0;
+    }
 }

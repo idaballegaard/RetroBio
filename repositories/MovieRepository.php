@@ -290,4 +290,19 @@ class MovieRepository extends BaseRepository {
             echo $e->getMessage();
         }
     }
+
+    public function getMovieTitleByShowingId($showingId) : string {
+        $db = $this->connectDatabase();
+
+          $stmt = $db->prepare("
+              SELECT m.title 
+              FROM Showing s
+              JOIN Movie m ON m.movieID = s.movieID
+              WHERE s.showingID = :showingID
+          ");
+          $stmt->bindParam(':showingID', $showingId, PDO::PARAM_INT);
+          $stmt->execute();
+          $title = $stmt->fetchColumn();
+          return $title ? $title : '';
+    }
 }

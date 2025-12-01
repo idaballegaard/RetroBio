@@ -3,8 +3,7 @@ require_once __DIR__ . "/BasicViewModel.php";
 
 class BookingViewModel extends BasicViewModel {
     
-    // @var Showing|null
-    private $showing = null;
+    private Showing|null $showing = null;
 
     // @var Seat[]|null
     private $seats = null;
@@ -16,6 +15,7 @@ class BookingViewModel extends BasicViewModel {
         parent::__construct($viewPath);
     }
 
+    /** @returns Showing */
     public function getShowing() {
         return $this->showing;
     }

@@ -115,16 +115,16 @@ $showing = $viewModel->getShowing();
         <aside class="panel p-6 rounded-xl shadow-lg">
             <h2 class="text-2xl font-bold text-[#00e7ec]">Choose tickets</h2>
 
-            <div class="mt-6 space-y-4">
+            <div class="price-group mt-6 space-y-4" data-price="<?php echo $showing->getPrice(); ?>">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="font-semibold">Normal</div>
                         <div class="text-xs text-gray-400"><?php echo $showing->getPrice() ?> DKK incl. fee</div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button id="dec-normal" class="px-2 py-1 rounded-md bg-gray-800">−</button>
+                        <button id="dec-normal" class="px-2 py-1 rounded-md bg-gray-800" onclick="decreaseTicketCount('#count-normal')">−</button>
                         <div id="count-normal" class="w-8 text-center">2</div>
-                        <button id="inc-normal" class="px-2 py-1 rounded-md bg-[#00e7ec] text-black">+</button>
+                        <button id="inc-normal" class="px-2 py-1 rounded-md bg-[#00e7ec] text-black" onclick="increaseTicketCount('#count-normal')">+</button>
                     </div>
                 </div>
 
@@ -140,7 +140,7 @@ $showing = $viewModel->getShowing();
                 </div>
                 <div>
                     <div class="text-xs text-gray-400">Price</div>
-                    <div id="total-price" class="font-bold text-lg">DKK 300</div>
+                    <div id="total-price-view" class="font-bold text-lg">DKK 300</div>
                 </div>
             </div>
 
@@ -170,6 +170,7 @@ $showing = $viewModel->getShowing();
                             <?php foreach ($row as $seat): ?>
                                 <?php $isSold = array_key_exists($seat->getSeatID(), $viewModel->getSoldSeatMap()) ?>
                                 <button class="seat seat--available <?php echo $isSold ? "seat--sold" : "" ?>"
+                                        data-id="<?php echo safeString($seat->getSeatID()); ?>"
                                         data-seat="<?php echo safeString($seat->getNumber()); ?>"
                                         data-row="<?php echo safeString($seat->getRowNumber()); ?>"
                                         onmouseenter="onSeatHover(<?php echo $seat->getRowNumber(); ?>, <?php echo $seat->getNumber(); ?>, this)"
@@ -209,7 +210,10 @@ $showing = $viewModel->getShowing();
                         <input type="hidden" name="showingId"
                                value="<?php echo safeString($showing->getShowingID()); ?>">
                         <input type="hidden" name="seats" id="seats-input" value="">
-                        <input type="hidden" name="tickets" id="tickets-input" value="">
+                        <input type="hidden" name="totalPrice" id="total-price" value="">
+                        <input type="hidden" name="numberOfTickets" id="number-of-tickets" value="">
+                        <input type="hidden" name="unitPrice" id="unit-price"
+                               value="<?php echo safeString($showing->getPrice()); ?>">
                         <button id="next-btn" class="px-6 py-2 rounded-md bg-[#00e7ec] text-black font-semibold">Next
                         </button>
                     </form>
@@ -224,6 +228,10 @@ $showing = $viewModel->getShowing();
     let hoverBlock = null;
     const selected = new Set();
 
+    const totalPriceField = document.getElementById('total-price');
+    const numberOfTicketsField = document.getElementById('number-of-tickets');
+    const unitPriceField = document.getElementById('unit-price');
+
     function getTotalTickets() {
         return 2;
     }
@@ -233,6 +241,18 @@ $showing = $viewModel->getShowing();
         if (len === 0) return; // nothing to highlight
         const block = findContiguousBlock(rowId, colIndex, len);
         highlightBlock(block);
+    }
+
+    function clearSelections() {
+        // Deselect previous selection (use data-row + data-seat from the DOM)
+        selected.forEach(id => {
+            const parts = id.split(':'); // stored as "row:seat"
+            const r = parts[0];
+            const s = parts[1];
+            const el = document.querySelector(`.seat[data-row="${r}"][data-seat="${s}"]`);
+            if (el) el.classList.remove('seat--selected');
+        });
+        selected.clear();
     }
 
     function onSeatClick(rowId, colIndex) {
@@ -247,16 +267,7 @@ $showing = $viewModel->getShowing();
             alert('Cannot find a contiguous group of seats here. Try another spot.');
             return;
         }
-
-        // Deselect previous selection (use data-row + data-seat from the DOM)
-        selected.forEach(id => {
-            const parts = id.split(':'); // stored as "row:seat"
-            const r = parts[0];
-            const s = parts[1];
-            const el = document.querySelector(`.seat[data-row="${r}"][data-seat="${s}"]`);
-            if (el) el.classList.remove('seat--selected');
-        });
-        selected.clear();
+        clearSelections();
 
         // Select new block using the seat attributes that exist in the markup
         for (let c = block.start; c <= block.end; c++) {
@@ -364,6 +375,36 @@ $showing = $viewModel->getShowing();
             if (sel) sel.classList.remove('seat--hover');
         }
         hoverBlock = null;
+    }
+
+    function increaseTicketCount(counterId) {
+        let counter = document.querySelector(counterId);
+        console.log(counterId);
+        let count = parseInt(counter.textContent, 10);
+        count += 1;
+        counter.textContent = count;
+        numberOfTicketsField.value = count;
+        updateTotal();
+        clearSelections();
+    }
+
+    function decreaseTicketCount(counterId) {
+        let counter = document.querySelector(counterId);
+        let count = parseInt(counter.textContent, 10);
+        if (count > 0) {
+            count -= 1;
+            counter.textContent = count;
+            numberOfTicketsField.value = count;
+            updateTotal();
+            clearSelections();
+        }
+    }
+
+    function updateTotal() {
+        var numberOfTickets = parseInt(numberOfTicketsField.value);
+        var unitPrice = parseFloat(unitPriceField.value);
+        console.log(totalPriceField);
+        totalPriceField.value = numberOfTickets * unitPrice;
     }
 </script>
 

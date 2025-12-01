@@ -65,37 +65,13 @@ $showing = $viewModel->getShowing();
         <div class="mt-6 space-y-4">
           <div class="flex items-center justify-between">
             <div>
-              <div class="font-semibold">Adult</div>
-              <div class="text-xs text-gray-400">150 DKK incl. fee</div>
+              <div class="font-semibold">Normal</div>
+              <div class="text-xs text-gray-400"><?php echo $showing->getPrice() ?> DKK incl. fee</div>
             </div>
             <div class="flex items-center gap-2">
               <button id="dec-normal" class="px-2 py-1 rounded-md bg-gray-800">−</button>
               <div id="count-normal" class="w-8 text-center">2</div>
               <button id="inc-normal" class="px-2 py-1 rounded-md bg-[#00e7ec] text-black">+</button>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-semibold">Child &lt;12</div>
-              <div class="text-xs text-gray-400">110 DKK incl. fee</div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button id="dec-child" class="px-2 py-1 rounded-md bg-gray-800">−</button>
-              <div id="count-child" class="w-8 text-center">0</div>
-              <button id="inc-child" class="px-2 py-1 rounded-md bg-[#00e7ec] text-black">+</button>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-semibold">Senior</div>
-              <div class="text-xs text-gray-400">125 DKK incl. fee</div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button id="dec-senior" class="px-2 py-1 rounded-md bg-gray-800">−</button>
-              <div id="count-senior" class="w-8 text-center">0</div>
-              <button id="inc-senior" class="px-2 py-1 rounded-md bg-[#00e7ec] text-black">+</button>
             </div>
           </div>
 
@@ -132,7 +108,24 @@ $showing = $viewModel->getShowing();
           <!-- Seats grid container -->
 
           <div id="seat-map" class="w-full flex flex-col items-center gap-3">
-            <?php echo json_encode($viewModel->getSeatMap()); ?>
+            <?php foreach ($viewModel->getSeatMap() as $number => $row): ?>
+                <div class="seat-row flex items-center gap-3">
+                    <div class="w-6 text-sm text-gray-300"><?php echo $number; ?></div>
+                    <?php /** @var Seat $seat */ ?>
+                    <?php foreach ($row as $seat): ?>
+                        <?php $isSold = array_key_exists($seat->getSeatID(), $viewModel->getSoldSeatMap()) ?>
+                        <button class="seat seat--available <?php echo $isSold ? "seat--sold" : "" ?>"
+                            data-seat="<?php echo safeString($seat->getNumber()); ?>"
+                            data-row="<?php echo safeString($seat->getRowNumber()); ?>"
+                            onmouseenter="onSeatHover(<?php echo $seat->getRowNumber(); ?>, <?php echo $seat->getNumber(); ?>, this)"
+                            onclick="onSeatClick(<?php echo $seat->getRowNumber(); ?>, <?php echo $seat->getNumber(); ?>)"
+                            <?php echo $isSold ? "disabled" : "" ?>
+                        >
+                            <?php echo safeString($seat->getNumber()); ?>
+                        </button>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>?
           </div>
           <div id="sold-map" class="hidden">
             <?php echo json_encode($viewModel->getSoldSeatMap()); ?>
@@ -150,7 +143,12 @@ $showing = $viewModel->getShowing();
           <div class="text-sm text-gray-300">Selected seats: <span id="selected-list" class="font-semibold text-white">Row 4 • 5</span></div>
           <div class="flex items-center gap-4">
             <button id="reset-btn" class="px-4 py-2 rounded-md bg-gray-800">Reset</button>
-            <button id="next-btn" class="px-6 py-2 rounded-md bg-[#00e7ec] text-black font-semibold">Next</button>
+            <form method="POST" action="<?php echo generateUrl('booking'); ?>" id="payment-form">
+              <input type="hidden" name="showingId" value="<?php echo safeString($showing->getShowingID()); ?>">
+              <input type="hidden" name="seats" id="seats-input" value="">
+              <input type="hidden" name="tickets" id="tickets-input" value="">
+              <button id="next-btn" class="px-6 py-2 rounded-md bg-[#00e7ec] text-black font-semibold">Next</button>
+            </form>
           </div>
         </div>
 
@@ -159,226 +157,148 @@ $showing = $viewModel->getShowing();
   </main>
 
   <script>
-    /* Configuration for the map (rows, seats per row, and reserved seats) */
-    const rows = JSON.parse(document.getElementById('seat-map').textContent);
-    document.getElementById('seat-map').textContent = ''; // clear placeholder
-    
-    /* Example seat metadata (sold) -- in real app replace with API data */
-    // const sold = new Set(['1-3','1-4','2-8','3-7','4-9']);
-    const sold = new Set(JSON.parse(document.getElementById('sold-map').textContent.trim()));
+let hoverBlock = null;
+const selected = new Set();
 
-    // State
-    let selected = new Set();
-    let hoverBlock = null; // {row, start, end}
-
-    // Ticket counts (matching left panel)
-    const ticketCounts = { normal:2, child:0, senior:0 };
-
-    function formatSeatId(r,c){ return `${r}-${c}` }
-
-    // --- Build seat map ---
-    const seatMapEl = document.getElementById('seat-map');
-    rows.forEach(row=>{
-      const rowEl = document.createElement('div');
-      rowEl.className = 'flex items-center gap-3';
-
-      // row label
-      const label = document.createElement('div');
-      label.className = 'w-6 text-sm text-gray-300';
-      label.textContent = row.id;
-      rowEl.appendChild(label);
-
-      // seats container
-      const seatsContainer = document.createElement('div');
-      seatsContainer.className = 'flex gap-2 flex-wrap';
-
-      for(let i=1;i<=row.seats;i++){
-        const id = formatSeatId(row.id,i);
-        const btn = document.createElement('button');
-        btn.type='button';
-        btn.className = 'seat seat--available';
-        btn.setAttribute('data-seat', id);
-        btn.setAttribute('data-row', row.id);
-        btn.setAttribute('data-col', i);
-        btn.setAttribute('aria-label', `Row ${row.id}, Seat ${i}`);
-        btn.tabIndex=0;
-
-        // Visual variants
-        if(sold.has(id)){
-          btn.classList.add('seat--sold');
-          btn.disabled = true;
-        }
-
-        // Hover behavior: show potential contiguous block equal to ticket count
-        btn.addEventListener('mouseenter', (e)=> onSeatHover(row.id, i, btn));
-        btn.addEventListener('mouseleave', (e)=> clearHoverBlock());
-
-        // Click: if a hover block exists, select that block
-        btn.addEventListener('click', ()=> onSeatClick(row.id, i));
-
-        btn.innerHTML = '<span class="text-[10px]">' + i + '</span>';
-        seatsContainer.appendChild(btn);
+        function getTotalTickets(){
+          return 2;
       }
 
-      rowEl.appendChild(seatsContainer);
-      seatMapEl.appendChild(rowEl);
-    });
-
-    // --- Hover / selection logic ---
-    function getTotalTickets(){ return ticketCounts.normal + ticketCounts.child + ticketCounts.senior; }
-
-    // Try to find a contiguous block of length `len` that includes `colIndex` in row `rowId`.
-    // Preference: centered on hovered seat, but will shift left/right to find space.
-    function findContiguousBlock(rowId, colIndex, len){
-      if(len <= 0) return null;
-      const row = rows.find(r=>r.id===rowId);
-      if(!row) return null;
-
-      // Helper to check if block [s..e] is valid (no sold)
-      function blockValid(s,e){
-        if(s<1 || e>row.seats) return false;
-        for(let c=s;c<=e;c++){
-          if(sold.has(formatSeatId(rowId,c))) return false;
-        }
-        return true;
+      function onSeatHover(rowId, colIndex, btn){
+          const len = getTotalTickets();
+          if(len === 0) return; // nothing to highlight
+          const block = findContiguousBlock(rowId, colIndex, len);
+          highlightBlock(block);
       }
 
-      // Start try: center the block around colIndex
-      const halfLeft = Math.floor((len-1)/2);
-      const centerStart = colIndex - halfLeft;
-
-      // We'll attempt offsets from 0..row.seats to shift left/right
-      for(let offset=0; offset<=row.seats; offset++){
-        // try shifted left
-        let s = centerStart - offset;
-        let e = s + len - 1;
-        if(blockValid(s,e)) return {row:rowId, start:s, end:e};
-        // try shifted right
-        s = centerStart + offset;
-        e = s + len - 1;
-        if(blockValid(s,e)) return {row:rowId, start:s, end:e};
-      }
-      return null;
-    }
-
-    function highlightBlock(block){
-      clearHoverBlock();
-      if(!block) return;
-      hoverBlock = block;
-      for(let c=block.start; c<=block.end; c++){
-        const sel = document.querySelector(`[data-seat='${formatSeatId(block.row,c)}']`);
-        if(sel && !sel.classList.contains('seat--sold')) sel.classList.add('seat--hover');
-      }
-    }
-
-    function clearHoverBlock(){
-      if(!hoverBlock) return;
-      for(let c=hoverBlock.start; c<=hoverBlock.end; c++){
-        const sel = document.querySelector(`[data-seat='${formatSeatId(hoverBlock.row,c)}']`);
-        if(sel) sel.classList.remove('seat--hover');
-      }
-      hoverBlock = null;
-    }
-
-    function onSeatHover(rowId, colIndex, btn){
-      const len = getTotalTickets();
-      if(len === 0) return; // nothing to highlight
-      const block = findContiguousBlock(rowId, colIndex, len);
-      highlightBlock(block);
-    }
-
-    function onSeatClick(rowId, colIndex){
-      const len = getTotalTickets();
-      if(len === 0) { alert('Please choose ticket quantity first.'); return; }
-      const block = findContiguousBlock(rowId, colIndex, len);
-      if(!block){
+function onSeatClick(rowId, colIndex){
+    const len = getTotalTickets();
+    if(len === 0){ alert('Please choose ticket quantity first.'); return; }
+    const block = findContiguousBlock(rowId, colIndex, len);
+    if(!block){
         // no contiguous block available including this seat
         alert('Cannot find a contiguous group of seats here. Try another spot.');
         return;
-      }
+    }
 
-      // Deselect previous selection
-      selected.forEach(s=>{ const el = document.querySelector(`[data-seat='${s}']`); if(el) el.classList.remove('seat--selected'); });
-      selected.clear();
+    // Deselect previous selection (use data-row + data-seat from the DOM)
+    selected.forEach(id => {
+        const parts = id.split(':'); // stored as "row:seat"
+        const r = parts[0];
+        const s = parts[1];
+        const el = document.querySelector(`.seat[data-row="${r}"][data-seat="${s}"]`);
+        if(el) el.classList.remove('seat--selected');
+    });
+    selected.clear();
 
-      // Select new block
-      for(let c=block.start; c<=block.end; c++){
-        const id = formatSeatId(block.row,c);
-        const el = document.querySelector(`[data-seat='${id}']`);
+    // Select new block using the seat attributes that exist in the markup
+    for(let c = block.start; c <= block.end; c++){
+        const el = document.querySelector(`.seat[data-row="${block.row}"][data-seat="${c}"]`);
         if(el && !el.classList.contains('seat--sold')){
-          el.classList.add('seat--selected');
-          selected.add(id);
+            el.classList.add('seat--selected');
+            // store selection as "row:seat" to keep it unique across rows
+            selected.add(`${block.row}:${c}`);
         }
-      }
-      refreshSelectedList();
     }
 
-    // --- Existing functions ---
-    function updateTotals(){
-      const total = getTotalTickets();
-      document.getElementById('total-count').textContent = total;
-      const price = ticketCounts.normal*150 + ticketCounts.child*110 + ticketCounts.senior*125;
-      document.getElementById('total-price').textContent = 'DKK ' + price;
-
-      // If selected seats > tickets, deselect all (ensures consistent UX)
-      if(selected.size > total){
-        selected.forEach(s=>deselectSeat(s));
-      }
+    // Update UI: selected list and hidden inputs (if present)
+    const listEl = document.getElementById('selected-list');
+    if(listEl){
+        const items = Array.from(selected).map(id => {
+            const [r,s] = id.split(':');
+            return `Row ${r} • ${s}`;
+        });
+        listEl.textContent = items.join(', ');
     }
 
-    function deselectSeat(seatId){
-      selected.delete(seatId);
-      const btn = document.querySelector(`[data-seat='${seatId}']`);
-      if(btn){ btn.classList.remove('seat--selected'); }
-      refreshSelectedList();
-    }
+    const seatsInput = document.getElementById('seats-input');
+    if(seatsInput) seatsInput.value = Array.from(selected).join(',');
 
-    function refreshSelectedList(){
-      const arr = Array.from(selected).map(s=>{
-        const [r,c] = s.split('-'); return `R${r}S${c}`;
-      });
-      const selectedListEl = document.getElementById('selected-list');
-      selectedListEl.textContent = arr.length ? arr.join(' • ') : 'None';
-      // color selected-list yellow when seats selected
-      selectedListEl.style.color = arr.length ? getComputedStyle(document.documentElement).getPropertyValue('--neon-yellow') : '';
+    const ticketsInput = document.getElementById('tickets-input');
+    if(ticketsInput) ticketsInput.value = selected.size;
+}
 
-      document.getElementById('total-count').textContent = getTotalTickets();
-      document.getElementById('count-normal').textContent = ticketCounts.normal;
-      document.getElementById('count-child').textContent = ticketCounts.child;
-      document.getElementById('count-senior').textContent = ticketCounts.senior;
-      const price = ticketCounts.normal*150 + ticketCounts.child*110 + ticketCounts.senior*125;
-      document.getElementById('total-price').textContent = 'DKK ' + price;
-    }
+function findContiguousBlock(rowId, colIndex, len){
+    if (len <= 0) return null;
 
-    // Wire increment/decrement
-    document.getElementById('inc-normal').addEventListener('click', ()=>{ ticketCounts.normal++; refreshSelectedList(); });
-    document.getElementById('dec-normal').addEventListener('click', ()=>{ if(ticketCounts.normal>0) ticketCounts.normal--; refreshSelectedList(); });
-    document.getElementById('inc-child').addEventListener('click', ()=>{ ticketCounts.child++; refreshSelectedList(); });
-    document.getElementById('dec-child').addEventListener('click', ()=>{ if(ticketCounts.child>0) ticketCounts.child--; refreshSelectedList(); });
-    document.getElementById('inc-senior').addEventListener('click', ()=>{ ticketCounts.senior++; refreshSelectedList(); });
-    document.getElementById('dec-senior').addEventListener('click', ()=>{ if(ticketCounts.senior>0) ticketCounts.senior--; refreshSelectedList(); });
+    const seatMap = document.querySelector('#seat-map');
+    if (!seatMap) return null;
 
-    document.getElementById('reset-btn').addEventListener('click', ()=>{
-      selected.forEach(s=>deselectSeat(s));
-      selected.clear();
-      refreshSelectedList();
+    // Get all row containers and find the one whose left label matches rowId
+    const rows = Array.from(seatMap.querySelectorAll('.seat-row'));
+    const rowEl = rows.find(r => {
+        const labelDiv = r.querySelector(':scope > div');
+        if (!labelDiv) return false;
+        return labelDiv.textContent.trim() === String(rowId);
     });
+    if (!rowEl) return null;
 
-    document.getElementById('next-btn').addEventListener('click', ()=>{
-      const totalTickets = getTotalTickets();
-      if(selected.size !== totalTickets){
-        alert('Please select exactly ' + totalTickets + ' seats before continuing.');
-        return;
-      }
-      // Proceed: here you would POST selection to server
-      const payload = { seats:Array.from(selected), tickets:ticketCounts };
-      console.log('Proceed with', payload);
-      alert('Proceeding to payment — check console (dev).');
-    });
+    // Collect seat buttons in this row and determine min/max seat numbers
+    const seats = Array.from(rowEl.querySelectorAll('.seat'));
+    if (seats.length === 0) return null;
+    const seatNums = seats
+        .map(b => parseInt(b.getAttribute('data-seat'), 10))
+        .filter(n => !isNaN(n))
+        .sort((a, b) => a - b);
+    const minSeat = seatNums[0];
+    const maxSeat = seatNums[seatNums.length - 1];
 
-    // Init
-    refreshSelectedList();
+    // Helper to test whether a seat is sold/unavailable using the DOM
+    function isSeatSold(n){
+        const btn = rowEl.querySelector(`.seat[data-seat="${n}"]`);
+        return !btn || btn.disabled || btn.classList.contains('seat--sold');
+    }
 
+    // Validate block [s..e] using the actual DOM seats
+    function blockValid(s, e){
+        if (s < minSeat || e > maxSeat) return false;
+        for (let c = s; c <= e; c++){
+            // every seat must exist and not be sold/disabled
+            const btn = rowEl.querySelector(`.seat[data-seat="${c}"]`);
+            if (!btn || isSeatSold(c)) return false;
+        }
+        return true;
+    }
+
+    // Center the block around the hovered column where possible
+    const halfLeft = Math.floor((len - 1) / 2);
+    const centerStart = colIndex - halfLeft;
+
+    const maxOffset = (maxSeat - minSeat + 1);
+    for (let offset = 0; offset <= maxOffset; offset++){
+        // try shifted left
+        let s = centerStart - offset;
+        let e = s + len - 1;
+        if (blockValid(s, e)) return { row: rowId, start: s, end: e };
+        // try shifted right
+        s = centerStart + offset;
+        e = s + len - 1;
+        if (blockValid(s, e)) return { row: rowId, start: s, end: e };
+    }
+
+    return null;
+}
+
+function highlightBlock(block){
+    clearHoverBlock();
+    if(!block) return;
+    hoverBlock = block;
+    for(let c = block.start; c <= block.end; c++){
+        // Use data-row and data-seat attributes from the DOM (no formatSeatId)
+        const sel = document.querySelector(`.seat[data-row="${block.row}"][data-seat="${c}"]`);
+        if(sel && !sel.classList.contains('seat--sold')) sel.classList.add('seat--hover');
+    }
+}
+
+function clearHoverBlock(){
+    if(!hoverBlock) return;
+    for(let c = hoverBlock.start; c <= hoverBlock.end; c++){
+        const sel = document.querySelector(`.seat[data-row="${hoverBlock.row}"][data-seat="${c}"]`);
+        if(sel) sel.classList.remove('seat--hover');
+    }
+    hoverBlock = null;
+}
   </script>
+
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

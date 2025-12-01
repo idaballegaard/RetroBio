@@ -9,7 +9,7 @@ class BookingViewModel extends BasicViewModel {
     // @var Seat[]|null
     private $seats = null;
 
-    // @var Seat[]|null
+    /** @var Seat[]|null */
     private $soldSeats = null;
 
     public function __construct($viewPath) {
@@ -43,33 +43,21 @@ class BookingViewModel extends BasicViewModel {
     public function getSeatMap() {
         // Transform seats into the desired format with row id and seat count
         $rows = [];
-        if ($this->seats !== null) {
-            $seatCounts = [];
-            foreach ($this->seats as $seat) {
-                $rowNumber = $seat->getRowNumber();
-                if (!isset($seatCounts[$rowNumber])) {
-                    $seatCounts[$rowNumber] = 0;
-                }
-                $seatCounts[$rowNumber]++;
+        foreach($this->seats as $seat) {
+            $rowNumber = $seat->getRowNumber();
+            if (!isset($rows[$rowNumber])) {
+                $rows[$rowNumber] = array();
             }
-            
-            foreach ($seatCounts as $rowNumber => $count) {
-                $rows[] = [
-                    'id' => $rowNumber,
-                    'seats' => $count
-                ];
-            }
+            $rows[$rowNumber][] = $seat;
         }
         return $rows;
     }
 
     public function getSoldSeatMap() {
-        $soldSeatIds = [];
-        if ($this->soldSeats !== null) {
-            foreach ($this->soldSeats as $seat) {
-                $soldSeatIds[] = $seat->__toString();
-            }
+        $soldSeats = [];
+        foreach ($this->soldSeats as $seat) {
+            $soldSeats[$seat->getSeatID()] = $seat;
         }
-        return $soldSeatIds;
+        return $soldSeats;
     }
 }

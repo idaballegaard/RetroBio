@@ -4,7 +4,6 @@ class Seat {
     private int $rowNumber;
     private int $number;
     private int $hallID;
-
     public function getSeatID() : int {
         return $this->seatID;
     }
@@ -31,5 +30,9 @@ class Seat {
     }
     public function __toString() : string {
         return $this->rowNumber . '-' . $this->number;
+    }
+
+    public function __compare(Seat $other) : bool {
+        return $this->seatID === $other->getSeatID();
     }
 }

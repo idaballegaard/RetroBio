@@ -211,7 +211,7 @@ $showing = $viewModel->getShowing();
                                value="<?php echo safeString($showing->getShowingID()); ?>">
                         <input type="hidden" name="seats" id="seats-input" value="">
                         <input type="hidden" name="totalPrice" id="total-price" value="">
-                        <input type="hidden" name="numberOfTickets" id="number-of-tickets" value="">
+                        <input type="hidden" name="numberOfTickets" id="number-of-tickets" value="2">
                         <input type="hidden" name="unitPrice" id="unit-price"
                                value="<?php echo safeString($showing->getPrice()); ?>">
                         <button id="next-btn" class="px-6 py-2 rounded-md bg-[#00e7ec] text-black font-semibold">Next
@@ -226,6 +226,7 @@ $showing = $viewModel->getShowing();
 
 <script>
     let hoverBlock = null;
+    // store selected seats by their data-id (unique seat ID) instead of "row:seat"
     const selected = new Set();
 
     const totalPriceField = document.getElementById('total-price');
@@ -233,7 +234,11 @@ $showing = $viewModel->getShowing();
     const unitPriceField = document.getElementById('unit-price');
 
     function getTotalTickets() {
-        return 2;
+        // derive ticket count from the hidden field so seat selection logic uses the current ticket count
+        const n = parseInt(numberOfTicketsField.value, 10);
+        // console.log(numberOfTicketsField);
+        // console.log(n);
+        return isNaN(n) ? 0 : n;
     }
 
     function onSeatHover(rowId, colIndex, btn) {
@@ -244,15 +249,19 @@ $showing = $viewModel->getShowing();
     }
 
     function clearSelections() {
-        // Deselect previous selection (use data-row + data-seat from the DOM)
+        // Deselect previous selection using data-id stored in the `selected` Set
         selected.forEach(id => {
-            const parts = id.split(':'); // stored as "row:seat"
-            const r = parts[0];
-            const s = parts[1];
-            const el = document.querySelector(`.seat[data-row="${r}"][data-seat="${s}"]`);
+            const el = document.querySelector(`.seat[data-id="${id}"]`);
             if (el) el.classList.remove('seat--selected');
         });
         selected.clear();
+
+        // reset UI where relevant
+        const listEl = document.getElementById('selected-list');
+        if (listEl) listEl.textContent = '';
+
+        const seatsInput = document.getElementById('seats-input');
+        if (seatsInput) seatsInput.value = '';
     }
 
     function onSeatClick(rowId, colIndex) {
@@ -274,17 +283,19 @@ $showing = $viewModel->getShowing();
             const el = document.querySelector(`.seat[data-row="${block.row}"][data-seat="${c}"]`);
             if (el && !el.classList.contains('seat--sold')) {
                 el.classList.add('seat--selected');
-                // store selection as "row:seat" to keep it unique across rows
-                selected.add(`${block.row}:${c}`);
+                // store selection by the unique data-id attribute
+                const sid = el.getAttribute('data-id');
+                if (sid) selected.add(sid);
             }
         }
 
-        // Update UI: selected list and hidden inputs (if present)
+        // Update UI: selected list and hidden inputs (store seat IDs)
         const listEl = document.getElementById('selected-list');
         if (listEl) {
             const items = Array.from(selected).map(id => {
-                const [r, s] = id.split(':');
-                return `Row ${r} • ${s}`;
+                const el = document.querySelector(`.seat[data-id="${id}"]`);
+                if (!el) return id;
+                return `Row ${el.getAttribute('data-row')} • ${el.getAttribute('data-seat')}`;
             });
             listEl.textContent = items.join(', ');
         }
@@ -292,8 +303,11 @@ $showing = $viewModel->getShowing();
         const seatsInput = document.getElementById('seats-input');
         if (seatsInput) seatsInput.value = Array.from(selected).join(',');
 
-        const ticketsInput = document.getElementById('tickets-input');
-        if (ticketsInput) ticketsInput.value = selected.size;
+        // update number of tickets stored
+        if (numberOfTicketsField) numberOfTicketsField.value = selected.size;
+
+        // ensure total price is up-to-date
+        updateTotal();
     }
 
     function findContiguousBlock(rowId, colIndex, len) {
@@ -379,11 +393,11 @@ $showing = $viewModel->getShowing();
 
     function increaseTicketCount(counterId) {
         let counter = document.querySelector(counterId);
-        console.log(counterId);
         let count = parseInt(counter.textContent, 10);
         count += 1;
         counter.textContent = count;
-        numberOfTicketsField.value = count;
+        console.log(numberOfTicketsField);
+        if (numberOfTicketsField) numberOfTicketsField.value = count;
         updateTotal();
         clearSelections();
     }
@@ -394,7 +408,7 @@ $showing = $viewModel->getShowing();
         if (count > 0) {
             count -= 1;
             counter.textContent = count;
-            numberOfTicketsField.value = count;
+            if (numberOfTicketsField) numberOfTicketsField.value = count;
             updateTotal();
             clearSelections();
         }
@@ -403,9 +417,22 @@ $showing = $viewModel->getShowing();
     function updateTotal() {
         var numberOfTickets = parseInt(numberOfTicketsField.value);
         var unitPrice = parseFloat(unitPriceField.value);
-        console.log(totalPriceField);
-        totalPriceField.value = numberOfTickets * unitPrice;
+        if (isNaN(numberOfTickets) || isNaN(unitPrice)) return;
+        if (totalPriceField) {
+            // totalPriceField is a hidden input; update its value
+            totalPriceField.value = numberOfTickets * unitPrice;
+
+            // update the total count display
+            const totalCountView = document.getElementById('total-count');
+            if (totalCountView) totalCountView.textContent = numberOfTickets;
+
+            // also update visible price display if present
+            const totalPriceView = document.getElementById('total-price-view');
+            if (totalPriceView) totalPriceView.textContent = 'DKK ' + (numberOfTickets * unitPrice);
+        }
     }
+
+    updateTotal();
 </script>
 
 

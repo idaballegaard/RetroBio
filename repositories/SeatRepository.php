@@ -3,7 +3,8 @@ require_once __DIR__ . "/BaseRepository.php";
 require_once __DIR__ . "/../models/Seat.php";
 
 class SeatRepository extends BaseRepository {
-    
+
+    /** @return Seat[] */
     function getSeatsByHallId($hallID): array {
         $pdo = $this->connectDatabase();
         $stmt = $pdo->prepare("SELECT seatID, `number`, rowNumber, hallID FROM Seat WHERE hallID = :hallID ORDER BY rowNumber, `number`");
@@ -21,6 +22,7 @@ class SeatRepository extends BaseRepository {
         return $seats;
     }
 
+    /** @return Seat[] */
     function getSoldSeatsByShowingId($showingID): array {
         $pdo = $this->connectDatabase();
         $stmt = $pdo->prepare("SELECT s.seatID, s.`number`, s.rowNumber, s.hallID 
@@ -43,4 +45,23 @@ class SeatRepository extends BaseRepository {
         return $seats;
     }
 
+    function getSeatRowsByIds(array $seatIDs): array {
+        if (empty($seatIDs)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($seatIDs), '?'));
+        $pdo = $this->connectDatabase();
+        $stmt = $pdo->prepare("SELECT DISTINCT rowNumber FROM Seat WHERE seatID IN ($placeholders)");
+        foreach ($seatIDs as $index => $seatID) {
+            $stmt->bindValue($index + 1, $seatID, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+
+        $seatRows = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $seatRows[] = $row['rowNumber'];
+        }
+        return $seatRows;
+    }
 }

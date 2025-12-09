@@ -3,7 +3,7 @@ class BasicViewModel {
     private $viewPath = null;
     private $errorMessage = null;
 
-    public function __construct($viewPath, $errorMessage = null) {
+    public function __construct($viewPath) {
         $this->viewPath = $viewPath;
     }
 

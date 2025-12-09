@@ -110,6 +110,17 @@ $showing = $viewModel->getShowing();
 </header>
 
 <main class="container mx-auto px-6 py-10">
+    <?php if ($viewModel->getErrorMessage()): ?>
+        <div class="mb-6">
+            <div class="panel border border-red-500/40 bg-red-950/40 text-red-100 rounded-lg px-4 py-3 text-sm">
+                <p class="font-semibold mb-2">Please fix the following:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <?php echo $viewModel->getErrorMessage(); ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Left: ticket controls -->
         <aside class="panel p-6 rounded-xl shadow-lg">

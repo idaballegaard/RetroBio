@@ -25,14 +25,38 @@ class BookingController extends BaseController {
         return $viewModel;
     }
 
-  public function processBooking() {
+  public function processBooking() : ?BookingViewModel {
+    $showingID = $_POST["showingId"];
 
     require_once __DIR__ . "/../repositories/OrderRepository.php";
     $seats = explode(",", $_POST['seats']);
 
     require_once __DIR__ . "/../repositories/ShowingRepository.php";
     $showingRepository = new ShowingRepository();
-    $price = $showingRepository->getShowingPrice((int)$_POST['showingId']);
+    $price = $showingRepository->getShowingPrice($showingID);
+
+    require_once __DIR__ . "/../repositories/SeatRepository.php";
+    $seatRepository = new SeatRepository();
+    $seatRows = $seatRepository->getSeatRowsByIds($seats);
+
+    $errors = array();
+    if(count($seats) === 0) {
+      $errors[] = "Please pick at least one seat.";
+    } elseif (count($seats) > 5) {
+      $errors[] = "You can only book up to 5 seats at a time.";
+    } elseif ($price === null) {
+      $errors[] = "Invalid showing selected.";
+    } elseif(count($seatRows) > 1) {
+      print_r($seatRows);
+      $errors[] = "Make sure to pick seats from the same row.";
+    }
+
+    if (!empty($errors)) {
+      $viewModel = $this->showBookingPage($showingID);
+      $viewModel->setErrorMessage('<li>' . implode('</li><li>', $errors) . '</li>');
+      return $viewModel;
+    }
+
 
     $orderRepository = new OrderRepository();
     $orderId = $orderRepository->createOrder(
@@ -50,8 +74,6 @@ class BookingController extends BaseController {
     require_once __DIR__ . "/../stripe/init.php";
     \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));
     header('Content-Type: application/json');
-
-    $YOUR_DOMAIN = 'http://localhost:4242';
 
     $checkout_session = \Stripe\Checkout\Session::create([
         'client_reference_id' => (string)$orderId,

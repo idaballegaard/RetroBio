@@ -101,7 +101,7 @@ get(generateUrl("booking"), function() {
 post(generateUrl("booking"), function() {
   require_once __DIR__ . "/controllers/BookingController.php";
   $controller = new BookingController();
-  $controller->processBooking();
+  $controller->processBooking()->presentView();
 });
 
 get(generateUrl("confirmBooking"), function() {

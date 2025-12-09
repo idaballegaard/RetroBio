@@ -116,12 +116,12 @@ class ShowingRepository extends BaseRepository {
         $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID,
                         h.name, h.number,
                         cm.firstName, cm.lastName,
-                        m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
+                        m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear
                     FROM Showing s
                     LEFT JOIN Movie m ON s.movieID = m.movieID
                     LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                     LEFT JOIN Hall h ON s.hallID = h.hallID
-                    WHERE s.movieID = :movieID AND s.date >= CURDATE() 
+                    WHERE s.movieID = :movieID AND s.date >= CURDATE()
                     ORDER BY s.date, s.startTime ASC");
         $stmt->bindValue(":movieID", $movieID, PDO::PARAM_INT);
         $stmt->execute();
@@ -130,17 +130,9 @@ class ShowingRepository extends BaseRepository {
         $showings = [];
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($rows as $row) {
-            /** @var Showing */
-            $previous = end($showings);
-            if($previous && $previous->getMovie()->getMovieID() === $row['movieID']  && $previous->getDate() === $row['date']) {
-              $previous->addReelTime($row['startTime']);
-              continue;
-            }
-
             $showing = new Showing();
             $showing->setShowingID($row['showingID']);
             $showing->setType($row['type']);
-            $showing->addReelTime($row['startTime']);
             $showing->setDate(new DateTime($row['date']));
             $showing->setPrice($row['price']);
 
@@ -162,6 +154,9 @@ class ShowingRepository extends BaseRepository {
             $showing->getMovie()->setAgeLimit($row['ageLimit']);
             $showing->getMovie()->setRanking($row['ranking']);
             $showing->getMovie()->setReleaseYear($row['releaseYear']);
+
+            $showing->addReelTime($row['startTime']);
+
             $showings[] = $showing;
         }
         return $showings;

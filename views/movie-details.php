@@ -53,8 +53,8 @@ $selectedMovie = $viewModel->getSelectedMovie();
                class="absolute left-0 mt-1 w-full bg-black border border-[#00e7ec] rounded-lg shadow-lg hidden z-50 max-h-60 overflow-y-auto">
               <?php foreach ($viewModel->getFutureShowings() as $showing): ?>
                   <div class="px-3 py-2 hover:bg-[#003133] cursor-pointer text-[#00e7ec]"
-                       onclick="document.getElementById('dateInput').value='<?= safeString($showing->getDate()->format('F j Y')) . ')' ?>';">
-                      <?= safeString($showing->getDate()->format('F j Y')); ?>
+                       onclick="goToBooking(<?php echo safeString($showing->getShowingID()); ?>)">
+                      <?= safeString($showing->getDate()->format('F j Y')); ?> <?php echo safeString($showing->getReelTimes()[0]); ?>
                   </div>
               <?php endforeach; ?>
           </div>
@@ -122,6 +122,10 @@ const dateDropdown = document.getElementById('dateDropdown');
               dropdown.classList.add('hidden');
           }
       });
+  }
+
+  function goToBooking(showingID) {
+      window.location.href = `booking?showing_id=${showingID}`;
   }
 
   prepareDropdown(movieInput, movieDropdown);

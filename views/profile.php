@@ -49,77 +49,34 @@ if(!isset($_SESSION['username'])) {
     <!-- To-kolonne layout -->
     <div class="flex flex-col md:flex-row gap-8">
 
-        <!-- Venstre kolonne -->
-        <div class="w-full md:w-1/2 flex flex-col gap-8">
-            <!-- Upcoming Tickets -->
-            <section class="py-12">
-                <h2 class="text-3xl text-[#00e7ec] font-semibold mb-6 animate-neon-flicker text-left">Upcoming Tickets</h2>
-                <div class="relative flex items-center">
-                    <button class="scroll-left z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8249;</button>
-                    <div id="tickets-container" class="flex overflow-x-auto space-x-6 pb-4 scroll-smooth cursor-grab"></div>
-                    <button class="scroll-right z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8250;</button>
-                </div>
-            </section>
-
-            <!-- Watchlist -->
-            <section class="py-12">
-                <h2 class="text-3xl text-[#00e7ec] font-semibold mb-6 animate-neon-flicker text-left">Watchlist</h2>
-                <div class="relative flex items-center">
-                    <button class="scroll-left z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8249;</button>
-                    <div id="watchlist-container" class="flex overflow-x-auto space-x-6 pb-4 scroll-smooth cursor-grab"></div>
-                    <button class="scroll-right z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8250;</button>
-                </div>
-            </section>
-        </div>
-
         <!-- Højre kolonne -->
-        <div class="w-full md:w-1/2 flex flex-col gap-8">
+        <div class="w-full md:w-1/1 flex flex-col gap-8">
             <!-- Watched Movies -->
             <section class="py-12">
-                <h2 class="text-3xl text-[#00e7ec] font-semibold mb-6 animate-neon-flicker text-left">Watched Movies</h2>
-                <div class="relative flex items-center">
-                    <button class="scroll-left z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8249;</button>
-                    <div id="watched-container" class="flex overflow-x-auto space-x-6 pb-4 scroll-smooth cursor-grab"></div>
-                    <button class="scroll-right z-10 bg-black/70 text-[#FFDF00] p-2 rounded-full neon-border">&#8250;</button>
-                </div>
-            </section>
-
-            <!-- Reviews -->
-            <section class="py-12">
-                <h2 class="text-3xl text-[#00e7ec] font-semibold mb-6 animate-neon-flicker text-left">Reviews</h2>
-                <div class="space-y-4 max-w-full">
-                    <div class="border border-[#00e7ec] rounded-lg p-4 shadow-[0_0_12px_#00e7ec] hover:shadow-[0_0_25px_#00e7ec] transition-shadow">
-                        <p class="text-[#FFDF00] font-semibold">Pulp Fiction – Rating: 5/5</p>
-                        <p class="text-gray-300 mt-1">Classic Tarantino!</p>
-                    </div>
-                    <div class="border border-[#00e7ec] rounded-lg p-4 shadow-[0_0_12px_#00e7ec] hover:shadow-[0_0_25px_#00e7ec] transition-shadow">
-                        <p class="text-[#FFDF00] font-semibold">Back to the Future – Rating: 4/5</p>
-                        <p class="text-gray-300 mt-1">Always fun to watch!</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Orders -->
-            <table class="w-full text-left border-collapse">
-                <thead>
+                <h2 class="text-3xl text-[#00e7ec] font-semibold mb-6 animate-neon-flicker text-left">Previous orders</h2>
+                <!-- Orders -->
+                <table class="w-full text-left border-collapse">
+                    <thead>
                     <tr>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Order ID</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Date</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Status</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Total</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <?php foreach($viewModel->getOrders() as $order): ?>
-                    <tr>
-                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
-                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
-                        <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
-                        <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>
-                    </tr>
+                        <tr>
+                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>
+                        </tr>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </section>
+
 
         </div>
 

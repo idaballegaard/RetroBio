@@ -9,7 +9,7 @@ class AboutAdminController extends BaseAdminController {
         $viewModel = new AboutAdminViewModel(__DIR__ . "/../../views/admin.php");
 
         $aboutRepository = new AboutRepository();
-        $about = $aboutRepository->getAboutInfoForAdmin();
+        $about = $aboutRepository->getAboutInfo();
         if ($about) {
             $viewModel->setAbouts([$about]);
         } else {

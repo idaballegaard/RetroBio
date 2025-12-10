@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/Company.php";
 require_once __DIR__ . "/BaseRepository.php";
-
 class CompanyRepository extends BaseRepository {
     public function saveCompany(string $companyName) : Company
     {

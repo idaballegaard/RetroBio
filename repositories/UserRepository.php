@@ -5,39 +5,11 @@ require_once __DIR__ . "/../models/User.php";
 class UserRepository extends BaseRepository {
 
     public function getUserByEmailOrUsername(string $emailOrUsername) : User | null {
-        $db = $this->connectDatabase();
-        $stmt = $db->prepare("SELECT * FROM `User` u JOIN PostalCode p ON u.postalCodeID = p.postalCodeID WHERE email = :emailOrUsername OR username = :emailOrUsername");
-        $stmt->bindValue(':emailOrUsername', $emailOrUsername);
-        try {
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($row) {
-                $user = new User();
-                $user->setUserID($row['userID']);
-                $user->setFirstName($row['firstName']);
-                $user->setLastName($row['lastName']);
-                $user->setUsername($row['username']);
-                $user->setEmail($row['email']);
-                $user->setHashedPassword($row['hashedPassword']);
-                $user->setPhone($row['phone']);
-                $user->setCountry($row['country']);
-                $user->setStreet($row['street']);
-                $user->setStreetNumber($row['streetNumber']);
-                $user->setPostalCode($row['postalCode']);
-                $user->setCity($row['city']);
-                $user->setIsAdmin($row['isAdmin']);
-                return $user;
-            } else {
-                return null;
-            }
-        }
-        catch(PDOException $e) {
-            echo $e->getMessage();
-            return null;
-        }
+      $db = $this->connectDatabase();
+      $stmt = $db->prepare("SELECT * FROM `User` u JOIN PostalCode p ON u.postalCodeID = p.postalCodeID WHERE email = :emailOrUsername OR username = :emailOrUsername");
+      $stmt->bindValue(':emailOrUsername', $emailOrUsername);
+      return $this->readUserFromDatabase($stmt);
     }
-
-
     public function createUser(
         string $firstName,
         string $lastName,
@@ -46,7 +18,7 @@ class UserRepository extends BaseRepository {
         string $phone,
         string $country,
         string $city,
-        string $postalCode,   // Brugeren indtaster postnummer som fx "8000"
+        string $postalCode,
         string $street,
         string $streetNumber,
         string $hashedPassword
@@ -56,7 +28,6 @@ class UserRepository extends BaseRepository {
 
         $postalCodeID = $postalCodeRepository->getPostalCodeID($postalCode, $city);
 
-        // 2️⃣ Indsæt bruger i User-tabellen
         $stmt = $db->prepare("
             INSERT INTO `User` (
                 firstName, lastName, username, email, phone,
@@ -91,33 +62,7 @@ class UserRepository extends BaseRepository {
         $db = $this->connectDatabase();
         $stmt = $db->prepare("SELECT * FROM `User` u JOIN PostalCode p ON u.postalCodeID = p.postalCodeID WHERE u.userID = :userID");
         $stmt->bindValue(':userID', $userID);
-        try {
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($row) {
-                $user = new User();
-                $user->setUserID($row['userID']);
-                $user->setFirstName($row['firstName']);
-                $user->setLastName($row['lastName']);
-                $user->setUsername($row['username']);
-                $user->setEmail($row['email']);
-                $user->setHashedPassword($row['hashedPassword']);
-                $user->setPhone($row['phone']);
-                $user->setCountry($row['country']);
-                $user->setStreet($row['street']);
-                $user->setStreetNumber($row['streetNumber']);
-                $user->setPostalCode($row['postalCode']);
-                $user->setCity($row['city']);
-                $user->setIsAdmin($row['isAdmin']);
-                return $user;
-            } else {
-                return null;
-            }
-        }
-        catch(PDOException $e) {
-            echo $e->getMessage();
-            return null;
-        }
+        return $this->readUserFromDatabase($stmt);
     }
 
     public static function isAdmin() {
@@ -132,7 +77,40 @@ class UserRepository extends BaseRepository {
     public static function dieIfNotAdmin() {
         if(!UserRepository::isAdmin()) {
             die("You are not authorized to access this resource.");
-            return;
         }
     }
+
+  /**
+   * @param bool|PDOStatement $stmt
+   * @return User|null
+   */
+  private function readUserFromDatabase(bool|PDOStatement $stmt): ?User
+  {
+    try {
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($row) {
+        $user = new User();
+        $user->setUserID($row['userID']);
+        $user->setFirstName($row['firstName']);
+        $user->setLastName($row['lastName']);
+        $user->setUsername($row['username']);
+        $user->setEmail($row['email']);
+        $user->setHashedPassword($row['hashedPassword']);
+        $user->setPhone($row['phone']);
+        $user->setCountry($row['country']);
+        $user->setStreet($row['street']);
+        $user->setStreetNumber($row['streetNumber']);
+        $user->setPostalCode($row['postalCode']);
+        $user->setCity($row['city']);
+        $user->setIsAdmin($row['isAdmin']);
+        return $user;
+      } else {
+        return null;
+      }
+    } catch (PDOException $e) {
+      echo $e->getMessage();
+      return null;
+    }
+  }
 }

@@ -31,6 +31,8 @@ class GenreRepository extends BaseRepository {
     /** @return Genre[] */
     public function saveGenres($genres) : array
     {
+      UserRepository::dieIfNotAdmin();
+
         $db = $this->connectDatabase();
         if (!$db) return [];
 

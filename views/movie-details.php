@@ -79,7 +79,7 @@ $selectedMovie = $viewModel->getSelectedMovie();
                 <div class="flex flex-col md:flex-row">
                     <div class="md:w-1/3">
                         <img id="moviePoster"
-                             src="/assets/posters/<?= strtolower(str_replace(' ', '-', $selectedMovie->getTitle())); ?>.jpg"
+                             src="<?php echo safeString($viewModel->getUploadPaths($selectedMovie->getMovieID(), "movies")[0]); ?>"
                              alt="Movie Poster"
                              class="w-full h-full object-cover">
                     </div>

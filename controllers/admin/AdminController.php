@@ -59,7 +59,6 @@ class AdminController extends BaseAdminController {
         $company = $_POST["company"];
         $director = $_POST["director"];
         $ageLimit = $_POST["ageLimit"];
-        $company = $_POST["company"];
 
         $company = $this->companyRepository->saveCompany($company);
         $genres = $this->genreRepository->saveGenres(array_map('trim', explode(',', $genre)));
@@ -81,6 +80,7 @@ class AdminController extends BaseAdminController {
         $movie->setActors($actors);
 
         $this->movieRepository->saveMovie($movie);
+        $this->handleUpload($movie->getMovieID(), 'movies', 'poster', 500, 750);
     }
 
     public function saveShowing() {

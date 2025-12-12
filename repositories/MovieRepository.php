@@ -245,6 +245,7 @@ class MovieRepository extends BaseRepository {
                 $insertStmt->bindParam(':companyID', $companyID, PDO::PARAM_INT);
                 $insertStmt->execute();
                 $movieID = $db->lastInsertId();
+                $movie->setMovieID($movieID);
             }
 
             // Delete existing movie genres

@@ -1,4 +1,5 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
+<?php /** @var FrontPageViewModel $viewModel */ ?>
 
 <!-- Hero Section -->
 <section id="hero" class="relative h-[650px] flex flex-col items-center justify-center text-center overflow-hidden px-4"
@@ -57,7 +58,7 @@
                     hover:shadow-2xl">
             <div class="flex flex-col md:flex-row">
                 <div class="md:w-1/4">
-                    <img src="img/The_Goonies.jpg" 
+                    <img src="<?php echo safeString($viewModel->getUploadPaths($showing->getMovie()->getMovieID(), "movies")[0]) ?>"
                         alt="Movie Poster" 
                         class="w-full h-full object-cover">
                 </div>

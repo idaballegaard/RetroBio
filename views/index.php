@@ -34,37 +34,6 @@
             </a>
         </div>
 
-        <!-- Date picker -->
-        <div class="mb-8">
-            <div class="relative max-w-md">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <i data-feather="calendar" class="text-white w-5 h-5"></i>
-                </div>
-                <input id="dateInput" type="text"
-                    class="bg-black border border-[#00e7ec] text-white text-sm rounded-lg focus:ring-[#00e7ec] focus:border-[#00e7ec] block w-full pl-10 p-2.5"
-                    placeholder="Select date" readonly>
-
-                <!-- Calendar dropdown -->
-                <div id="calendar" class="absolute left-0 mt-1 w-64 bg-black border border-[#00e7ec] rounded-lg shadow-lg hidden z-50 p-2 text-sm overflow-y-auto max-h-80">
-                    <div class="flex justify-between items-center mb-1 text-[#00e7ec] text-sm">
-                        <button id="prevMonth" class="px-2 py-1 bg-black rounded hover:bg-[#003133]">&lt;</button>
-                        <span id="monthYear" class="font-semibold text-[#00e7ec]"></span>
-                        <button id="nextMonth" class="px-2 py-1 bg-black rounded hover:bg-[#003133]">&gt;</button>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1 text-center font-medium text-xs">
-                        <div class="text-[#00e7ec]">Sun</div>
-                        <div class="text-white">Mon</div>
-                        <div class="text-white">Tue</div>
-                        <div class="text-white">Wed</div>
-                        <div class="text-white">Thu</div>
-                        <div class="text-white">Fri</div>
-                        <div class="text-[#00e7ec]">Sat</div>
-                    </div>
-                    <div id="dates" class="grid grid-cols-7 gap-1 mt-1 text-center text-white text-sm"></div>
-                </div>
-            </div>
-        </div>
-
         <!-- Week Calendar -->
         <div class="flex overflow-x-auto pb-4 mb-8 scrollbar-hide">
           <div class="flex space-x-2">

@@ -30,6 +30,7 @@
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-3xl text-[#00e7ec] font-bold">On the Reel</h2>
             <a href="#" class="flex items-center text-amber-400 hover:text-amber-300 transition">
+            <a href="<?php echo generateUrl("movie-details") ?>" class="flex items-center text-amber-400 hover:text-amber-300 transition">
                 View All <i data-feather="chevron-right" class="ml-1"></i>
             </a>
         </div>

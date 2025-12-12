@@ -19,7 +19,9 @@ class MovieController extends BaseController {
         $viewModel = new MovieDetailsViewModel(__DIR__ . "/../views/movie-details.php");
         $viewModel->setAllMovies($allMovies);
         $viewModel->setSelectedMovie($selectedMovie);
-        $viewModel->setFutureShowings($showingRepository->getFutureShowingsByMovieId($movieID));
+        if($movieID) {
+          $viewModel->setFutureShowings($showingRepository->getFutureShowingsByMovieId($movieID));
+        }
 
         return $viewModel;
     }

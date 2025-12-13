@@ -400,9 +400,12 @@ $showing = $viewModel->getShowing();
     function increaseTicketCount(counterId) {
         let counter = document.querySelector(counterId);
         let count = parseInt(counter.textContent, 10);
+        if(count === 5) {
+            alert("You can only book a maximum of 5 tickets at a time.");
+            return;
+        }
         count += 1;
         counter.textContent = count;
-        console.log(numberOfTicketsField);
         if (numberOfTicketsField) numberOfTicketsField.value = count;
         updateTotal();
         clearSelections();
@@ -411,13 +414,15 @@ $showing = $viewModel->getShowing();
     function decreaseTicketCount(counterId) {
         let counter = document.querySelector(counterId);
         let count = parseInt(counter.textContent, 10);
-        if (count > 0) {
-            count -= 1;
-            counter.textContent = count;
-            if (numberOfTicketsField) numberOfTicketsField.value = count;
-            updateTotal();
-            clearSelections();
+        if(count === 1) {
+            alert("You must book at least 1 ticket.");
+            return;
         }
+        count -= 1;
+        counter.textContent = count;
+        if (numberOfTicketsField) numberOfTicketsField.value = count;
+        updateTotal();
+        clearSelections();
     }
 
     function updateTotal() {

@@ -3,15 +3,6 @@
 <?php
 $user = $viewModel->getUser();
 ?>
-
-<?php
-if(!isset($_SESSION['username'])) {
-    $_SESSION['username'] = "RetroFan"; // Dummy session for layout-test
-    // header("Location: login.php");
-    // exit();
-}
-?>
-
 <main class="bg-black min-h-screen text-white relative px-6 md:px-12 lg:px-24">
 
     <!-- Top Banner / Profil Header -->
@@ -59,6 +50,7 @@ if(!isset($_SESSION['username'])) {
                     <thead>
                     <tr>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Order ID</th>
+                        <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Movie</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Date</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Status</th>
                         <th class="border-b border-[#00e7ec] pb-2 text-[#00e7ec]">Total</th>
@@ -68,6 +60,7 @@ if(!isset($_SESSION['username'])) {
                     <?php foreach($viewModel->getOrders() as $order): ?>
                         <tr>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getMovie()->getTitle()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>

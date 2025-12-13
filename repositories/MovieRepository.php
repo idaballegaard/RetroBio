@@ -306,4 +306,32 @@ class MovieRepository extends BaseRepository {
           $title = $stmt->fetchColumn();
           return $title ? $title : '';
     }
+
+    public function getMovieByShowingId($showingId) : ?Movie {
+        $db = $this->connectDatabase();
+
+          $stmt = $db->prepare("
+              SELECT m.* 
+              FROM Showing s
+              JOIN Movie m ON m.movieID = s.movieID
+              WHERE s.showingID = :showingID
+          ");
+          $stmt->bindParam(':showingID', $showingId, PDO::PARAM_INT);
+          $stmt->execute();
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+          if (!$row) return null;
+
+          $movie = new Movie();
+          $movie->setMovieID((int)$row['movieID']);
+          $movie->setTitle($row['title'] ?? '');
+          $movie->setDescription($row['description'] ?? '');
+          $movie->setReleaseYear((int)($row['releaseYear'] ?? 0));
+          $movie->setLength((int)($row['length'] ?? 0));
+          $movie->setLanguage($row['language'] ?? '');
+          $movie->setAgeLimit((int)($row['ageLimit'] ?? 0));
+          $movie->setRanking($row['ranking'] ?? '');
+
+          return $movie;
+    }
 }

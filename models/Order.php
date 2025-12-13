@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/../models/Movie.php";
 class Order {
     private int $orderId;
     private float $price;
@@ -7,6 +8,7 @@ class Order {
     private int $numberOfTickets;
     private int $userId;
     private int $showingId;
+    private Movie $movie;
 
     public function getOrderId(): int {
         return $this->orderId;
@@ -62,5 +64,13 @@ class Order {
 
     public function setShowingId(int $showingId): void {
         $this->showingId = $showingId;
+    }
+
+    public function getMovie(): Movie {
+        return $this->movie;
+    }
+
+    public function setMovie(Movie $movie): void {
+        $this->movie = $movie;
     }
 }

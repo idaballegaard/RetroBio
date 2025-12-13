@@ -66,6 +66,10 @@ class OrderRepository extends BaseRepository
   }
 
   public function getOrdersByUserId(int $userId): array {
+    require_once __DIR__ . "/MovieRepository.php";
+
+    $movieRepository = new MovieRepository();
+    
     $db = $this->connectDatabase();
     $stmt = $db->prepare("SELECT * FROM `Order` WHERE userId = :userId ORDER BY date DESC");
     $stmt->execute([':userId' => $userId]);
@@ -80,6 +84,7 @@ class OrderRepository extends BaseRepository
       $order->setNumberOfTickets((int)$row['numberOfTickets']);
       $order->setUserId((int)$row['userID']);
       $order->setShowingId((int)$row['showingID']);
+      $order->setMovie($movieRepository->getMovieByShowingId((int)$row['showingID']));
       $orders[] = $order;
     }
     return $orders;

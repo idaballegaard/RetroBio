@@ -104,9 +104,6 @@
   <div class="container mx-auto">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-3xl text-[#FE04FF] font-bold animate-neon-flicker">Retro News</h2>
-      <a href="/news.php" class="flex items-center text-amber-400 hover:text-amber-300 transition">
-        View All <i data-feather="chevron-right" class="ml-1"></i>
-      </a>
     </div>
 
     <div class="relative">

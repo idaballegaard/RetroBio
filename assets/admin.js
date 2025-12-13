@@ -9,9 +9,11 @@ function showSection(sectionId) {
 
 function confirmDelete(type, id) {
     const deleteLink = document.querySelector('#deleteModal a');
-    deleteLink.setAttribute('data-delete-type', type);
-    deleteLink.setAttribute('data-delete-id', id);
-    deleteLink.href = `<?php echo generateUrl("admin-delete") ?>?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
+    deleteLink.onclick = function(e) {
+        const url = deleteLink.getAttribute("data-delete-url");
+        window.location.href = url + "?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id);
+    }
+    // deleteLink.href = `<?php echo generateUrl("admin-delete") ?>?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
     openModal('deleteModal');
 }
 

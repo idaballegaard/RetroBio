@@ -4,7 +4,6 @@ require_once __DIR__ . "/UserRepository.php";
 require_once __DIR__ . "/../models/News.php";
 
 class NewsRepository extends BaseRepository {
-
     public function getLatestNews(int $limit = 5): array {
         $newsList = [];
         $db = $this->connectDatabase();
@@ -77,6 +76,10 @@ class NewsRepository extends BaseRepository {
             $stmt->bindValue(':releaseDate', $news->getReleaseDate()->format('Y-m-d'), PDO::PARAM_STR);
 
             $stmt->execute();
+            if($news->getNewsID() == 0) {
+              $newsID = $db->lastInsertId();
+              $news->setNewsID((int)$newsID);
+            }
         } catch (PDOException $e) {
             echo "Database error: " . $e->getMessage();
         }

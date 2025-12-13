@@ -36,11 +36,15 @@
     <div class="modal-box bg-[#1a1a1a] p-6 rounded-lg w-full max-w-2xl text-white relative">
         <button onclick="closeModal('newsModal')" class="btn-close absolute top-3 right-3 text-gray-400 hover:text-white"><i data-feather="x"></i></button>
         <h3 class="text-2xl font-semibold mb-4 text-[#FE04FF]" id="news-modal-title">Edit News</h3>
-        <form id="form-news" method="POST" action="<?php echo generateUrl('admin-save-news'); ?>" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form id="form-news" method="POST" action="<?php echo generateUrl('admin-save-news'); ?>" enctype="multipart/form-data" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="hidden" name="id" />
             <div class="sm:col-span-2">
                 <label class="block text-sm text-gray-400 mb-1">Title</label>
                 <input name="title" type="text" class="w-full p-2 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" />
+            </div>
+            <div class="sm:col-span-2">
+                <label class="block text-sm text-gray-400 mb-1">Image</label>
+                <input name="image" type="file" class="w-full p-2 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" />
             </div>
             <div class="sm:col-span-2">
                 <label class="block text-sm text-gray-400 mb-1">Description</label>

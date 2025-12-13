@@ -118,7 +118,7 @@
 
         <div class="news-card w-[520px] bg-black border border-[#FE04FF] rounded-xl p-4 flex-shrink-0 relative hover:shadow-[0_0_25px_#FE04FF] transition-all duration-500">
           <div class="overflow-hidden rounded-lg border border-[#FE04FF] mb-4">
-            <img src="/img/news1.jpg" alt="Nyhed 1" class="w-full h-52 object-cover">
+            <img src="<?php echo safeString($viewModel->getUploadPaths($news->getNewsID(), "news")[0]) ?>" alt="Nyhed 1" class="w-full h-52 object-cover">
           </div>
           <h3 class="text-xl text-[#FE04FF] font-bold mb-2 animate-neon-flicker"><?php echo safeString($news->getTitle()) ?></h3>
           <div class="text-container text-gray-300 text-sm relative overflow-hidden">

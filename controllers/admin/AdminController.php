@@ -117,6 +117,7 @@ class AdminController extends BaseAdminController {
         $news->setReleaseDate(new DateTime($releaseDate));
 
         $this->newsRepository->saveNews($news);
+        $this->handleUpload($news->getNewsID(), 'news', 'image', 750, 500);
     }
 
     public function delete(string $type, int $id) {

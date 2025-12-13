@@ -11,7 +11,7 @@
   </header>
 
   <!-- Navigation Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 pt-0">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6 pt-0">
     <div onclick="showSection('movies')" class="bg-[#eaf0ff] p-6 rounded shadow hover:shadow-xl hover:scale-105 transition cursor-pointer">
       <div class="flex items-center mb-3">
         <i data-feather="film" class="w-8 h-8 text-[#FE04FF] mr-3"></i>
@@ -42,6 +42,14 @@
         <h2 class="text-xl font-semibold text-black">About</h2>
       </div>
       <p class="text-sm text-gray-700">Update biography information, contact details, and opening hours.</p>
+    </div>
+
+    <div onclick="showSection('orders')" class="bg-[#eaf0ff] p-6 rounded shadow hover:shadow-xl hover:scale-105 transition cursor-pointer">
+      <div class="flex items-center mb-3">
+        <i data-feather="shopping-cart" class="w-8 h-8 text-[#FE04FF] mr-3"></i>
+        <h2 class="text-xl font-semibold text-black">Orders</h2>
+      </div>
+      <p class="text-sm text-gray-700">View and manage customer orders, tickets, and purchase history.</p>
     </div>
   </div>
 

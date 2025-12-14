@@ -198,7 +198,6 @@ class MovieRepository extends BaseRepository
         $insertStmt->execute();
         $movieID = $db->lastInsertId();
         $movie->setMovieID($movieID);
-        echo "MOVIE ID: " . $movieID;
       }
 
       // Delete existing movie genres
@@ -229,7 +228,7 @@ class MovieRepository extends BaseRepository
         $insertActorStmt->execute();
       }
 
-      $db->rollBack();
+      $db->commit();
     } catch (PDOException $e) {
       $db->rollBack();
       echo $e->getMessage();

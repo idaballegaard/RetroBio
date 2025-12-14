@@ -69,7 +69,7 @@ class BookingController extends BaseController {
 
     require_once __DIR__ . "/../repositories/MovieRepository.php";
     $movieRepository = new MovieRepository();
-    $movieTitle = $movieRepository->getMovieTitleByShowingId((int)$_POST['showingId']);
+    $movieTitle = $movieRepository->getMovieById((int)$_POST['showingId'])->getTitle();
 
     require_once __DIR__ . "/../stripe/init.php";
     \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));

@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "/BasicViewModel.php";
-require_once __DIR__ . "/../models/About.php";
 
 class AdminViewModel extends BasicViewModel
 {
@@ -19,6 +18,9 @@ class AdminViewModel extends BasicViewModel
 
     /** @var User[] */
     private array $orderUsers = [];
+
+    /** @var Movie[] */
+    private array $orderMovies = [];
 
     public function setShowings(array $showings): void
     {
@@ -88,5 +90,15 @@ class AdminViewModel extends BasicViewModel
     public function getOrderUsers(): array
     {
         return $this->orderUsers;
+    }
+
+    public function setOrderMovies(array $orderMovies): void
+    {
+        $this->orderMovies = $orderMovies;
+    }
+
+    public function getOrderMovies(): array
+    {
+        return $this->orderMovies;
     }
 }

@@ -3,7 +3,7 @@
 
 <!-- Hero Section -->
 <section id="hero" class="relative h-[650px] flex flex-col items-center justify-center text-center overflow-hidden px-4"
-      style="background-image: url('/img/hero-img.webp'); background-size: cover; background-position: center;">
+      style="background-size: cover; background-position: center;">
 
     <div class="absolute inset-0 bg-black/60"></div>
 

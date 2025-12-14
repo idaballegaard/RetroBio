@@ -20,7 +20,7 @@
             <tr class="hover:bg-white/5">
                 <td class="px-4 py-3"><?php echo safeString($order->getOrderId()) ?></td>
               <td class="px-4 py-3"><?php echo safeString($viewModel->getOrderUsers()[$order->getUserId()]) ?></td>
-              <td class="px-4 py-3"><?php echo safeString($order->getMovie()->getTitle()) ?></td>
+              <td class="px-4 py-3"><?php echo safeString($viewModel->getOrderMovies()[$order->getShowingId()]) ?></td>
               <td class="px-4 py-3"><?php echo safeString($order->getDate()) ?></td>
               <td class="px-4 py-3"><?php echo safeString($order->getStatus()) ?></td>
               <td class="px-4 py-3"><?php echo safeString($order->getPrice()) ?></td>

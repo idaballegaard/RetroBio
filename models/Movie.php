@@ -128,4 +128,8 @@ class Movie {
     public function setCompany(Company $company): void {
         $this->company = $company;
     }
+
+    public function __toString(): string {
+        return $this->title;
+    }
 }

@@ -83,7 +83,6 @@ class OrderRepository extends BaseRepository
       $order->setNumberOfTickets((int)$row['numberOfTickets']);
       $order->setUserId((int)$row['userID']);
       $order->setShowingId((int)$row['showingID']);
-      $order->setMovie($movieRepository->getMovieByShowingId((int)$row['showingID']));
       $orders[] = $order;
     }
     return $orders;
@@ -110,7 +109,6 @@ class OrderRepository extends BaseRepository
       $order->setNumberOfTickets((int)$row['numberOfTickets']);
       $order->setUserId((int)$row['userID']);
       $order->setShowingId((int)$row['showingID']);
-      $order->setMovie($movieRepository->getMovieByShowingId((int)$row['showingID']));
       $orders[] = $order;
     }
     return $orders;

@@ -69,8 +69,4 @@ class Order {
     public function getMovie(): Movie {
         return $this->movie;
     }
-
-    public function setMovie(Movie $movie): void {
-        $this->movie = $movie;
-    }
 }

@@ -49,9 +49,11 @@ class AdminController extends BaseAdminController {
         $viewModel->setNews($this->newsRepository->getAllNews());
         $viewModel->setOrders($this->orderRepository->getAllOrders());
 
-        // Get a distinct list of all user ids in the orders list
-        $userIds = array_unique(array_map(fn($order) => $order->getUserId(), $viewModel->getOrders()));
+        $userIds = array_values(array_unique(array_map(fn($order) => $order->getUserId(), $viewModel->getOrders())));
         $viewModel->setOrderUsers($this->userRepository->getUsersByID($userIds));
+
+        $showingIds = array_values(array_unique(array_map(fn($order) => $order->getShowingId(), $viewModel->getOrders())));
+        $viewModel->setOrderMovies($this->movieRepository->getMoviesByShowingId($showingIds));
 
         return $viewModel;
     }

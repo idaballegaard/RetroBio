@@ -1,8 +1,8 @@
 <?php
 class CastMember {
-    private int $castMemberID;
-    private ?string $firstName;
-    private ?string $lastName;
+    private int $castMemberID = 0;
+
+    private string $name;
 
     public function getCastMemberID() : int {
         return $this->castMemberID;
@@ -10,20 +10,16 @@ class CastMember {
     public function setCastMemberID(int $castMemberID) : void {
         $this->castMemberID = $castMemberID;
     }
-    public function getFirstName() : ?string {
-        return $this->firstName;
+
+    public function getName() : ?string {
+        return $this->name;
     }
-    public function setFirstName(?string $firstName) : void {
-        $this->firstName = $firstName;
-    }
-    public function getLastName() : ?string {
-        return $this->lastName;
-    }
-    public function setLastName(?string $lastName) : void {
-        $this->lastName = $lastName;
+
+    public function setName(?string $name) : void {
+        $this->name = $name;
     }
 
     public function __toString() {
-        return $this->firstName . " " . $this->lastName;
+        return $this->name;
     }
 }

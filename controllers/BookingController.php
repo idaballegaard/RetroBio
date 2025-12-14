@@ -33,7 +33,7 @@ class BookingController extends BaseController {
 
     require_once __DIR__ . "/../repositories/ShowingRepository.php";
     $showingRepository = new ShowingRepository();
-    $price = $showingRepository->getShowingPrice($showingID);
+    $price = $showingRepository->getShowingById($showingID)->getPrice();
 
     require_once __DIR__ . "/../repositories/SeatRepository.php";
     $seatRepository = new SeatRepository();

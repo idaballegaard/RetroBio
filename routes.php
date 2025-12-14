@@ -134,7 +134,7 @@ if (UserRepository::isAdmin()) {
     require_once __DIR__ . "/controllers/admin/AdminController.php";
     $controller = new AdminController();
     $controller->saveMovie();
-    header("Location: " . generateUrl("admin"));
+//    header("Location: " . generateUrl("admin"));
   });
   post(generateUrl("admin-save-showing"), function () {
     require_once __DIR__ . "/controllers/admin/AdminController.php";

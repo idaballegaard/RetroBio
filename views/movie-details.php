@@ -107,13 +107,13 @@ $selectedMovie = $viewModel->getSelectedMovie();
                             <div><span class="text-[#00e7ec]">Age Limit:</span> <?= $selectedMovie->getAgeLimit(); ?>+
                             </div>
                             <div>
-                                <span class="text-[#00e7ec]">Director:</span> <?= safeString($selectedMovie->getDirector()->getFirstName() . ' ' . $selectedMovie->getDirector()->getLastName()); ?>
+                                <span class="text-[#00e7ec]">Director:</span> <?= safeString($selectedMovie->getDirector()->getName()); ?>
                             </div>
                             <div>
                                 <span class="text-[#00e7ec]">Company:</span> <?= safeString($selectedMovie->getCompany()->getName()); ?>
                             </div>
                             <div class="col-span-2 md:col-span-3"><span
-                                        class="text-[#00e7ec]">Main Cast:</span> <?= implode(', ', array_map(fn($a) => safeString($a->getFirstName() . ' ' . $a->getLastName()), $selectedMovie->getActors())); ?>
+                                        class="text-[#00e7ec]">Main Cast:</span> <?= implode(', ', array_map(fn(CastMember $a) => safeString($a->getName()), $selectedMovie->getActors())); ?>
                             </div>
                         </div>
                     </div>

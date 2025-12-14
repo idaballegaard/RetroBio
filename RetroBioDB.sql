@@ -14,8 +14,7 @@ CREATE TABLE Genre (
 
 CREATE TABLE CastMember (
     castMemberID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    firstName varchar (255) NOT NULL,
-    lastName varchar (255) NOT NULL
+    `name` varchar (255) NOT NULL
 );
 
 CREATE TABLE Movie (
@@ -44,7 +43,7 @@ CREATE TABLE MovieActor (
     castMemberID int NOT NULL,
     CONSTRAINT PK_MovieActors PRIMARY KEY (movieID, castMemberID),
     FOREIGN KEY (movieID) REFERENCES Movie(movieID),
-    FOREIGN KEY (castMemberID) REFERENCES CastMembers(castMemberID)
+    FOREIGN KEY (castMemberID) REFERENCES CastMember(castMemberID)
 );
 
 CREATE TABLE Showing (
@@ -353,37 +352,6 @@ INSERT INTO Contains(ticketID,seatID) VALUES
 (9,3),
 (10,30),(10,31);
 
-
--- OpeningHours
-INSERT INTO OpeningHours (dayOfWeek, openTime, closeTime, aboutID)
-VALUES
-  ('Mon', '16:00:00', '22:30:00', 1),
-  ('Tue', '16:00:00', '22:30:00', 1),
-  ('Wed', '16:00:00', '22:30:00', 1),
-  ('Thu', '16:00:00', '22:30:00', 1),
-  ('Fri', '16:00:00', '00:00:00', 1),
-  ('Sat', '12:00:00', '00:00:00', 1),
-  ('Sun', '12:00:00', '22:00:00', 1);
-
-  -- OpeningDays
-  INSERT INTO OpeningDays (timeSlotID, dayOfWeek, aboutID)
-VALUES
-  (1, 'Mon', 1),
-  (1, 'Tue', 1),
-  (1, 'Wed', 1),
-  (1, 'Thu', 1),
-  (2, 'Fri', 1),
-  (3, 'Sat', 1),
-  (4, 'Sun', 1);
-
-  -- timeSlots
-  INSERT INTO TimeSlots (openTime, closeTime, label)
-VALUES 
-  ('16:00:00','22:30:00','Mon–Thu'),
-  ('16:00:00','00:00:00','Fri'),
-  ('12:00:00','00:00:00','Sat'),
-  ('12:00:00','22:00:00','Sun');
-
 -- Company
 INSERT INTO Company (name) VALUES
 ('Miramax Films'),
@@ -409,10 +377,13 @@ SELECT
     m.language, 
     m.ageLimit, 
     m.ranking,
-    CONCAT(d.firstName, ' ', d.lastName) AS director,
+    m.directorID,
+    d.name AS director,
     c.name AS company,
     GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres,
-    GROUP_CONCAT(DISTINCT CONCAT(a.firstName, ' ', a.lastName) ORDER BY a.lastName SEPARATOR ', ') AS actors
+    GROUP_CONCAT(DISTINCT g.genreID ORDER BY g.name SEPARATOR ', ') AS genreIDs,
+    GROUP_CONCAT(DISTINCT a.name ORDER BY a.name SEPARATOR ', ') AS actors,
+    GROUP_CONCAT(DISTINCT a.castMemberID ORDER BY a.name SEPARATOR ', ') AS actorIDs
 FROM Movie m
 JOIN CastMember d ON m.directorID = d.castMemberID
 JOIN Company c ON m.companyID = c.companyID
@@ -422,7 +393,7 @@ LEFT JOIN MovieActor ma ON m.movieID = ma.movieID
 LEFT JOIN CastMember a ON ma.castMemberID = a.castMemberID
 GROUP BY 
     m.movieID, m.title, m.description, m.releaseYear, m.length, m.language, 
-    m.ageLimit, m.ranking, d.firstName, d.lastName, c.name;
+    m.ageLimit, m.ranking, d.name, c.name;
 
 
 -- Showing details view

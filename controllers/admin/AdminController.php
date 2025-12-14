@@ -5,17 +5,13 @@ require_once __DIR__ . "/../../repositories/MovieRepository.php";
 require_once __DIR__ . "/../../repositories/ShowingRepository.php";
 require_once __DIR__ . "/../../repositories/NewsRepository.php";
 require_once __DIR__ . "/../../repositories/AboutRepository.php";
-require_once __DIR__ . "/../../repositories/GenreRepository.php";
-require_once __DIR__ . "/../../repositories/CastMemberRepository.php";
 require_once __DIR__ . "/../../repositories/CompanyRepository.php";
 require_once __DIR__ . "/../../repositories/HallRepository.php";
 require_once __DIR__ . "/../../repositories/OrderRepository.php";
 
 class AdminController extends BaseAdminController {
 
-    private GenreRepository $genreRepository;
     private MovieRepository $movieRepository;
-    private CastMemberRepository $castMemberRepository;
     private CompanyRepository $companyRepository;
     private HallRepository $hallRepository;
     private ShowingRepository $showingRepository;
@@ -26,9 +22,7 @@ class AdminController extends BaseAdminController {
 
     public function __construct() {
         parent::__construct();
-        $this->genreRepository = new GenreRepository();
         $this->movieRepository = new MovieRepository();
-        $this->castMemberRepository = new CastMemberRepository();
         $this->companyRepository = new CompanyRepository();
         $this->hallRepository = new HallRepository();
         $this->showingRepository = new ShowingRepository();
@@ -73,9 +67,9 @@ class AdminController extends BaseAdminController {
         $ageLimit = $_POST["ageLimit"];
 
         $company = $this->companyRepository->saveCompany($company);
-        $genres = $this->genreRepository->saveGenres(array_map('trim', explode(',', $genre)));
-        $actors = $this->castMemberRepository->saveCastMembers(array_map('trim', explode(',', $cast)));
-        $director = $this->castMemberRepository->saveCastMembers([trim($director)])[0];
+        $genres = $this->movieRepository->saveGenres(array_map('trim', explode(',', $genre)));
+        $actors = $this->movieRepository->saveCastMembers(array_map('trim', explode(',', $cast)));
+        $director = $this->movieRepository->saveCastMembers([trim($director)])[0];
 
         $movie = new Movie();
         $movie->setMovieID((int)$id);

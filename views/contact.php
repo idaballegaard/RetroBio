@@ -1,7 +1,5 @@
-<?php // @var BasicViewModel $viewModel ?>
+<?php /** @var ContactViewModel $viewModel */ ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
-
-
     <div class="scanlines"></div>
 
     <section class="min-h-screen flex flex-col justify-center items-center py-20 px-6 relative overflow-hidden">
@@ -28,7 +26,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php generateUrl('contact') ?>" class="space-y-6">
+            <form method="POST" action="<?php echo generateUrl('contact') ?>" class="space-y-6">
                 <!-- Custom Neon Dropdown -->
                 <div class="dropdown-wrapper">
                     <label class="block text-[#FFDF00] font-semibold mb-2">🎯 Purpose of your message</label>

@@ -11,7 +11,7 @@ class AboutAdminController extends BaseAdminController {
         $aboutRepository = new AboutRepository();
         $about = $aboutRepository->getAboutInfo();
         if ($about) {
-            $viewModel->setAbouts([$about]);
+            $viewModel->setAbouts($about);
         } else {
             $viewModel->setAbouts([]);
         }

@@ -162,16 +162,16 @@
 
               <div class="text-center mb-3">
                   <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[#FFDF00] animate-neon-flicker">
-                    <?php echo safeString($about->getTitle()) ?>
+                    <?php echo safeString($about['title']) ?>
                   </h2>
                   <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FE04FF] animate-neon-flicker delay-200 mt-2">
-                    <?php echo safeString($about->getSubtitle()) ?>
+                    <?php echo safeString($about['subtitle']) ?>
                   </h3>
               </div>
 
               <div class="space-y-6 text-gray-300 leading-relaxed text-lg" style="white-space: pre-line;">
                 <p>
-                    <?php echo safeString($about->getDescription()); ?>
+                    <?php echo safeString($about['description']); ?>
                 </p>
               </div>
 
@@ -183,21 +183,10 @@
                   </h3>
 
                   <div class="space-y-2 text-sm text-gray-200">
-                      <p><span class="font-semibold text-[#FE04FF]">Address:</span> <?php echo safeString($about->getAddress()) ?></p>
-                      <p><span class="font-semibold text-[#FE04FF]">Email:</span> <?php echo safeString($about->getEmail()) ?></p>
-                      <p><span class="font-semibold text-[#FE04FF]">Phone:</span> <?php echo safeString($about->getPhone()) ?></p>
-                  </div>
-
-                  <div class="mt-4">
-                      <h4 class="text-lg text-[#FFDF00] font-bold animate-neon-flicker delay-200 mb-2">
-                          Opening Hours
-                      </h4>
-                      <ul class="space-y-1 text-sm text-gray-200">
-                          <li><span class="text-[#FE04FF] font-semibold">Mon–Thu:</span> 16:00 – 22:30</li>
-                          <li><span class="text-[#FE04FF] font-semibold">Fri:</span> 16:00 – 00:00</li>
-                          <li><span class="text-[#FE04FF] font-semibold">Sat:</span> 12:00 – 00:00</li>
-                          <li><span class="text-[#FE04FF] font-semibold">Sun:</span> 12:00 – 22:00</li>
-                      </ul>
+                      <p><span class="font-semibold text-[#FE04FF]">Address:</span> <?php echo safeString($about['address']) ?></p>
+                      <p><span class="font-semibold text-[#FE04FF]">Email:</span> <?php echo safeString($about['email']) ?></p>
+                      <p><span class="font-semibold text-[#FE04FF]">Phone:</span> <?php echo safeString($about['phone']) ?></p>
+                      <p><span class="font-semibold text-[#FE04FF]">Opening hours:</span> <?php echo safeString($about['openingHours']) ?></p>
                   </div>
               </div>
           </div>

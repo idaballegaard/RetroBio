@@ -9,6 +9,7 @@ require_once __DIR__ . "/../../repositories/GenreRepository.php";
 require_once __DIR__ . "/../../repositories/CastMemberRepository.php";
 require_once __DIR__ . "/../../repositories/CompanyRepository.php";
 require_once __DIR__ . "/../../repositories/HallRepository.php";
+require_once __DIR__ . "/../../repositories/OrderRepository.php";
 
 class AdminController extends BaseAdminController {
 
@@ -20,6 +21,8 @@ class AdminController extends BaseAdminController {
     private ShowingRepository $showingRepository;
     private NewsRepository $newsRepository;
     private AboutRepository $aboutRepository;
+    private OrderRepository $orderRepository;
+    private UserRepository $userRepository;
 
     public function __construct() {
         parent::__construct();
@@ -31,6 +34,8 @@ class AdminController extends BaseAdminController {
         $this->showingRepository = new ShowingRepository();
         $this->newsRepository = new NewsRepository();
         $this->aboutRepository = new AboutRepository();
+        $this->orderRepository = new OrderRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function adminFrontpage() {
@@ -42,6 +47,11 @@ class AdminController extends BaseAdminController {
         $viewModel->setAbout($this->aboutRepository->getAboutInfo());
         $viewModel->setHalls($this->hallRepository->getAllHalls());
         $viewModel->setNews($this->newsRepository->getAllNews());
+        $viewModel->setOrders($this->orderRepository->getAllOrders());
+
+        // Get a distinct list of all user ids in the orders list
+        $userIds = array_unique(array_map(fn($order) => $order->getUserId(), $viewModel->getOrders()));
+        $viewModel->setOrderUsers($this->userRepository->getUsersByID($userIds));
 
         return $viewModel;
     }
@@ -118,6 +128,10 @@ class AdminController extends BaseAdminController {
 
         $this->newsRepository->saveNews($news);
         $this->handleUpload($news->getNewsID(), 'news', 'image', 750, 500);
+    }
+
+    public function saveAbout() {
+      $this->aboutRepository->saveAboutInfo($_POST);
     }
 
     public function delete(string $type, int $id) {

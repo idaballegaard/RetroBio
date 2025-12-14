@@ -8,7 +8,7 @@ class FrontpageViewModel extends BasicViewModel {
     private array $news = [];
 
     // @var About|null
-    private ?About $about = null;
+    private ?array $about = null;
 
     /**
      * @return Movie[]
@@ -39,16 +39,16 @@ class FrontpageViewModel extends BasicViewModel {
     }
 
     /**
-     * @return About[]
+     * @return array
      */
-    public function getAbout(): ?About {
+    public function getAbout(): ?array {
         return $this->about;
     }
 
     /**
-     * @param About $about
+     * @param array $about
      */
-    public function setAbout(About $about): void {
+    public function setAbout(array $about): void {
         $this->about = $about;
     }
 }

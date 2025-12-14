@@ -10,9 +10,15 @@ class AdminViewModel extends BasicViewModel
     private array $news = [];
     // @var Movie[]
     private array $movies = [];
-    private ?About $about = null;
+    private ?array $about = null;
     // @var Hall[]
     private array $halls = [];
+
+    /** @var Order[] */
+    private array $orders = [];
+
+    /** @var User[] */
+    private array $orderUsers = [];
 
     public function setShowings(array $showings): void
     {
@@ -44,12 +50,12 @@ class AdminViewModel extends BasicViewModel
         return $this->movies;
     }
 
-    public function setAbout(?About $about): void
+    public function setAbout(?array $about): void
     {
         $this->about = $about;
     }
 
-    public function getAbout(): ?About
+    public function getAbout(): ?array
     {
         return $this->about;
     }
@@ -62,5 +68,25 @@ class AdminViewModel extends BasicViewModel
     public function getHalls(): array
     {
         return $this->halls;
+    }
+
+    public function setOrders(array $orders): void
+    {
+        $this->orders = $orders;
+    }
+
+    public function getOrders(): array
+    {
+        return $this->orders;
+    }
+
+    public function setOrderUsers(array $orderUsers): void
+    {
+        $this->orderUsers = $orderUsers;
+    }
+
+    public function getOrderUsers(): array
+    {
+        return $this->orderUsers;
     }
 }

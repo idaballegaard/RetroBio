@@ -4,31 +4,40 @@ require_once __DIR__ . "/../models/About.php";
 
 class AboutRepository extends BaseRepository {
 
-    public function getAboutInfo(): ?About {
+    public function getAboutInfo(): array {
         $db = $this->connectDatabase();
-        if (!$db) return null;
+        if (!$db) return [];
 
         try {
-            $stmt = $db->prepare("SELECT * FROM About LIMIT 1");
+            $stmt = $db->prepare("SELECT * FROM About");
             $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($row) {
-                $about = new About();
-                $about->setAboutID((int)$row['aboutID']);
-                $about->setTitle($row['title']);
-                $about->setSubtitle($row['subtitle']);
-                $about->setDescription($row['description']);
-                $about->setAddress($row['address']);
-                $about->setEmail($row['email']);
-                $about->setPhone($row['phone']);
-                return $about;
+            $about = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              $about[$row["key"]] = $row["value"];
             }
+            return $about;
         } catch (PDOException $e) {
             echo "Database error: " . $e->getMessage();
         }
 
-        return null;
+        return [];
+    }
+
+    public function saveAboutInfo(array $aboutData): void {
+        $db = $this->connectDatabase();
+        if (!$db) return;
+
+        try {
+            foreach ($aboutData as $key => $value) {
+                $stmt = $db->prepare("UPDATE About SET `value` = :value WHERE `key` = :key");
+                $stmt->bindParam(':key', $key);
+                $stmt->bindParam(':value', $value);
+                $stmt->execute();
+            }
+        } catch (PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        }
     }
 
 }

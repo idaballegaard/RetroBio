@@ -67,12 +67,38 @@ class OrderRepository extends BaseRepository
 
   public function getOrdersByUserId(int $userId): array {
     require_once __DIR__ . "/MovieRepository.php";
-
     $movieRepository = new MovieRepository();
     
     $db = $this->connectDatabase();
     $stmt = $db->prepare("SELECT * FROM `Order` WHERE userId = :userId ORDER BY date DESC");
     $stmt->execute([':userId' => $userId]);
+
+    $orders = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $order = new Order();
+      $order->setOrderId((int)$row['orderID']);
+      $order->setPrice((float)$row['price']);
+      $order->setDate($row['date']);
+      $order->setStatus($row['status']);
+      $order->setNumberOfTickets((int)$row['numberOfTickets']);
+      $order->setUserId((int)$row['userID']);
+      $order->setShowingId((int)$row['showingID']);
+      $order->setMovie($movieRepository->getMovieByShowingId((int)$row['showingID']));
+      $orders[] = $order;
+    }
+    return $orders;
+  }
+
+  /** @return Order[] */
+  public function getAllOrders(): array {
+    UserRepository::dieIfNotAdmin();
+
+    require_once __DIR__ . "/MovieRepository.php";
+    $movieRepository = new MovieRepository();
+
+    $db = $this->connectDatabase();
+    $stmt = $db->prepare("SELECT * FROM `Order`");
+    $stmt->execute();
 
     $orders = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

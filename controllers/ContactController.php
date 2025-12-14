@@ -18,7 +18,7 @@ class ContactController extends BaseController {
         $headers = 'From: ' . $email . "\r\n" .
             'Reply-To: ' . $email;
 
-        mail($about->getEmail(), $purpose, $message, $headers);
+        mail($about['email'], $purpose, $message, $headers);
 
         $viewModel = new ContactViewModel("views/contact.php");
         $viewModel->setMailSent(true);

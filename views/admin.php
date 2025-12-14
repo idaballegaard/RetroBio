@@ -70,47 +70,13 @@
 
   <!-- About Section -->
   <section id="about" class="hidden mt-8 px-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-      <h3 class="text-2xl font-semibold">About</h3>
-    </div>
-    <div class="overflow-auto rounded-lg border border-gray-800">
-      <table class="min-w-full text-sm">
-        <thead class="bg-[#0f0f10] text-gray-300 text-left">
-          <tr>
-            <th class="px-4 py-3">About ID</th>
-            <th class="px-4 py-3">Title</th>
-            <th class="px-4 py-3">Subtitle</th>
-            <th class="px-4 py-3">Email</th>
-            <th class="px-4 py-3">Phone</th>
-            <th class="px-4 py-3">Opening Hours</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-black divide-y divide-gray-900 text-gray-200">
-          <tr class="hover:bg-white/5 align-top">
-            <?php $about = $viewModel->getAbout(); ?>
-            <?php if ($about): ?>
-            <td class="px-4 py-3"><?php echo safeString($about->getAboutId()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($about->getTitle()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($about->getSubtitle()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($about->getEmail()); ?></td>
-            <td class="px-4 py-3"><?php echo safeString($about->getPhone()); ?></td>
-            <!-- <td class="px-4 py-3 whitespace-pre-line text-gray-300 leading-tight">
-              Mon–Thu:<?php //echo safeString($about->getOpeningHoursMonThu()); ?><br>
-              Fri:<?php //echo safeString($about->getOpeningHoursFri()); ?><br>
-              Sat:<?php //echo safeString($about->getOpeningHoursSat()); ?><br>
-              Sun:<?php //echo safeString($about->getOpeningHoursSun()); ?>
-            </td> -->
-            <td class="px-4 py-3 flex gap-3">
-              <button onclick="openModal('aboutModal')" class="text-[#FE04FF] hover:opacity-80"><i data-feather="edit-2"></i></button>
-              <button onclick="openModal('deleteModal')" class="text-red-500 hover:opacity-80"><i data-feather="trash-2"></i></button>
-            </td>
-            <?php endif; ?>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <?php require __DIR__ . "/admin/about-section.php"; ?>
   </section>
+
+  <!-- Orders Section -->
+    <section id="orders" class="hidden mt-8 px-6">
+        <?php require __DIR__ . "/admin/order-section.php"; ?>
+    </section>
 
   <!-- Modals -->
   <div id="aboutModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">

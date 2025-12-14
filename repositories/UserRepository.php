@@ -65,6 +65,23 @@ class UserRepository extends BaseRepository {
         return $this->readUserFromDatabase($stmt);
     }
 
+    public function getUsersByID(array $userIDs): array {
+        $db = $this->connectDatabase();
+
+        $placeholders = implode(',', array_fill(0, count($userIDs), '?'));
+        $stmt = $db->prepare("SELECT * FROM `User` u JOIN PostalCode p ON u.postalCodeID = p.postalCodeID WHERE u.userID IN ($placeholders)");
+        foreach ($userIDs as $index => $userID) {
+            $stmt->bindValue($index + 1, $userID, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+
+        $users = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $users[$row['userID']] = $this->readUserFromDatabase($stmt);
+        }
+        return $users;
+    }
+
     public static function isAdmin() {
         $userRepository = new UserRepository();
         if(!isset($_SESSION["user_id"])) {

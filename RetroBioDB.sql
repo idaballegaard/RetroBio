@@ -127,40 +127,9 @@ CREATE TABLE News (
 );
 
 CREATE TABLE About (
-    aboutID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title varchar (100) NOT NULL,
-    subtitle varchar (100) NOT NULL,
-    `description` varchar (1500) NOT NULL,
-    `address` VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(20) NOT NULL
+    `key` VARCHAR(30) NOT NULL PRIMARY KEY,
+    `value` VARCHAR(1500) NOT NULL
 );
-
-CREATE TABLE OpeningHours (
-  openingHoursID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  dayOfWeek ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
-  openTime TIME NOT NULL,
-  closeTime TIME NOT NULL,
-  aboutID INT NOT NULL,
-  FOREIGN KEY (aboutID) REFERENCES About(aboutID)
-);
-
-CREATE TABLE TimeSlots (
-    timeSlotID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    openTime TIME NOT NULL,
-    closeTime TIME NOT NULL,
-    label VARCHAR(50) NULL
-);
-
-CREATE TABLE OpeningDays (
-    openingDayID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    timeSlotID INT NOT NULL,
-    dayOfWeek ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun') NOT NULL,
-    aboutID INT NOT NULL,
-    FOREIGN KEY (timeSlotID) REFERENCES TimeSlots(timeSlotID),
-    FOREIGN KEY (aboutID) REFERENCES About(aboutID)
-)
-
 
 
 

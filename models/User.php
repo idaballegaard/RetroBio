@@ -99,4 +99,8 @@ class User {
     public function setIsAdmin(bool $isAdmin) : void {
         $this->isAdmin = $isAdmin;
     }
+
+    public function __toString(): string {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }

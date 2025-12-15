@@ -28,10 +28,8 @@ class ShowingRepository extends BaseRepository
   public function getShowingsThisWeek(): array
   {
     $pdo = $this->connectDatabase();
-    $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
-                                    h.name, h.number
-                            FROM Showing s
-                            LEFT JOIN Hall h ON s.hallID = h.hallID
+    $stmt = $pdo->query("SELECT *
+                            FROM ShowingDetails s
                             WHERE s.date >= CURDATE() AND s.date < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
                             ORDER BY s.date, s.startTime ASC
         ");
@@ -62,38 +60,12 @@ class ShowingRepository extends BaseRepository
     return $showing;
   }
 
-  private function getGenresByMovieId($movieID): array
-  {
-    $db = $this->connectDatabase();
-    if (!$db) return [];
-
-    try {
-      $stmt = $db->prepare("SELECT g.name 
-                                  FROM MovieGenre mg
-                                  JOIN Genre g ON mg.genreID = g.genreID
-                                  WHERE mg.movieID = :movieID");
-      $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
-      $stmt->execute();
-
-      $result = [];
-      foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $genreName) {
-        $result[] = $genreName;
-      }
-      return $result;
-    } catch (PDOException $e) {
-      echo "Database error: " . $e->getMessage();
-      return [];
-    }
-  }
-
   /** @return Showing[] */
   public function getFutureShowingsByMovieId(int $movieID): array
   {
     $pdo = $this->connectDatabase();
-    $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID,
-                        h.name, h.number
+    $stmt = $pdo->prepare("SELECT *
                     FROM Showing s
-                    LEFT JOIN Hall h ON s.hallID = h.hallID
                     WHERE s.movieID = :movieID AND s.date >= CURDATE()
                     ORDER BY s.date, s.startTime ASC");
     $stmt->bindValue(":movieID", $movieID, PDO::PARAM_INT);
@@ -115,10 +87,8 @@ class ShowingRepository extends BaseRepository
 
     $showings = [];
     $pdo = $this->connectDatabase();
-    $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
-                                    h.name, h.number
-                            FROM Showing s
-                            LEFT JOIN Hall h ON s.hallID = h.hallID
+    $stmt = $pdo->query("SELECT *
+                            FROM ShowingDetails s
                             ORDER BY s.date, s.startTime ASC
         ");
     $stmt->execute();

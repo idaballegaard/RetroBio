@@ -56,6 +56,7 @@ CREATE TABLE Showing (
     hallID int NOT NULL,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID)
 );
+CREATE INDEX idx_showing_date ON Showing (`date`);
 
 CREATE TABLE Hall (  
     hallID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -114,7 +115,7 @@ CREATE TABLE OrderSeat (
     orderID int NOT NULL,
     seatID int NOT NULL,
     CONSTRAINT PK_OrderSeat PRIMARY KEY (orderID, seatID),
-    FOREIGN KEY (orderID) REFERENCES `Order`(orderID),
+    FOREIGN KEY (orderID) REFERENCES `Order`(orderID) ON DELETE CASCADE,
     FOREIGN KEY (seatID) REFERENCES Seat(seatID)
 );
 
@@ -124,6 +125,7 @@ CREATE TABLE News (
     `description` varchar (1000) NOT NULL,
     releaseDate DATE NOT NULL
 );
+CREATE INDEX idx_releaseDate ON News (releaseDate DESC);
 
 CREATE TABLE About (
     `key` VARCHAR(30) NOT NULL PRIMARY KEY,
@@ -1074,9 +1076,30 @@ GROUP BY
 
 -- Showing details view
 CREATE OR REPLACE VIEW ShowingDetails AS
-SELECT s.showingID, m.title AS movieTitle, s.date AS showingDate, s.startTime AS showingTime,
-       h.name AS hallName, h.number AS hallNumber, s.price AS showingPrice
+SELECT s.*, h.name, h.number
 FROM Showing s
-JOIN Movie m ON s.movieID = m.movieID
-JOIN Hall h ON s.hallID = h.hallID
-GROUP BY s.showingID, m.title, s.date, s.startTime, h.name, h.number, s.price;
+         JOIN Hall h ON s.hallID = h.hallID
+GROUP BY s.showingID, s.date, s.startTime, h.name, h.number, s.price;
+
+-- Trigger to prevent deletion of completed orders within the last year
+DELIMITER //
+CREATE OR REPLACE TRIGGER orders_before_delete
+    BEFORE DELETE ON `Order`
+    FOR EACH ROW
+BEGIN
+    IF OLD.status = 'completed' AND OLD.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot delete completed orders within the last year.';
+    END IF;
+END//
+
+DELIMITER ;
+
+-- Trigger to delete pending orders older than 24 hours after new inserts in the order table
+DELIMITER //
+CREATE OR REPLACE TRIGGER cleanup_pending_orders
+    AFTER INSERT ON `OrderSeat`
+    FOR EACH ROW
+BEGIN
+    DELETE FROM `Order`
+        WHERE status = 'pending' AND `date` < DATE_SUB(NOW(), INTERVAL 24 HOUR);
+END//

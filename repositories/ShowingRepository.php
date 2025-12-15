@@ -9,12 +9,8 @@ class ShowingRepository extends BaseRepository
     // Implementation can be added as needed
     $pdo = $this->connectDatabase();
     $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
-                                    h.name, h.number,
-                                    cm.name AS directorName,
-                                    m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
+                                    h.name, h.number
                             FROM Showing s
-                            LEFT JOIN Movie m ON s.movieID = m.movieID
-                            LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                             LEFT JOIN Hall h ON s.hallID = h.hallID
                             WHERE s.showingID = :showingID
         ");
@@ -28,17 +24,13 @@ class ShowingRepository extends BaseRepository
     return null;
   }
 
-  // @return Showing[]
+  /** @return Showing[] */
   public function getShowingsThisWeek(): array
   {
     $pdo = $this->connectDatabase();
     $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
-                                    h.name, h.number,
-                                    cm.name as directorName,
-                                    m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
+                                    h.name, h.number
                             FROM Showing s
-                            LEFT JOIN Movie m ON s.movieID = m.movieID
-                            LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                             LEFT JOIN Hall h ON s.hallID = h.hallID
                             WHERE s.date >= CURDATE() AND s.date < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
                             ORDER BY s.date, s.startTime ASC
@@ -48,12 +40,6 @@ class ShowingRepository extends BaseRepository
     $showings = [];
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
-      /** @var Showing */
-      $previous = end($showings);
-      if ($previous && $previous->getMovie()->getMovieID() === $row['movieID']) {
-        $previous->addReelTime($row['startTime']);
-        continue;
-      }
       $showings[] = $this->mapRowToShowing($row);
     }
     return $showings;
@@ -64,27 +50,15 @@ class ShowingRepository extends BaseRepository
     $showing = new Showing();
     $showing->setShowingID($row['showingID']);
     $showing->setType($row['type']);
-    $showing->addReelTime($row['startTime']);
+    $showing->setStartTime($row['startTime']);
     $showing->setDate(new DateTime($row['date']));
     $showing->setPrice($row['price']);
+    $showing->setMovieID($row['movieID']);
 
     $showing->getHall()->setHallID($row['hallID']);
     $showing->getHall()->setName($row['name']);
     $showing->getHall()->setNumber($row['number']);
 
-    $showing->getMovie()->setMovieID($row['movieID']);
-    $showing->getMovie()->setTitle($row['title']);
-    $showing->getMovie()->setDescription($row['description']);
-    $showing->getMovie()->setLength($row['length']);
-    $showing->getMovie()->setLanguage($row['language']);
-
-    $showing->getMovie()->getDirector()->setCastMemberID($row['directorID']);
-    $showing->getMovie()->getDirector()->setName($row['directorName']);
-
-    $showing->getMovie()->setGenres($this->getGenresByMovieId($row['movieID']));
-    $showing->getMovie()->setAgeLimit($row['ageLimit']);
-    $showing->getMovie()->setRanking($row['ranking']);
-    $showing->getMovie()->setReleaseYear($row['releaseYear']);
     return $showing;
   }
 
@@ -117,12 +91,8 @@ class ShowingRepository extends BaseRepository
   {
     $pdo = $this->connectDatabase();
     $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID,
-                        h.name, h.number,
-                        cm.name as directorName,
-                        m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear
+                        h.name, h.number
                     FROM Showing s
-                    LEFT JOIN Movie m ON s.movieID = m.movieID
-                    LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                     LEFT JOIN Hall h ON s.hallID = h.hallID
                     WHERE s.movieID = :movieID AND s.date >= CURDATE()
                     ORDER BY s.date, s.startTime ASC");
@@ -146,12 +116,8 @@ class ShowingRepository extends BaseRepository
     $showings = [];
     $pdo = $this->connectDatabase();
     $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
-                                    h.name, h.number,
-                                    cm.name AS directorName,
-                                    m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
+                                    h.name, h.number
                             FROM Showing s
-                            LEFT JOIN Movie m ON s.movieID = m.movieID
-                            LEFT JOIN CastMember cm ON m.directorID = cm.castMemberID
                             LEFT JOIN Hall h ON s.hallID = h.hallID
                             ORDER BY s.date, s.startTime ASC
         ");
@@ -181,7 +147,7 @@ class ShowingRepository extends BaseRepository
     } else {
       $stmt = $pdo->prepare("INSERT INTO Showing (movieID, date, startTime, type, price, hallID) VALUES (:movieID, :date, :startTime, :type, :price, :hallID)");
     }
-    $stmt->bindValue(":movieID", $showing->getMovie()->getMovieID(), PDO::PARAM_INT);
+    $stmt->bindValue(":movieID", $showing->getMovieID(), PDO::PARAM_INT);
     $stmt->bindValue(":date", $showing->getDate()->format("Y-m-d"), PDO::PARAM_STR);
     $stmt->bindValue(":startTime", "00:00", PDO::PARAM_STR);
     $stmt->bindValue(":type", $showing->getType(), PDO::PARAM_STR);

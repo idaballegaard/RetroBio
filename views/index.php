@@ -38,62 +38,58 @@
         <!-- Week Calendar -->
         <div class="flex overflow-x-auto pb-4 mb-8 scrollbar-hide">
           <div class="flex space-x-2">
-              <?php $previous = null; ?>
-              <?php foreach($viewModel->getShowings() as $showing): ?>
-                <?php if($previous?->getDate()->format("Y-m-d") !== $showing->getDate()->format("Y-m-d")): ?>
-                  <button onclick="filterMovies(this)" class="filter-button bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo relativeDate($showing->getDate()) ?></button>
-                <?php endif; ?>
-                <?php $previous = $showing; ?>
+              <?php foreach($viewModel->getShowings() as $index => $showingDate): ?>
+                  <button onclick="filterMovies(this)" id="filter-button-<?php echo safeString($index) ?>" class="filter-button bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black text-white px-4 py-2 rounded-md min-w-[100px]"><?php echo safeString($index); ?></button>
               <?php endforeach; ?>
-              <!-- <button class="bg-[#00e7ec] text-black px-4 py-2 rounded-md font-medium min-w-[100px]">Today</button>
-              <button class="bg-black border border-[#00e7ec] hover:border-[#00e7ec] hover:bg-[#00e7ec] hover:text-black px-4 py-2 rounded-md min-w-[100px]">Tomorrow</button> -->
           </div>
         </div>
 
         <!-- Showing Card -->
-        <?php /** @var Showing $showing */ foreach($viewModel->getShowings() as $showing): ?>
-
-        <div data-showing-date="<?php echo relativeDate($showing->getDate()) ?>" class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
+        <?php foreach(array_keys($viewModel->getShowings()) as $date): ?>
+        <?php foreach(array_keys($viewModel->getShowings()[$date]) as $movieId): ?>
+        <?php $movie = $viewModel->getMovies()[$movieId]; ?>
+        <?php $showings = $viewModel->getShowings()[$date][$movieId]; ?>
+        <div data-showing-date="<?php echo safeString($date) ?>" class="bg-black rounded-xl overflow-hidden mb-12 border-[1px] border-[#00e7ec]
                     transition-transform duration-300 hover:-translate-y-2 
                     hover:shadow-2xl">
             <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/4">
-                    <img src="<?php echo safeString($viewModel->getUploadPaths($showing->getMovie()->getMovieID(), "movies")[0]) ?>"
+                <div class="md:w-1/5">
+                    <img src="<?php echo safeString($viewModel->getUploadPaths($movie->getMovieID(), "movies")[0]) ?>"
                         alt="Movie Poster" 
                         class="w-full h-full object-cover">
                 </div>
                 <div class="md:w-3/4 p-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                        <h3 class="text-2xl text-[#00e7ec] font-bold"><?php echo safeString($showing->getMovie()->getTitle()) ?></h3>
+                        <h3 class="text-2xl text-[#00e7ec] font-bold"><?php echo safeString($movie->getTitle()) ?></h3>
                         <div class="flex items-center ">
                             <i data-feather="star" class="mr-1"></i>
-                            <span><?php echo floatval($showing->getMovie()->getRanking()) ?>/5</span>
+                            <span><?php echo floatval($movie->getRanking()) ?>/5</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <?php /** @var string $genre */ foreach($showing->getMovie()->getGenres() as $genre): ?>
+                        <?php /** @var string $genre */ foreach($movie->getGenres() as $genre): ?>
                           <span class="text-xs bg-black border border-[#00e7ec] text-white px-2 py-1 rounded"><?php echo safeString($genre) ?></span>
                         <?php endforeach; ?>
                     </div>
-                    <p class="text-gray-300 mb-6"><?php echo safeString($showing->getMovie()->getDescription()) ?></p>
+                    <p class="text-gray-300 mb-6"><?php echo safeString($movie->getDescription()) ?></p>
 
                     <div>
                         <h4 class="font-medium text-[#00e7ec] mb-3">Reel times</h4>
                         <div class="flex flex-wrap gap-3">
-                            <?php foreach($showing->getReelTimes() as $reelTime): ?>
-                              <a href="booking_page" 
+                            <?php foreach($showings as $showing): ?>
+                              <a href="<?php echo safeString(generateUrl("booking")) ?>?showing_id=<?php echo $showing->getShowingId() ?>"
                               class="inline-block bg-black text-white px-4 py-2 rounded-md transition-colors 
                                   border border-[#00e7ec] hover:border-[#00e7ec]        
                                   hover:bg-[#00e7ec] hover:!text-[#000000]">
-                              <?php echo safeString($reelTime) ?>
+                                <?php echo safeString($showing->getStartTime()) ?>
                               </a>
                             <?php endforeach; ?>
-                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <?php endforeach; ?>
         <?php endforeach; ?>
       </div>
 </section>

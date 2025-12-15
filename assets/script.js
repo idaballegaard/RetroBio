@@ -157,27 +157,27 @@ function renderCalendar(date) {
 }
 
 // Vis kalender ved fokus
-input.addEventListener('focus', () => {
-  calendar.classList.remove('hidden');
-  renderCalendar(currentDate);
-});
+// input.addEventListener('focus', () => {
+//   calendar.classList.remove('hidden');
+//   renderCalendar(currentDate);
+// });
 
 // Skift måned
-prevMonthBtn.addEventListener('click', () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
-  renderCalendar(currentDate);
-});
-nextMonthBtn.addEventListener('click', () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  renderCalendar(currentDate);
-});
-
-// Gem kalender når der klikkes udenfor
-document.addEventListener('click', (e) => {
-  if (!input.contains(e.target) && !calendar.contains(e.target)) {
-    calendar.classList.add('hidden');
-  }
-});
+// prevMonthBtn.addEventListener('click', () => {
+//   currentDate.setMonth(currentDate.getMonth() - 1);
+//   renderCalendar(currentDate);
+// });
+// nextMonthBtn.addEventListener('click', () => {
+//   currentDate.setMonth(currentDate.getMonth() + 1);
+//   renderCalendar(currentDate);
+// });
+//
+// // Gem kalender når der klikkes udenfor
+// document.addEventListener('click', (e) => {
+//   if (!input.contains(e.target) && !calendar.contains(e.target)) {
+//     calendar.classList.add('hidden');
+//   }
+// });
 
 feather.replace();
 
@@ -225,4 +225,5 @@ function filterMovies(button) {
         }
     });
 }
+console.log(document.querySelector(".filter-button"));
 document.querySelectorAll('.filter-button')[0].click();

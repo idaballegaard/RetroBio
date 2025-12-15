@@ -14,7 +14,31 @@ class HomeController extends BaseController {
 
         // Showings
         $showingRepository = new ShowingRepository();
-        $viewModel->setShowings($showingRepository->getShowingsThisWeek());
+        $showings = $showingRepository->getShowingsThisWeek();
+
+        // Showing map by movie ID
+        $showingsByDateAndMovie = [];
+
+        foreach ($showings as $showing) {
+            $date = relativeDate($showing->getDate()); // use string date as array key
+            $movieID = $showing->getMovieID();
+
+            if (!isset($showingsByDateAndMovie[$date])) {
+                $showingsByDateAndMovie[$date] = [];
+            }
+
+            if (!isset($showingsByDateAndMovie[$date][$movieID])) {
+                $showingsByDateAndMovie[$date][$movieID] = [];
+            }
+
+            $showingsByDateAndMovie[$date][$movieID][] = $showing;
+        }
+        $viewModel->setShowings($showingsByDateAndMovie);
+
+        // Movies
+        $movieRepository = new MovieRepository();
+        $movieIDs = array_values(array_unique(array_map(fn($showing) => $showing->getMovieID(), $showings)));
+        $viewModel->setMovies($movieRepository->getMoviesByIDs($movieIDs));
 
         // News
         $newsRepository = new NewsRepository();

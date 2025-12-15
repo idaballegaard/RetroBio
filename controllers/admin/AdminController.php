@@ -100,9 +100,9 @@ class AdminController extends BaseAdminController {
 
         $showing = new Showing();
         $showing->setShowingID((int)$id);
-        $showing->setMovie(($this->movieRepository->getMovieById((int)$movieID)));
+        $showing->setMovieID((int)$movieID);
         $showing->setDate(new DateTime($date));
-        $showing->addReelTime($startTime);
+        $showing->setStartTime($startTime);
         $showing->setType($type);
         $showing->setPrice((float)$price);
         $showing->setHall(($this->hallRepository->getHallById((int)$hallID)));

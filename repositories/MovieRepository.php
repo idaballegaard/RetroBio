@@ -70,6 +70,47 @@ class MovieRepository extends BaseRepository
     }
   }
 
+  // Henter flere film baseret på en liste af ID'er
+  /** @param int[] $movieIDs */
+  /** @return Movie[] */
+  public function getMoviesByIds(array $movieIDs): array
+  {
+    if (empty($movieIDs)) {
+      return [];
+    }
+
+    $db = $this->connectDatabase();
+    if (!$db) return [];
+
+    // Build placeholders for prepared statement
+    $placeholders = implode(',', array_fill(0, count($movieIDs), '?'));
+
+    try {
+      $stmt = $db->prepare(
+        "SELECT * FROM moviedetail WHERE movieID IN ($placeholders)"
+      );
+
+      foreach ($movieIDs as $index => $movieID) {
+        $stmt->bindValue($index + 1, $movieID, PDO::PARAM_INT);
+      }
+
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      $movies = [];
+      foreach ($rows as $row) {
+        $movies[$row['movieID']] = $this->mapMovieDetailsRowToMovie($row);
+      }
+
+      return $movies;
+    } catch (PDOException $e) {
+      echo "Fejl ved hentning af film: " . $e->getMessage();
+      return [];
+    }
+  }
+
+
+
   public function getMoviesByShowingId(array $showingIDs): array
   {
     $db = $this->connectDatabase();

@@ -4,6 +4,9 @@ class FrontpageViewModel extends BasicViewModel {
     // @var Showing[]
     private array $showings = [];
 
+    // @var Movie[]
+    private array $movies = [];
+
     // @var News[]
     private array $news = [];
 
@@ -11,14 +14,14 @@ class FrontpageViewModel extends BasicViewModel {
     private ?array $about = null;
 
     /**
-     * @return Movie[]
+     * @return Showing[]
      */
     public function getShowings(): array {
         return $this->showings;
     }
 
     /**
-     * @param Movie[] $movies
+     * @param Showing[] $movies
      */
     public function setShowings(array $movies): void {
         $this->showings = $movies;
@@ -50,5 +53,15 @@ class FrontpageViewModel extends BasicViewModel {
      */
     public function setAbout(array $about): void {
         $this->about = $about;
+    }
+
+    /** @return Movie[] */
+    public function getMovies(): array {
+        return $this->movies;
+    }
+
+    /** @var Movie[] $movies */
+    public function setMovies(array $movies): void {
+        $this->movies = $movies;
     }
 }

@@ -124,13 +124,6 @@ class ShowingRepository extends BaseRepository
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
-      /** @var Showing */
-      $previous = end($showings);
-      if ($previous && $previous->getMovie()->getMovieID() === $row['movieID']) {
-        $previous->addReelTime($row['startTime']);
-        continue;
-      }
-
       $showings[] = $this->mapRowToShowing($row);
     }
     return $showings;

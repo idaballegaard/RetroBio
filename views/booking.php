@@ -3,6 +3,7 @@
 <?php
 /** @var BookingViewModel $viewModel */
 $showing = $viewModel->getShowing();
+$movie = $viewModel->getMovie();
 ?>
 
 <style>
@@ -100,8 +101,8 @@ $showing = $viewModel->getShowing();
 <header class="py-6 px-6 border-b border-[#0b1220]">
     <div class="container mx-auto flex items-center justify-between">
         <div class="flex flex-col">
-            <h1 class="text-2xl font-extrabold text-[var(--neon-yellow)]"><?php echo safeString($showing->getMovie()->getTitle()); ?></h1>
-            <span class="text-sm text-gray-300"><?php echo safeString($showing->getMovie()->getLength()); ?> minutes • <?php echo safeString(implode(", ", $showing->getMovie()->getGenres())); ?> • <?php echo safeString($showing->getMovie()->getReleaseYear()); ?></span>
+            <h1 class="text-2xl font-extrabold text-[var(--neon-yellow)]"><?php echo safeString($movie->getTitle()); ?></h1>
+            <span class="text-sm text-gray-300"><?php echo safeString($movie->getLength()); ?> minutes • <?php echo safeString(implode(", ", $movie->getGenres())); ?> • <?php echo safeString($movie->getReleaseYear()); ?></span>
         </div>
         <div class="text-sm text-gray-300">Hall: <span
                     class="font-semibold text-[#00e7ec]"><?php echo safeString($showing->getHall()->getNumber()); ?></span>

@@ -35,7 +35,11 @@ class AdminController extends BaseAdminController {
     public function adminFrontpage() {
         $viewModel = new AdminViewModel(__DIR__ . "/../../views/admin.php");
 
-        $viewModel->setMovies($this->movieRepository->getAllMovies());
+        $moviesById = [];
+        foreach ($this->movieRepository->getAllMovies() as $movie) {
+          $moviesById[$movie->getMovieID()] = $movie;
+        }
+        $viewModel->setMovies($moviesById);
         $viewModel->setShowings($this->showingRepository->getAllShowings());
         $viewModel->setNews($this->newsRepository->getAllNews());
         $viewModel->setAbout($this->aboutRepository->getAboutInfo());

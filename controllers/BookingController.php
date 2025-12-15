@@ -3,12 +3,13 @@ require_once __DIR__ . "/BaseController.php";
 require_once __DIR__ . "/../viewModels/BookingViewModel.php";
 require_once __DIR__ . "/../repositories/ShowingRepository.php";
 require_once __DIR__ . "/../repositories/SeatRepository.php";
-
+require_once __DIR__ . "/../repositories/MovieRepository.php";
 class BookingController extends BaseController {
     public function showBookingPage($showingID): BookingViewModel {
         // Opret ViewModel
         $showingRepository = new ShowingRepository();
         $seatRepository = new SeatRepository();
+        $movieRepository = new MovieRepository();
 
         $showing = $showingRepository->getShowingById($showingID);
         if ($showing === null) {
@@ -18,10 +19,13 @@ class BookingController extends BaseController {
         $seats = $seatRepository->getSeatsByHallId($showing->getHall()->getHallID());
         $soldSeats = $seatRepository->getSoldSeatsByShowingId($showingID);
 
+        $movie = $movieRepository->getMovieById($showing->getMovieID());
+
         $viewModel = new BookingViewModel(__DIR__ . "/../views/booking.php");
         $viewModel->setShowing($showing);
         $viewModel->setSeats($seats);
         $viewModel->setSoldSeats($soldSeats);
+        $viewModel->setMovie($movie);
         return $viewModel;
     }
 
@@ -35,6 +39,9 @@ class BookingController extends BaseController {
     $showingRepository = new ShowingRepository();
     $price = $showingRepository->getShowingById($showingID)->getPrice();
 
+    $movieRepository = new MovieRepository();
+    $movie = $movieRepository->getMoviesByShowingId(array($showingID))[$showingID];
+
     require_once __DIR__ . "/../repositories/SeatRepository.php";
     $seatRepository = new SeatRepository();
     $seatRows = $seatRepository->getSeatRowsByIds($seats);
@@ -47,7 +54,6 @@ class BookingController extends BaseController {
     } elseif ($price === null) {
       $errors[] = "Invalid showing selected.";
     } elseif(count($seatRows) > 1) {
-      print_r($seatRows);
       $errors[] = "Make sure to pick seats from the same row.";
     }
 
@@ -57,7 +63,6 @@ class BookingController extends BaseController {
       return $viewModel;
     }
 
-
     $orderRepository = new OrderRepository();
     $orderId = $orderRepository->createOrder(
         $price,
@@ -66,10 +71,6 @@ class BookingController extends BaseController {
         (int)$_POST['showingId'],
         $seats
     );
-
-    require_once __DIR__ . "/../repositories/MovieRepository.php";
-    $movieRepository = new MovieRepository();
-    $movieTitle = $movieRepository->getMovieById((int)$_POST['showingId'])->getTitle();
 
     require_once __DIR__ . "/../stripe/init.php";
     \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));
@@ -83,7 +84,7 @@ class BookingController extends BaseController {
                 'currency' => 'dkk',
                 'unit_amount' => $price * 100, // amount in cents (e.g., $20.00)
                 'product_data' => [
-                    'name' => $movieTitle
+                    'name' => $movie->getTitle()
                 ],
             ],
         ]],

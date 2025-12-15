@@ -109,8 +109,6 @@ class MovieRepository extends BaseRepository
     }
   }
 
-
-
   public function getMoviesByShowingId(array $showingIDs): array
   {
     $db = $this->connectDatabase();

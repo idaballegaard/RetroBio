@@ -8,7 +8,6 @@ class Order {
     private int $numberOfTickets;
     private int $userId;
     private int $showingId;
-    private Movie $movie;
 
     public function getOrderId(): int {
         return $this->orderId;
@@ -64,9 +63,5 @@ class Order {
 
     public function setShowingId(int $showingId): void {
         $this->showingId = $showingId;
-    }
-
-    public function getMovie(): Movie {
-        return $this->movie;
     }
 }

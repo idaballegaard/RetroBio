@@ -11,6 +11,7 @@ abstract class BaseRepository {
     protected function getEnvVariable(string $key): ?string {
       return $this->data[$key] ?? null;
     }
+
     protected function connectDatabase() {
         $db_name = $this->getEnvVariable("DB_NAME");
         $db_host = $this->getEnvVariable("DB_HOST");

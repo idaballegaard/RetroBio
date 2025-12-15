@@ -75,25 +75,26 @@ class OrderRepository extends BaseRepository
 
     $orders = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $order = new Order();
-      $order->setOrderId((int)$row['orderID']);
-      $order->setPrice((float)$row['price']);
-      $order->setDate($row['date']);
-      $order->setStatus($row['status']);
-      $order->setNumberOfTickets((int)$row['numberOfTickets']);
-      $order->setUserId((int)$row['userID']);
-      $order->setShowingId((int)$row['showingID']);
-      $orders[] = $order;
+      $orders[] = $this->mapRowToOrder($row);
     }
     return $orders;
+  }
+
+  private function mapRowToOrder(array $row): Order {
+    $order = new Order();
+    $order->setOrderId((int)$row['orderID']);
+    $order->setPrice((float)$row['price']);
+    $order->setDate($row['date']);
+    $order->setStatus($row['status']);
+    $order->setNumberOfTickets((int)$row['numberOfTickets']);
+    $order->setUserId((int)$row['userID']);
+    $order->setShowingId((int)$row['showingID']);
+    return $order;
   }
 
   /** @return Order[] */
   public function getAllOrders(): array {
     UserRepository::dieIfNotAdmin();
-
-    require_once __DIR__ . "/MovieRepository.php";
-    $movieRepository = new MovieRepository();
 
     $db = $this->connectDatabase();
     $stmt = $db->prepare("SELECT * FROM `Order`");
@@ -101,15 +102,7 @@ class OrderRepository extends BaseRepository
 
     $orders = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $order = new Order();
-      $order->setOrderId((int)$row['orderID']);
-      $order->setPrice((float)$row['price']);
-      $order->setDate($row['date']);
-      $order->setStatus($row['status']);
-      $order->setNumberOfTickets((int)$row['numberOfTickets']);
-      $order->setUserId((int)$row['userID']);
-      $order->setShowingId((int)$row['showingID']);
-      $orders[] = $order;
+      $orders[] = $this->mapRowToOrder($row);
     }
     return $orders;
   }

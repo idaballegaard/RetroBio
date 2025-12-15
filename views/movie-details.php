@@ -63,7 +63,7 @@ $selectedMovie = $viewModel->getSelectedMovie();
                         <?php foreach ($viewModel->getFutureShowings() as $showing): ?>
                             <div class="px-3 py-2 hover:bg-[#003133] cursor-pointer text-[#00e7ec]"
                                  onclick="goToBooking(<?php echo safeString($showing->getShowingID()); ?>)">
-                                <?= safeString($showing->getDate()->format('F j Y')); ?><?php echo safeString($showing->getReelTimes()[0]); ?>
+                                <?= safeString($showing->getDate()->format('F j Y')); ?> @ <?php echo safeString($showing->getStartTime()); ?>
                             </div>
                         <?php endforeach; ?>
                     </div>

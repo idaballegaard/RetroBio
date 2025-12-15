@@ -58,9 +58,10 @@ $user = $viewModel->getUser();
                     </thead>
                     <tbody>
                     <?php foreach($viewModel->getOrders() as $order): ?>
+                    <?php $movie = $viewModel->getMovies()[$order->getShowingID()] ?? null; ?>
                         <tr>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
-                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getMovie()->getTitle()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($movie->getTitle()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>

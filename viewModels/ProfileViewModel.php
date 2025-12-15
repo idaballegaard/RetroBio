@@ -5,6 +5,8 @@ class ProfileViewModel extends BasicViewModel {
 
     /** @var Order[] */
     private array $orders;
+
+    private array $movies;
     public function getUser(): User {
         return $this->user;
     }
@@ -19,5 +21,13 @@ class ProfileViewModel extends BasicViewModel {
 
     public function setOrders(array $orders): void {
         $this->orders = $orders;
+    }
+
+    public function setMovies(array $movies) {
+        $this->movies = $movies;
+    }
+
+    public function getMovies(): array {
+        return $this->movies;
     }
 }

@@ -96,16 +96,26 @@ class UserController extends BaseController {
     public function showProfile(int $userID) : BasicViewModel {
         $userRepository = new UserRepository();
         $orderRepository = new OrderRepository();
+        $moviesRepository = new MovieRepository();
+
         $user = $userRepository->getUserByID($userID);
+        $orders = $orderRepository->getOrdersByUserID($userID);
+
+        $showingIds = array_map(function($order) {
+            return $order->getShowingId();
+        }, $orders);
+
+        // $movies to associative array with movieId as key
+        $movies = $moviesRepository->getMoviesByShowingID($showingIds);
 
         if ($user) {
             $viewModel = new ProfileViewModel(__DIR__ . "/../views/profile.php");
             $viewModel->setUser($user);
-            $viewModel->setOrders($orderRepository->getOrdersByUserID($userID));
+            $viewModel->setOrders($orders);
+            $viewModel->setMovies($movies);
             return $viewModel;
         } else {
-            $viewModel = new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
-            return $viewModel;
+          return new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
         }
     }
 }

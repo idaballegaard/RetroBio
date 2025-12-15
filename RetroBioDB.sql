@@ -25,7 +25,7 @@ CREATE TABLE Movie (
     `length` int NOT NULL,
     `language` varchar (100) NOT NULL,
     ageLimit int NOT NULL,
-    ranking float NULL,
+    ranking decimal(3,2) NULL,
     directorID int NOT NULL,
     companyID int NOT NULL
 );

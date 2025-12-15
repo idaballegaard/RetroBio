@@ -34,7 +34,7 @@ class ShowingRepository extends BaseRepository
     $pdo = $this->connectDatabase();
     $stmt = $pdo->query("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
                                     h.name, h.number,
-                                    c.name as directorName,
+                                    cm.name as directorName,
                                     m.title, m.description, m.length, m.language, m.directorID, m.ageLimit, m.ranking, m.releaseYear 
                             FROM Showing s
                             LEFT JOIN Movie m ON s.movieID = m.movieID

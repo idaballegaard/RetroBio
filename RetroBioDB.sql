@@ -25,7 +25,7 @@ CREATE TABLE Movie (
     `length` int NOT NULL,
     `language` varchar (100) NOT NULL,
     ageLimit int NOT NULL,
-    ranking decimal(3,1) NULL,
+    ranking float NULL,
     directorID int NOT NULL,
     companyID int NOT NULL
 );
@@ -51,7 +51,7 @@ CREATE TABLE Showing (
     `date` date NOT NULL,
     startTime time NOT NULL,
     `type` varchar (100) NULL,
-    price decimal(10,2) NOT NULL,
+    price decimal(5,2) NOT NULL,
     movieID int NOT NULL,
     hallID int NOT NULL,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID)
@@ -76,7 +76,7 @@ CREATE TABLE Seat (
 
 CREATE TABLE `Order` (
     orderID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    price decimal(10,2) NOT NULL,
+    price decimal(6,2) NOT NULL,
     `date` date NOT NULL,
     `status` varchar (100) NOT NULL,
     numberOfTickets int NOT NULL,

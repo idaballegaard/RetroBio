@@ -12,12 +12,7 @@ class SeatRepository extends BaseRepository {
         $stmt->execute();
         $seats = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seat = new Seat();
-            $seat->setSeatID($row['seatID']);
-            $seat->setNumber($row['number']);
-            $seat->setRowNumber($row['rowNumber']);
-            $seat->setHallID($row['hallID']);
-            $seats[] = $seat;
+            $seats[] = $this->mapRowToSeat($row);
         }
         return $seats;
     }
@@ -35,16 +30,19 @@ class SeatRepository extends BaseRepository {
         $stmt->execute();
         $seats = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seat = new Seat();
-            $seat->setSeatID($row['seatID']);
-            $seat->setNumber($row['number']);
-            $seat->setRowNumber($row['rowNumber']);
-            $seat->setHallID($row['hallID']);
-            $seats[] = $seat;
+            $seats[] = $this->mapRowToSeat($row);
         }
         return $seats;
     }
 
+    private function mapRowToSeat($row): Seat {
+        $seat = new Seat();
+        $seat->setSeatID($row['seatID']);
+        $seat->setNumber($row['number']);
+        $seat->setRowNumber($row['rowNumber']);
+        $seat->setHallID($row['hallID']);
+        return $seat;
+    }
     function getSeatRowsByIds(array $seatIDs): array {
         if (empty($seatIDs)) {
             return [];

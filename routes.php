@@ -93,6 +93,11 @@ get(generateUrl("profile"), function () {
   $controller = new UserController();
   $controller->showProfile()->presentView();
 });
+post(generateUrl("profile"), function () {
+  require_once __DIR__ . "/controllers/UserController.php";
+  $controller = new UserController();
+  $controller->updateProfile()->presentView();
+});
 
 // Admin
 if (UserRepository::isAdmin()) {

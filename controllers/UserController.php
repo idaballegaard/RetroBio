@@ -122,8 +122,38 @@ class UserController extends BaseController {
           return new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
         }
     }
+    public function updateProfile() : BasicViewModel
+    {
+        $userID = $_SESSION["user_id"];
 
-    public function saveProfile() : BasicViewModel {
+        $firstName = $this->retrieveInput("firstName");
+        $lastName = $this->retrieveInput("lastName");
+        $email = $this->retrieveInput("email");
+        $phone = $this->retrieveInput("phone");
+        $street = $this->retrieveInput("street");
+        $streetNumber = $this->retrieveInput("streetNumber");
+        $postalCode = $this->retrieveInput("postalCode");
+        $city = $this->retrieveInput("city");
+        $country = $this->retrieveInput("country");
 
+        $userRepository = new UserRepository();
+        $user = $userRepository->getUserByID($userID);
+
+        if ($user) {
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setEmail($email);
+            $user->setPhone($phone);
+            $user->setCountry($country);
+            $user->setCity($city);
+            $user->setPostalCode($postalCode);
+            $user->setStreet($street);
+            $user->setStreetNumber($streetNumber);
+
+            $userRepository->updateProfile($user);
+            return $this->showProfile();
+        } else {
+            return new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
+        }
     }
 }

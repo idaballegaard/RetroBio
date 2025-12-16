@@ -151,4 +151,38 @@ class UserRepository extends BaseRepository {
       return null;
     }
   }
+
+  public function updateProfile(User $user): void {
+    // Implementation for updating user details in the database
+    $db = $this->connectDatabase();
+    $stmt = $db->prepare("
+        UPDATE `User` SET
+            firstName = :firstName,
+            lastName = :lastName,
+            email = :email,
+            phone = :phone,
+            country = :country,
+            postalCodeID = :postalCodeID,
+            street = :street,
+            streetNumber = :streetNumber
+        WHERE userID = :userID
+    ");
+
+    // Bind values and execute the statement
+    $stmt->bindValue(':firstName', $user->getFirstName());
+    $stmt->bindValue(':lastName', $user->getLastName());
+    $stmt->bindValue(':email', $user->getEmail());
+    $stmt->bindValue(':phone', $user->getPhone());
+    $stmt->bindValue(':street', $user->getStreet());
+    $stmt->bindValue(':streetNumber', $user->getStreetNumber());
+    $stmt->bindValue(':postalCodeID', $this->getPostalCodeID($user->getPostalCode(), $user->getCity()));
+    $stmt->bindValue(':country', $user->getCountry());
+    $stmt->bindValue(':userID', $user->getUserID());
+
+    try {
+      $stmt->execute();
+    } catch (PDOException $e) {
+      echo "Database Error: " . $e->getMessage();
+    }
+  }
 }

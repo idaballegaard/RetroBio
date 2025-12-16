@@ -1,6 +1,7 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 
 <?php
+/** @var User $user */
 $user = $viewModel->getUser();
 ?>
 <main class="bg-black min-h-screen text-white relative px-6 md:px-12 lg:px-24">
@@ -9,31 +10,53 @@ $user = $viewModel->getUser();
     <section class="relative bg-black h-auto flex flex-col md:flex-row justify-between items-start py-8 mb-8 px-6 md:px-0 rounded-lg">
             
         <!-- Venstre: Brugerinfor -->
-        <div class="flex flex-col text-left space-y-3">
+        <div class="flex flex-col text-left space-y-3 w-full">
             <h1 class="text-4xl font-bold text-[#00e7ec] animate-neon-flicker mb-2">
                 <?php echo safeString($user->getUsername()); ?>
             </h1>
-            <p class="text-[#FFDF00] text-sm">
-                <?php echo safeString($user->getFirstName() . ' ' . $user->getLastName()); ?>
-            </p>
-            <p class="text-[#FFDF00] text-sm">
-                <?php echo safeString($user->getEmail()); ?>
-            </p>
-            <p class="text-[#FFDF00] text-sm">
-                <?php echo safeString($user->getPhone()); ?>
-            </p>
-            <p class="text-[#FFDF00] text-sm">
-                <?php echo safeString($user->getStreet() . ' ' . $user->getStreetNumber()); ?>
-            </p>
-            <p class="text-[#FFDF00] text-sm">
-                <?php echo safeString($user->getPostalCode() . ' ' . $user->getCity()); ?>
-            </p>
-        </div>
-
-        <!-- Højre: Knapper -->
-        <div class="mt-4 md:mt-0 flex space-x-4 self-end">
-            <a href="#" class="px-4 py-2 border border-[#FFDF00] text-[#FFDF00] rounded-lg yellow-hover shadow-[0_0_10px_#FFDF00]">Edit Profile</a>
-            <a href="#" class="px-4 py-2 border border-[#FFDF00] text-[#FFDF00] rounded-lg yellow-hover shadow-[0_0_10px_#FFDF00]">Logout</a>
+            <form id="form-about" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full" method="POST" action="<?php echo generateUrl('profile'); ?>">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-2">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Firstname</label>
+                        <input name="firstName" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getFirstname()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Lastname</label>
+                        <input name="lastName" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getLastname()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Email</label>
+                        <input name="email" type="email" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getEmail()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Phone</label>
+                        <input name="phone" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getPhone()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Street</label>
+                        <input name="street" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getStreet()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Street number</label>
+                        <input name="streetNumber" type="number" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getStreetNumber()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Postal code</label>
+                        <input name="postalCode" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getPostalCode()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">City</label>
+                        <input name="city" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getCity()); ?>" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Country</label>
+                        <input name="country" type="text" class="w-full p-3 rounded bg-[#0f0f10] border border-gray-700 focus:ring-1 focus:ring-[#FE04FF]" value="<?php echo safeString($user->getCountry()); ?>" />
+                    </div>
+                </div>
+                <div class="col-span-2 flex justify-end mt-4">
+                    <button type="submit" class="px-4 py-2 rounded bg-[#FE04FF] text-white hover:opacity-90 w-full">Save</button>
+                </div>
+            </form>
         </div>
     </section>
 

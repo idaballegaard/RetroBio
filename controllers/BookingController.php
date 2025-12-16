@@ -111,7 +111,7 @@ class BookingController extends BaseController {
 
     // Read parameters
     $orderId = $this->retrieveInput("orderId", FILTER_SANITIZE_NUMBER_INT);
-    $sessionId = $this->retrieveInput("session_id", FILTER_SANITIZE_NUMBER_INT);
+    $sessionId = $_REQUEST['session_id'];
 
     // Basic validation
     if (!$orderId || !$sessionId) {

@@ -114,6 +114,8 @@ class MovieRepository extends BaseRepository
     $db = $this->connectDatabase();
     if (!$db) return [];
 
+    if(empty($showingIDs)) return [];
+
     $placeholders = implode(',', array_fill(0, count($showingIDs), '?'));
 
     $stmt = $db->prepare("SELECT * FROM moviedetail m JOIN Showing s ON m.movieID = s.movieID WHERE s.showingID IN ($placeholders)");

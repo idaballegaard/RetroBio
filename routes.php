@@ -34,13 +34,6 @@ get(generateUrl("movie-details"), function () {
   $controller->showMovieDetails()->presentView();
 });
 
-// Test
-get(generateUrl("test"), function () {
-  require_once __DIR__ . "/controllers/TestController.php";
-  $testController = new TestController();
-  $testController->showFrontpage()->presentView();
-});
-
 // Contact
 get(generateUrl("contact"), function () {
   requestLoginRedirectIfNeeded();

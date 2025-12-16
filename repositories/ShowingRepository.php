@@ -10,7 +10,7 @@ class ShowingRepository extends BaseRepository
     $pdo = $this->connectDatabase();
     $stmt = $pdo->prepare("SELECT s.showingID, s.date, s.type, s.startTime, s.hallID, s.price, s.movieID, 
                                     h.name, h.number
-                            FROM Showing s
+                            FROM ShowingDetails s
                             LEFT JOIN Hall h ON s.hallID = h.hallID
                             WHERE s.showingID = :showingID
         ");
@@ -65,7 +65,7 @@ class ShowingRepository extends BaseRepository
   {
     $pdo = $this->connectDatabase();
     $stmt = $pdo->prepare("SELECT *
-                    FROM Showing s
+                    FROM ShowingDetails s
                     WHERE s.movieID = :movieID AND s.date >= CURDATE()
                     ORDER BY s.date, s.startTime ASC");
     $stmt->bindValue(":movieID", $movieID, PDO::PARAM_INT);

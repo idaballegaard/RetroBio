@@ -6,7 +6,9 @@ require_once __DIR__ . "/../viewModels/MovieDetailsViewModel.php";
 
 class MovieController extends BaseController {
 
-    public function showMovieDetails(?int $movieID = null): MovieDetailsViewModel {
+    public function showMovieDetails(): MovieDetailsViewModel {
+        $movieID = $this->retrieveInput("id", FILTER_VALIDATE_INT);
+
         $movieRepository = new MovieRepository();
         $showingRepository = new ShowingRepository();
         $allMovies = $movieRepository->getAllMovies();

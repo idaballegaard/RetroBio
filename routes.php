@@ -17,7 +17,7 @@ get(generateUrl("login"), "views/login.php");
 post(generateUrl("login"), function () {
   require_once __DIR__ . "/controllers/UserController.php";
   $controller = new UserController();
-  $controller->authenticate($_POST["username"], $_POST["password"])->presentView();
+  $controller->authenticate()->presentView();
 });
 
 // Logout
@@ -31,8 +31,7 @@ get(generateUrl("logout"), function () {
 get(generateUrl("movie-details"), function () {
   require_once __DIR__ . "/controllers/MovieController.php";
   $controller = new MovieController();
-  $movieID = isset($_GET['id']) && is_numeric($_GET['id']) ? (int)$_GET['id'] : null;
-  $controller->showMovieDetails($movieID)->presentView();
+  $controller->showMovieDetails()->presentView();
 });
 
 // Test
@@ -67,35 +66,14 @@ get(generateUrl("register"), function () {
 post(generateUrl("register"), function () {
   require_once __DIR__ . "/controllers/UserController.php";
   $controller = new UserController();
-
-  // Hent alle POST-data
-  $firstName = $_POST["firstName"] ?? '';
-  $lastName = $_POST["lastName"] ?? '';
-  $username = $_POST["username"] ?? '';
-  $email = $_POST["email"] ?? '';
-  $phone = $_POST["phone"] ?? '';
-  $country = $_POST["country"] ?? '';
-  $city = $_POST["city"] ?? '';
-  $postalCode = $_POST["postalCode"] ?? '';
-  $street = $_POST["street"] ?? '';
-  $streetNumber = $_POST["streetNumber"] ?? '';
-  $password = $_POST["password"] ?? '';
-  $confirmPassword = $_POST["confirm_password"] ?? '';
-
-  // Kald controller
-  $controller->register(
-      $firstName, $lastName, $username, $email, $phone,
-      $country, $city, $postalCode, $street, $streetNumber,
-      $password, $confirmPassword
-  )->presentView();
+  $controller->register()->presentView();
 });
 
 // Booking
 get(generateUrl("booking"), function () {
   require_once __DIR__ . "/controllers/BookingController.php";
   $controller = new BookingController();
-  $showingID = isset($_GET['showing_id']) && is_numeric($_GET['showing_id']) ? (int)$_GET['showing_id'] : null;
-  $controller->showBookingPage($showingID)->presentView();
+  $controller->showBookingPage()->presentView();
 });
 
 post(generateUrl("booking"), function () {
@@ -157,9 +135,7 @@ if (UserRepository::isAdmin()) {
   get(generateUrl("admin-delete"), function () {
     require_once __DIR__ . "/controllers/admin/AdminController.php";
     $controller = new AdminController();
-    $type = $_GET['type'] ?? '';
-    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-    $controller->delete($type, $id);
+    $controller->delete();
     header("Location: " . generateUrl("admin"));
   });
 } else {

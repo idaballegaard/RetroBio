@@ -56,19 +56,19 @@ class AdminController extends BaseAdminController {
         return $viewModel;
     }
 
-    public function saveMovie() {
-        $id = $_POST["id"];
-        $title = $_POST["title"];
-        $genre = $_POST["genre"];
-        $cast = $_POST["cast"];
-        $description = $_POST["description"];
-        $releaseYear = $_POST["releaseYear"];
-        $length = $_POST["length"];
-        $language = $_POST["language"];
-        $ranking = $_POST["ranking"];
-        $company = $_POST["company"];
-        $director = $_POST["director"];
-        $ageLimit = $_POST["ageLimit"];
+    public function saveMovie(): void {
+        $id = $this->retrieveInput("id", FILTER_SANITIZE_NUMBER_INT);
+        $title = $this->retrieveInput("title");
+        $genre = $this->retrieveInput("genre");
+        $cast = $this->retrieveInput("cast");
+        $description = $this->retrieveInput("description");
+        $releaseYear = $this->retrieveInput("releaseYear", FILTER_SANITIZE_NUMBER_INT);
+        $length = $this->retrieveInput("length", FILTER_SANITIZE_NUMBER_INT);
+        $language = $this->retrieveInput("language");
+        $ranking = $this->retrieveInput("ranking", FILTER_SANITIZE_NUMBER_FLOAT);
+        $company = $this->retrieveInput("company");
+        $director = $this->retrieveInput("director");
+        $ageLimit = $this->retrieveInput("ageLimit", FILTER_SANITIZE_NUMBER_INT);
 
         $company = $this->companyRepository->saveCompany($company);
         $genres = $this->movieRepository->saveGenres(array_map('trim', explode(',', $genre)));
@@ -93,14 +93,14 @@ class AdminController extends BaseAdminController {
         $this->handleUpload($movie->getMovieID(), 'movies', 'poster', 500, 750);
     }
 
-    public function saveShowing() {
-        $id = $_POST["id"];
-        $movieID = $_POST["movie"];
-        $date = $_POST["date"];
-        $startTime = $_POST["startTime"];
-        $type = $_POST["type"];
-        $price = $_POST["price"];
-        $hallID = $_POST["hall"];
+    public function saveShowing(): void {
+        $id = $this->retrieveInput("id", FILTER_SANITIZE_NUMBER_INT);
+        $movieID = $this->retrieveInput("movie", FILTER_SANITIZE_NUMBER_INT);
+        $date = $this->retrieveInput("date");
+        $startTime = $this->retrieveInput("startTime");
+        $type = $this->retrieveInput("type");
+        $price = $this->retrieveInput("price", FILTER_SANITIZE_NUMBER_FLOAT);
+        $hallID = $this->retrieveInput("hall", FILTER_SANITIZE_NUMBER_INT);
 
         $showing = new Showing();
         $showing->setShowingID((int)$id);
@@ -114,11 +114,11 @@ class AdminController extends BaseAdminController {
         $this->showingRepository->saveShowing($showing);
     }
 
-    public function saveNews() {
-        $id = $_POST["id"];
-        $title = $_POST["title"];
-        $description = $_POST["description"];
-        $releaseDate = $_POST["releaseDate"];
+    public function saveNews(): void {
+        $id = $this->retrieveInput("id", FILTER_SANITIZE_NUMBER_INT);
+        $title = $this->retrieveInput("title");
+        $description = $this->retrieveInput("description");
+        $releaseDate = $this->retrieveInput("releaseDate");
 
         $news = new News();
         $news->setNewsID((int)$id);
@@ -130,11 +130,14 @@ class AdminController extends BaseAdminController {
         $this->handleUpload($news->getNewsID(), 'news', 'image', 750, 500);
     }
 
-    public function saveAbout() {
+    public function saveAbout(): void {
       $this->aboutRepository->saveAboutInfo($_POST);
     }
 
-    public function delete(string $type, int $id) {
+    public function delete(): void {
+        $type = $this->retrieveInput("type");
+        $id = $this->retrieveInput("id", FILTER_SANITIZE_NUMBER_INT);
+
         if($type === 'movie') {
             $this->movieRepository->deleteMovie($id);
         }

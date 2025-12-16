@@ -17,8 +17,9 @@ function relativeDate($date) {
     }
 }
 
-function generateUrl(string $path) {
-    $prefix = "/RetroBio";
+function generateUrl(string $path): string {
+    $data = parse_ini_file(__DIR__ . "/.env");
+    $prefix = $data['URL_PREFIX'] ?? "";
     if($path === "" || $path === "/") {
         $url = $prefix;
     } else {

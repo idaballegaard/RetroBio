@@ -3,7 +3,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 $menuLinks = [
     generateUrl("") => 'Home',
-    generateUrl('movie-details?id=1') => 'Movies',
+    generateUrl('movie-details') => 'Movies',
     generateUrl('contact') => 'Contact'
 ];
 

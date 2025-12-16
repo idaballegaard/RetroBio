@@ -5,7 +5,9 @@ require_once __DIR__ . "/../repositories/ShowingRepository.php";
 require_once __DIR__ . "/../repositories/SeatRepository.php";
 require_once __DIR__ . "/../repositories/MovieRepository.php";
 class BookingController extends BaseController {
-    public function showBookingPage($showingID): BookingViewModel {
+    public function showBookingPage(): BookingViewModel {
+        $showingID = $this->retrieveInput("showing_id", FILTER_VALIDATE_INT);
+
         // Opret ViewModel
         $showingRepository = new ShowingRepository();
         $seatRepository = new SeatRepository();
@@ -18,7 +20,6 @@ class BookingController extends BaseController {
 
         $seats = $seatRepository->getSeatsByHallId($showing->getHall()->getHallID());
         $soldSeats = $seatRepository->getSoldSeatsByShowingId($showingID);
-
         $movie = $movieRepository->getMovieById($showing->getMovieID());
 
         $viewModel = new BookingViewModel(__DIR__ . "/../views/booking.php");
@@ -30,10 +31,10 @@ class BookingController extends BaseController {
     }
 
   public function processBooking() : ?BookingViewModel {
-    $showingID = $_POST["showingId"];
+    $showingID = $this->retrieveInput("showingId", FILTER_SANITIZE_NUMBER_INT);
 
     require_once __DIR__ . "/../repositories/OrderRepository.php";
-    $seats = explode(",", $_POST['seats']);
+    $seats = explode(",", $this->retrieveInput("seats"));
 
     require_once __DIR__ . "/../repositories/ShowingRepository.php";
     $showingRepository = new ShowingRepository();
@@ -68,7 +69,7 @@ class BookingController extends BaseController {
         $price,
         count($seats),
         $_SESSION['user_id'],
-        (int)$_POST['showingId'],
+        $this->retrieveInput("showingId", FILTER_SANITIZE_NUMBER_INT, 0),
         $seats
     );
 
@@ -98,6 +99,7 @@ class BookingController extends BaseController {
 
     header("HTTP/1.1 303 See Other");
     header("Location: " . $checkout_session->url);
+    return null;
   }
 
   public function confirmBooking() : BasicViewModel {
@@ -108,8 +110,8 @@ class BookingController extends BaseController {
     \Stripe\Stripe::setApiKey($this->getEnvVariable("STRIPE_KEY"));
 
     // Read parameters
-    $orderId = isset($_GET['orderId']) ? (int)$_GET['orderId'] : null;
-    $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+    $orderId = $this->retrieveInput("orderId", FILTER_SANITIZE_NUMBER_INT);
+    $sessionId = $this->retrieveInput("session_id", FILTER_SANITIZE_NUMBER_INT);
 
     // Basic validation
     if (!$orderId || !$sessionId) {
@@ -145,10 +147,10 @@ class BookingController extends BaseController {
     }
 }
 
-  public function cancelBooking() {
+  public function cancelBooking() : BasicViewModel {
     require_once __DIR__ . "/../repositories/OrderRepository.php";
 
-    $orderId = (int)$_GET['orderId'];
+    $orderId = $this->retrieveInput("orderId", FILTER_SANITIZE_NUMBER_INT);
     $orderRepository = new OrderRepository();
     $orderRepository->cancelOrder($orderId);
 

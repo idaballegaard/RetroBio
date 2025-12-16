@@ -8,7 +8,10 @@ require_once __DIR__ . "/../repositories/OrderRepository.php";
 
 class UserController extends BaseController {
 
-    public function authenticate(string $emailOrUsername, string $password) : BasicViewModel {
+    public function authenticate() : BasicViewModel {
+        $emailOrUsername = $_REQUEST["username"];
+        $password = $_REQUEST["password"];
+
         $userRepository = new UserRepository();
         $user = $userRepository->getUserByEmailOrUsername($emailOrUsername);
 
@@ -31,20 +34,20 @@ class UserController extends BaseController {
         header("Location: " . generateUrl(""));
     }
 
-    public function register(
-        string $firstName,
-        string $lastName,
-        string $username,
-        string $email,
-        string $phone,
-        string $country,
-        string $city,
-        string $postalCode,
-        string $street,
-        string $streetNumber,
-        string $password,
-        string $confirmPassword
-    ) : BasicViewModel {
+    public function register() : BasicViewModel {
+        $firstName = $this->retrieveInput("firstName");
+        $lastName = $this->retrieveInput("lastName");
+        $username = $this->retrieveInput("username");
+        $email = $this->retrieveInput("email");
+        $phone = $this->retrieveInput("phone");
+        $country = $this->retrieveInput("country");
+        $city = $this->retrieveInput("city");
+        $postalCode = $this->retrieveInput("postalCode");
+        $street = $this->retrieveInput("street");
+        $streetNumber = $this->retrieveInput("streetNumber");
+        $password = $this->retrieveInput("password");
+        $confirmPassword = $this->retrieveInput("confirm_password");
+
         $userRepository = new UserRepository();
         $viewModel = new BasicViewModel(__DIR__ . "/../views/register.php");
 

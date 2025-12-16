@@ -42,8 +42,8 @@ CREATE TABLE MovieActor (
     movieID int NOT NULL,
     castMemberID int NOT NULL,
     CONSTRAINT PK_MovieActors PRIMARY KEY (movieID, castMemberID),
-    FOREIGN KEY (movieID) REFERENCES Movie(movieID),
-    FOREIGN KEY (castMemberID) REFERENCES CastMember(castMemberID)
+    FOREIGN KEY (movieID) REFERENCES Movie(movieID) ON DELETE CASCADE,
+    FOREIGN KEY (castMemberID) REFERENCES CastMember(castMemberID) ON DELETE CASCADE
 );
 
 CREATE TABLE Showing (

@@ -10,9 +10,9 @@ class ContactController extends BaseController {
 
     public function sendMail() : ContactViewModel {
         $about = (new AboutRepository())->getAboutInfo();
-        $purpose = safeString($_POST['purpose'] ?? '');
-        $message = safeString($_POST['message'] ?? '');
-        $email = filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL) ?? '';
+        $purpose = $this->retrieveInput("purpose");
+        $message = $this->retrieveInput("message");
+        $email = $this->retrieveInput("email", FILTER_SANITIZE_EMAIL);
 
         $headers = 'From: ' . $email . "\r\n" .
             'Reply-To: ' . $email;

@@ -181,8 +181,15 @@ class MovieRepository extends BaseRepository
     if (!$db) return;
 
     try {
+      $movieID = $movie->getMovieID();
+
       $db->beginTransaction();
-      $stmt = $db->prepare("
+      $stmt = $db->prepare("SELECT COUNT(*) FROM Movie WHERE movieID = :movieID");
+      $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
+      $stmt->execute();
+
+      if($stmt->fetchColumn() != 0) {
+        $stmt = $db->prepare("
                 UPDATE Movie 
                 SET 
                     title = :title, 
@@ -196,6 +203,13 @@ class MovieRepository extends BaseRepository
                     companyID = :companyID
                 WHERE movieID = :movieID
             ");
+        $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
+      } else {
+        $stmt = $db->prepare("
+                INSERT INTO Movie (title, description, length, language, ageLimit, ranking, releaseYear, directorID, companyID) 
+                VALUES (:title, :description, :length, :language, :ageLimit, :ranking, :releaseYear, :directorID, :companyID)
+            ");
+      }
 
       $title = $movie->getTitle();
       $description = $movie->getDescription();
@@ -215,27 +229,12 @@ class MovieRepository extends BaseRepository
       $stmt->bindParam(':ageLimit', $ageLimit, PDO::PARAM_INT);
       $stmt->bindParam(':ranking', $ranking, PDO::PARAM_STR);
       $stmt->bindParam(':releaseYear', $releaseYear, PDO::PARAM_INT);
-      $stmt->bindParam(':movieID', $movieID, PDO::PARAM_INT);
       $stmt->bindParam(':directorID', $directorID, PDO::PARAM_INT);
       $stmt->bindParam(':companyID', $companyID, PDO::PARAM_INT);
       $stmt->execute();
 
-      if ($stmt->rowCount() === 0) {
-        $insertStmt = $db->prepare("
-                    INSERT INTO Movie (title, description, length, language, ageLimit, ranking, releaseYear, directorID, companyID) 
-                    VALUES (:title, :description, :length, :language, :ageLimit, :ranking, :releaseYear, :directorID, :companyID)
-                ");
-        $insertStmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $insertStmt->bindParam(':description', $description, PDO::PARAM_STR);
-        $insertStmt->bindParam(':length', $length, PDO::PARAM_INT);
-        $insertStmt->bindParam(':language', $language, PDO::PARAM_STR);
-        $insertStmt->bindParam(':ageLimit', $ageLimit, PDO::PARAM_INT);
-        $insertStmt->bindParam(':ranking', $ranking, PDO::PARAM_STR);
-        $insertStmt->bindParam(':releaseYear', $releaseYear, PDO::PARAM_INT);
-        $insertStmt->bindParam(':directorID', $directorID, PDO::PARAM_INT);
-        $insertStmt->bindParam(':companyID', $companyID, PDO::PARAM_INT);
-        $insertStmt->execute();
-        $movieID = $db->lastInsertId();
+      if ($movie->getMovieID() == 0) {
+        $movieID = (int)$db->lastInsertId();
         $movie->setMovieID($movieID);
       }
 
@@ -271,6 +270,7 @@ class MovieRepository extends BaseRepository
     } catch (PDOException $e) {
       $db->rollBack();
       echo $e->getMessage();
+      echo $e->getTraceAsString();
     }
   }
 

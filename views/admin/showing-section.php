@@ -29,7 +29,7 @@
           <td class="px-4 py-3" data-form-field="id"><?php echo safeString($showing->getShowingId()); ?></td>
           <td class="px-4 py-3"><?php echo safeString($movie->getTitle()); ?><span class="hidden" data-form-field="movie"><?php echo safeString($movie->getMovieID()); ?></span></td>
           <td class="px-4 py-3" data-form-field="date"><?php echo safeString($showing->getDate()->format("Y-m-d")); ?></td>
-          <td class="px-4 py-3" data-form-field="startTime"><?php echo safeString($showing->getDate()->format("H:i")); ?></td>
+          <td class="px-4 py-3" data-form-field="startTime"><?php echo safeString($showing->getStartTime()); ?></td>
           <td class="px-4 py-3" data-form-field="type"><?php echo safeString($showing->getType()); ?></td>
           <td class="px-4 py-3"><span data-form-field="price"><?php echo safeString($showing->getPrice()); ?></span> DKK</td>
           <td class="px-4 py-3"><?php echo safeString($showing->getHall()); ?><span class="hidden" data-form-field="hall"><?php echo safeString($showing->getHall()->getHallID()); ?></span></td>

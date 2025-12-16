@@ -89,7 +89,7 @@ class ShowingRepository extends BaseRepository
     $pdo = $this->connectDatabase();
     $stmt = $pdo->query("SELECT *
                             FROM ShowingDetails s
-                            ORDER BY s.date, s.startTime ASC
+                            ORDER BY s.date DESC, s.startTime ASC
         ");
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -112,7 +112,7 @@ class ShowingRepository extends BaseRepository
     }
     $stmt->bindValue(":movieID", $showing->getMovieID(), PDO::PARAM_INT);
     $stmt->bindValue(":date", $showing->getDate()->format("Y-m-d"), PDO::PARAM_STR);
-    $stmt->bindValue(":startTime", "00:00", PDO::PARAM_STR);
+    $stmt->bindValue(":startTime", $showing->getStartTime(), PDO::PARAM_STR);
     $stmt->bindValue(":type", $showing->getType(), PDO::PARAM_STR);
     $stmt->bindValue(":price", $showing->getPrice(), PDO::PARAM_STR);
     $stmt->bindValue(":hallID", $showing->getHall()->getHallID(), PDO::PARAM_INT);

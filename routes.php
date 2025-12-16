@@ -98,7 +98,7 @@ get(generateUrl("cancelBooking"), function () {
 get(generateUrl("profile"), function () {
   require_once __DIR__ . "/controllers/UserController.php";
   $controller = new UserController();
-  $controller->showProfile($_SESSION["user_id"])->presentView();
+  $controller->showProfile()->presentView();
 });
 
 // Admin
@@ -118,7 +118,7 @@ if (UserRepository::isAdmin()) {
     require_once __DIR__ . "/controllers/admin/AdminController.php";
     $controller = new AdminController();
     $controller->saveShowing();
-    header("Location: " . generateUrl("admin"));
+//    header("Location: " . generateUrl("admin"));
   });
   post(generateUrl("admin-save-news"), function () {
     require_once __DIR__ . "/controllers/admin/AdminController.php";

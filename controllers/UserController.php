@@ -28,7 +28,7 @@ class UserController extends BaseController {
         }
     }
 
-    public function logout() {
+    public function logout() : void {
         session_start();
         session_destroy();
         header("Location: " . generateUrl(""));
@@ -95,8 +95,9 @@ class UserController extends BaseController {
             return $viewModel;
         }
     }
+    public function showProfile() : BasicViewModel {
+        $userID = $_SESSION["user_id"];
 
-    public function showProfile(int $userID) : BasicViewModel {
         $userRepository = new UserRepository();
         $orderRepository = new OrderRepository();
         $moviesRepository = new MovieRepository();
@@ -120,5 +121,9 @@ class UserController extends BaseController {
         } else {
           return new BasicViewModel(__DIR__ . "/../views/404.php", "User not found.");
         }
+    }
+
+    public function saveProfile() : BasicViewModel {
+
     }
 }

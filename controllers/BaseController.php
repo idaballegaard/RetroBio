@@ -79,11 +79,11 @@ abstract class BaseController {
     }
   }
 
-  protected function retrieveInput(string $fieldName, ?int $filter = null, mixed $defaultValue = ''): mixed {
+  protected function retrieveInput(string $fieldName, ?int $filter = null, ?int $options = null): mixed {
     if($filter) {
-      return isset($_REQUEST[$fieldName]) ? filter_var(trim($_REQUEST[$fieldName]), $filter) : $defaultValue;
+      return isset($_REQUEST[$fieldName]) ? filter_var(trim($_REQUEST[$fieldName]), $filter, $options) : null;
     } else {
-      return isset($_REQUEST[$fieldName]) ? htmlspecialchars($_REQUEST[$fieldName]) : $defaultValue;
+      return isset($_REQUEST[$fieldName]) ? htmlspecialchars($_REQUEST[$fieldName]) : null;
     }
   }
 }

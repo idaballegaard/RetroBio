@@ -65,7 +65,7 @@ class AdminController extends BaseAdminController {
         $releaseYear = $this->retrieveInput("releaseYear", FILTER_SANITIZE_NUMBER_INT);
         $length = $this->retrieveInput("length", FILTER_SANITIZE_NUMBER_INT);
         $language = $this->retrieveInput("language");
-        $ranking = $this->retrieveInput("ranking", FILTER_SANITIZE_NUMBER_FLOAT);
+        $ranking = $this->retrieveInput("ranking", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $company = $this->retrieveInput("company");
         $director = $this->retrieveInput("director");
         $ageLimit = $this->retrieveInput("ageLimit", FILTER_SANITIZE_NUMBER_INT);

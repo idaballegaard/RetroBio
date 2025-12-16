@@ -89,6 +89,10 @@ class UserRepository extends BaseRepository {
     public function getUsersByID(array $userIDs): array {
         $db = $this->connectDatabase();
 
+        if(empty($userIDs)) {
+          return [];
+        }
+
         $placeholders = implode(',', array_fill(0, count($userIDs), '?'));
         $stmt = $db->prepare("SELECT * FROM `User` u JOIN PostalCode p ON u.postalCodeID = p.postalCodeID WHERE u.userID IN ($placeholders)");
         foreach ($userIDs as $index => $userID) {

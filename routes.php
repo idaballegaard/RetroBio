@@ -116,7 +116,7 @@ if (UserRepository::isAdmin()) {
     require_once __DIR__ . "/controllers/admin/AdminController.php";
     $controller = new AdminController();
     $controller->saveShowing();
-//    header("Location: " . generateUrl("admin"));
+    header("Location: " . generateUrl("admin"));
   });
   post(generateUrl("admin-save-news"), function () {
     require_once __DIR__ . "/controllers/admin/AdminController.php";

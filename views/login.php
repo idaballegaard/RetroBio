@@ -48,7 +48,7 @@
         <!-- Register Link -->
         <p class="text-center text-[#FFDF00]">
             Don't have an account? 
-            <a href="register.php" class="text-[#FE04FF] hover:underline">Sign Up</a>
+            <a href="<?php echo generateUrl('register'); ?>" class="text-[#FE04FF] hover:underline">Sign Up</a>
         </p>
     </div>
 </div>

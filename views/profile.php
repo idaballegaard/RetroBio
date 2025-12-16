@@ -84,7 +84,7 @@ $user = $viewModel->getUser();
                     <?php $movie = $viewModel->getMovies()[$order->getShowingID()] ?? null; ?>
                         <tr>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getOrderID()); ?></td>
-                            <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($movie->getTitle()); ?></td>
+                            <td class="border-b border-[#00e7ec] py-2"><a href="<?php echo generateUrl("booking") ?>?showing_id=<?php echo $order->getShowingID() ?>" style="text-decoration: underline;"><?php echo safeString($movie->getTitle()); ?></a></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getDate()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2"><?php echo safeString($order->getStatus()); ?></td>
                             <td class="border-b border-[#00e7ec] py-2">DKK <?php echo number_format($order->getPrice(), 2); ?></td>

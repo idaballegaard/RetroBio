@@ -6,6 +6,11 @@ require_once __DIR__ . "/../repositories/SeatRepository.php";
 require_once __DIR__ . "/../repositories/MovieRepository.php";
 class BookingController extends BaseController {
     public function showBookingPage(): BookingViewModel {
+        if(!isset($_SESSION['user_id'])) {
+            header("Location: " . generateUrl("login"));
+            exit();
+        }
+
         $showingID = $this->retrieveInput("showing_id", FILTER_VALIDATE_INT);
 
         // Opret ViewModel

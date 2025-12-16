@@ -37,7 +37,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
-      <a href="index.php" class="film-logo glow text-[#FFDF00] font-bold text-2xl">RetroBio</a>
+      <a href="<?php echo generateUrl("") ?>" class="film-logo glow text-[#FFDF00] font-bold text-2xl">RetroBio</a>
 
       <!-- Menu (desktop) -->
       <ul class="hidden md:flex space-x-10 font-medium relative">

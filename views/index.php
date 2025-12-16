@@ -148,7 +148,7 @@
           <!-- Image -->
           <div class="flex">
               <div class="image-box w-full overflow-hidden rounded-xl border border-[#00e7ec] film-grain">
-                  <img src="/img/cinema-interior.webp" alt="Retro Cinema Interior" class="w-full h-full object-cover">
+                  <img src="<?php echo generateUrl("assets/img/RetroBioCinema.png") ?>" alt="Retro Cinema Interior" class="w-full h-full object-cover">
               </div>
           </div>
 
